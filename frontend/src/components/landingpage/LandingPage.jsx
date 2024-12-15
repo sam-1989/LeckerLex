@@ -36,7 +36,7 @@ export default function LandingPage() {
 
   return (
     <motion.div
-      className="relative w-full h-screen overflow-hidden font-sans"
+      className="relative w-full h-screen overflow-hidden font-sans flex flex-col items-center justify-center"
       ref={ref}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -57,56 +57,49 @@ export default function LandingPage() {
 
       {/* Website-Name */}
       <motion.div
-        className="absolute top-5 right-3.5 transform -translate-x-1/2 z-20"
+        className="absolute top-5 left-2/2 transform -translate-x-1/2 z-20"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
       >
-        <h1 className="text-gray-800 text-6xl md:text-4xl font-bold">
+        <h1 className="text-green-900 text-4xl md:text-5xl font-bold">
           LeckerLex
         </h1>
       </motion.div>
 
       {/* Inhalt über dem Video */}
       <motion.div
-        className="absolute top-24 left-10 z-10 w-3/4 md:w-1/2 bg-black bg-opacity-0 p-4 rounded"
+        className="z-10 w-3/4 md:w-1/2 bg-black bg-opacity-0 p-4 rounded text-center"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}
         transition={{ duration: 1, delay: 1.5 }}
       >
-        <h1 className="text-green-800 text-7xl md:text-5xl font-bold drop-shadow-2xl">
-        Cooking made easy with what you have at home.
+        <h1 className="text-gray-50 text-6xl md:text-5xl font-bold drop-shadow-2xl">
+          Cooking made easy with what you have at home.
         </h1>
-      </motion.div>
-
-      <motion.div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-3/4 md:w-1/2 text-center"
-        initial="initial"
-        animate="animate"
-        transition={{ staggerChildren: 0.05, delayChildren: 2 }}
-      >
-        <h2 className="text-gray-50 text-lg md:text-5xl font-bold drop-shadow-2xl">
-          {text.split('').map((char, index) => (
-            <motion.span key={index} variants={letterAnimation}>
-              {char}
-            </motion.span>
-          ))}
-        </h2>
       </motion.div>
 
       {/* Button mit Framer Motion */}
       <motion.div
-        className="absolute bottom-10 w-full flex justify-center z-10"
+        className="z-10 w-3/4 md:w-1/2 text-center mt-8"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 5 }}
       >
-         <Link to="/home">
-          <button className="button px-8 py-4 text-lg md:text-xl bg-green-500 text-gray-50 rounded-full shadow-2xl hover:bg-green-700 transform hover:scale-110 transition-transform duration-300">
+        <Link to="/home">
+          <button className="button px-8 py-4 text-lg md:text-xl bg-green-600 text-gray-100 rounded-full shadow-2xl hover:bg-green-700 transform hover:scale-110 transition-transform duration-300">
             Get inspired
           </button>
         </Link>
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-10 w-full flex justify-center z-10 drop-shadow-md"
+        initial="initial"
+        animate="animate"
+        transition={{ staggerChildren: 0.05, delayChildren: 2 }}
+      >
       </motion.div>
     </motion.div>
   )
