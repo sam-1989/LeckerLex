@@ -3,6 +3,6 @@ import * as recipe from "../controllers/recipeController.js";
 
 const recipeRouter = Router();
 
-recipeRouter.get("/search-recipes", recipe.searchRecipesAndDetails);
+recipeRouter.get("/recipes", recipe.searchRecipesAndDetails);
 
 export default recipeRouter;
