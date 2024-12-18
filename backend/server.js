@@ -9,7 +9,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json());
-app.use("/recipes", recipeRouter);
+app.use("/search", recipeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);

@@ -21,7 +21,7 @@ export const searchRecipesAndDetails = async (req, res, next) => {
       .json({ msg: "Search is permitted with a minimum of 4 ingredients." });
 
   try {
-    // Fetch basic recipe list based on ingredients: hard-coded salt, water, oil, sugar as something everyone has at home; set to prioritize minimising missing ingredients, limited to 5 results
+    // Fetch basic recipe list based on ingredients: hard-coded salt, water, oil, sugar as something everyone has at home; parameters are set to prioritize minimising missing ingredients & limit to 5 results
     const response = await fetch(
       `https://api.spoonacular.com/recipes/findByIngredients?ingredients=salt,water,oil,sugar,${ingredients}&ranking=2&ignorePantry=true&number=5`,
       options
@@ -38,6 +38,50 @@ export const searchRecipesAndDetails = async (req, res, next) => {
 
         const recipeDetail = await detailResponse.json();
 
+        // extract nutrition values per portion (in order to calculate nutrition per 100g)
+        const nutritionData = {
+          calories:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Calories"
+            )?.amount || 0,
+          fat:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Fat"
+            )?.amount || 0,
+          saturatedFat:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Saturated Fat"
+            )?.amount || 0,
+          carbohydrates:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Carbohydrates"
+            )?.amount || 0,
+          sugar:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Sugar"
+            )?.amount || 0,
+          protein:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Protein"
+            )?.amount || 0,
+          sodium:
+            recipeDetail.nutrition.nutrients.find(
+              (nutrient) => nutrient.name === "Sodium"
+            )?.amount / 1000 || 0, // convert from mg to g
+        };
+
+        // serving size needed for nutrient calculation per 100g
+        const servingSize = recipeDetail.nutrition.weightPerServing.amount || 1;
+
+        // create a shallow copy and calculate values per 100g, round it to 2 decimals, and convert back to number-type data
+        const nutritionDataPer100g = { ...nutritionData };
+        for (const nutrient in nutritionDataPer100g) {
+          nutritionDataPer100g[nutrient] = +(
+            (nutritionDataPer100g[nutrient] / servingSize) *
+            100
+          ).toFixed(2);
+        }
+
         return {
           id: recipe.id,
           title: recipe.title,
@@ -45,47 +89,19 @@ export const searchRecipesAndDetails = async (req, res, next) => {
           usedIngredientCount: recipe.usedIngredientCount,
           missedIngredientCount: recipe.missedIngredientCount,
           missedIngredients: recipe.missedIngredients.map(
-            (ingredient) => ingredient.name
+            (ingredient) => ingredient.original
           ),
           usedIngredients: recipe.usedIngredients.map(
-            (ingredient) => ingredient.name
+            (ingredient) => ingredient.original
           ),
           preparationTime: recipeDetail.readyInMinutes,
           servingsAmount: recipeDetail.servings || 0,
           servingPortion: {
-            amount: recipeDetail.nutrition.weightPerServing?.amount || 0,
-            unit: recipeDetail.nutrition.weightPerServing?.unit || "",
+            amount: servingSize || 1,
+            unit: recipeDetail.nutrition.weightPerServing.unit || "",
           },
-          nutritionPerServing: {
-            calories:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Calories"
-              )?.amount || 0, // check if Calories or calories TODO
-            fat:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Fat"
-              )?.amount || 0,
-            saturatedFat:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Saturated Fat"
-              )?.amount || 0,
-            carbohydrates:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Carbohydrates"
-              )?.amount || 0,
-            sugar:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Sugar"
-              )?.amount || 0,
-            protein:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Protein"
-              )?.amount || 0,
-            sodium:
-              recipeDetail.nutrition.nutrients.find(
-                (nutrient) => nutrient.name === "Sodium"
-              )?.amount || 0,
-          },
+          nutritionPerServing: nutritionData,
+          nutritionPer100g: nutritionDataPer100g,
           diet: {
             vegetarian: recipeDetail.vegetarian,
             vegan: recipeDetail.vegan,
@@ -107,29 +123,23 @@ export const searchRecipesAndDetails = async (req, res, next) => {
       })
     );
 
-    // send the combined data as a single response used for search results and for each recipe detail
+    // send the combined data as a single response used for search results and for each recipe details
     res.status(200).json({ data: detailedRecipes });
   } catch (error) {
     next(error);
   }
 };
 
-/* export const searchRecipes = async (req, res, next) => {
+/* // just for (spoonacular endpoints) testing purposes
+export const testController = async (req, res, next) => {
   const url =
-    "https://api.spoonacular.com/recipes/findByIngredients?ingredients=eggs,sugar,salt,oil,water,pepper,cheese,salad,onions&ranking=2&ignorePantry=true&number=5";
-
-  const url2 =
-    "https://api.spoonacular.com/recipes/findByIngredients?ingredients=eggs,sugar,salt,oil,water,pepper,cheese,salad,onions&ranking=2&ignorePantry=true&number=5";
-
-  const url3 =
-    "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+sugar&number=2";
-
+    "https://api.spoonacular.com/recipes/716429/information?includeNutrition=true";
   try {
     const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
+        "x-api-key": process.env.SPONACULAR_API_KEY,
       },
     });
     const result = await response.json();
@@ -137,7 +147,6 @@ export const searchRecipesAndDetails = async (req, res, next) => {
     res.status(200).json(result);
   } catch (error) {
     console.log(error);
-
     next(error);
   }
 }; */
