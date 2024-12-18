@@ -1,34 +1,44 @@
+
 @import './assets/fonts/fonts.css';
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
+
+@import "./assets/fonts/fonts.css";
+
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @keyframes gradient-x {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
   }
-  
-  .button--animate-gradient-x {
-    background-size: 200% 200%;
-    animation: gradient-x 8s ease infinite;
+  50% {
+    background-position: 100% 50%;
   }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
-  .h1 {
-    @apply font-bold;
-  }
-  
-  .h2 {
-    @apply font-medium;
-  }
-  
-  .p {
-    @apply font-book;
-  }
-  
-  .button {
-    @apply font-book;
-  }
+.button--animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 8s ease infinite;
+}
+
+.h1 {
+  @apply font-bold;
+}
+
+.h2 {
+  @apply font-medium;
+}
+
+.p {
+  @apply font-book;
+}
+
+.button {
+  @apply font-book;
+}
