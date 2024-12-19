@@ -1,4 +1,10 @@
+
+@import './assets/fonts/fonts.css';
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 @import "./assets/fonts/fonts.css";
+
 
 @tailwind base;
 @tailwind components;

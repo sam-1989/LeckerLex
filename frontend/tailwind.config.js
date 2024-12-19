@@ -13,6 +13,14 @@ export default {
         medium: 500,
         bold: 700,
       },
+      colors: {
+        primary: {
+          DEFAULT: "#08AF5F"
+        },
+        secondary: {
+          DEFAULT: ""
+        }
+      }
     },
   },
   plugins: [],

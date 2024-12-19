@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import HintergrundVideo from '../../assets/videos/kochenderTopf.mp4';
 import '../../assets/fonts/fonts.css';
+import './styles.css';
 
 
 const text = "Find delicious recipes with the ingredients you already have at home – clever and uncomplicated.";
@@ -15,7 +16,7 @@ const letterAnimation = {
 };
 
 export default function LandingPage() {
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(true);
   const videoRef = useRef(null);
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -37,7 +38,6 @@ export default function LandingPage() {
   return (
     <motion.div
       className="relative w-full h-screen overflow-hidden font-sans flex flex-col items-center justify-center"
-      ref={ref}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -57,7 +57,7 @@ export default function LandingPage() {
 
       {/* Website-Name */}
       <motion.div
-        className="absolute top-5 left-2/2 transform -translate-x-1/2 z-20"
+        className="absolute top-5 left-1/2 transform -translate-x-1/2 z-20"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -73,7 +73,7 @@ export default function LandingPage() {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}
-        transition={{ duration: 1, delay: 1.5 }}
+        transition={{ duration: 1, delay: 1 }}
       >
         <h1 className="text-gray-50 text-6xl md:text-5xl font-bold drop-shadow-2xl">
           Cooking made easy with what you have at home.
@@ -82,27 +82,19 @@ export default function LandingPage() {
 
       {/* Button mit Framer Motion */}
       <motion.div
-        className="z-10 w-3/4 md:w-1/2 text-center mt-8"
+        className="absolute bottom-10 w-full text-center"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 5 }}
+        transition={{ duration: 1, delay: 2 }}
       >
         <Link to="/home">
-          <button className="button px-8 py-4 text-lg md:text-xl bg-green-600 text-gray-100 rounded-full shadow-2xl hover:bg-green-700 transform hover:scale-110 transition-transform duration-300">
-            Get inspired
+          <button className="button px-8 py-4 text-lg md:text-xl bg-green-600 text-gray-100 rounded-full shadow-2xl hover:bg-green-700 transform hover:scale-105 transition-transform duration-300">
+            <span className="shimmer-text">Get inspired</span>
           </button>
         </Link>
       </motion.div>
-
-      <motion.div
-        className="absolute bottom-10 w-full flex justify-center z-10 drop-shadow-md"
-        initial="initial"
-        animate="animate"
-        transition={{ staggerChildren: 0.05, delayChildren: 2 }}
-      >
-      </motion.div>
     </motion.div>
-  )
+  );
 }
 
 
