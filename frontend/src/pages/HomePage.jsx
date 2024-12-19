@@ -241,7 +241,7 @@ export default function HomePage() {
       {/* Search bar  */}
       <div className="text-center mt-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          Tell us what you have – we will find the perfect recipe for you 😃
+          Tell us what you have – we will find the perfect recipe for you! 😃
         </h2>
         <div className="mt-4 flex justify-center">
           <input
@@ -288,7 +288,7 @@ export default function HomePage() {
       {/* images grid */}
 
       {selectedCategory === "Herbs and Spices" && (
-        <div className="grid gap-4 p-4 grid-rows-2 grid-flow-col ">
+        <div className="grid gap-4 p-4 grid-rows-2 grid-flow-col">
           {herbsAndSpices.map((item, idx) => {
             const isSelected = selectedIngredients.includes(item.alt);
             return (
@@ -300,12 +300,12 @@ export default function HomePage() {
                 <img
                   src={item.src}
                   alt={item.alt}
-                  className={`hover:scale-105 hover:rounded-lg transition-transform duration-200 max-w-full h-auto`}
+                  className={`hover:scale-105 hover:rounded-lg transition-transform duration-200 max-w-full h-auto sm:grid-rows-2`}
                 />
                 {/* text overlay when hovering */}
                 <div
                   className="absolute inset-0 flex items-center justify-center
-                      bg-gray-50/50 backdrop-blur-sm text-gray-900 
+                      bg-green-/50 backdrop-blur-sm text-gray-900 
                       text-sm sm:text-lg py-2
                       opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 >
