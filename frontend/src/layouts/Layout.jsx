@@ -1,15 +1,16 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
+import React from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { Outlet } from "react-router-dom";
 
-const Layout = ({ children }) => {
+export default function Layout() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-1 container mx-auto p-4">
-        {children}
+    <>
+      <Header />
+      <main>
+        <Outlet />
       </main>
-    </div>
+      <Footer />
+    </>
   );
-};
-
-export default Layout;
+}

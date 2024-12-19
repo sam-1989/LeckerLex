@@ -14,12 +14,8 @@ export default {
         bold: 700,
       },
       colors: {
-        primary: {
-          DEFAULT: "#08AF5F"
-        },
-        secondary: {
-          DEFAULT: ""
-        }
+        primary: "#08AF5F",
+        secondary: " ",
       }
     },
   },
