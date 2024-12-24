@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
 import Footer from "../components/Footer";
 import {
   FaSearch,
@@ -45,7 +44,7 @@ const PrevArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute -left-7 top-1/2 transform -translate-y-1/2 cursor-pointer"
+      className="absolute -left-6 top-1/3 transform -translate-y-1/2 cursor-pointer"
       onClick={onClick}
     >
       <FaArrowLeft className="text-2xl text-gray-800 hover:text-gray-600" />
@@ -57,7 +56,7 @@ const NextArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute -right-8 top-1/2 transform -translate-y-1/2 cursor-pointer"
+      className="absolute -right-6 top-1/3 transform -translate-y-1/2 cursor-pointer"
       onClick={onClick}
     >
       <FaArrowRight className="text-2xl text-gray-800 hover:text-gray-600" />
@@ -70,7 +69,7 @@ const sliderSettings = {
   infinite: false,
   speed: 500,
   slidesToShow: 4,
-  slidesToScroll: 2,
+  slidesToScroll: 3,
   nextArrow: <NextArrow />,
   prevArrow: <PrevArrow />,
   responsive: [
@@ -97,9 +96,8 @@ const sliderSettings = {
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
   const [searchText, setSearchText] = useState("");
-  const [placeholder, setPlaceholder] = useState("Zutaten eingeben...");
+  const [placeholder, setPlaceholder] = useState("Enter your ingredients...");
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   // // The placeholder will show the selected ingredients if any are selected, otherwise the default text
@@ -170,20 +168,20 @@ export default function HomePage() {
       {/* Search bar  */}
       <div className="text-center mt-8 px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          Tell us what you have – we will find the perfect recipe for you! 😃
+        Got ingredients? Weve got the recipe! 🥘✨
         </h2>
         <div className="mt-4 flex justify-center">
           <input
             type="text"
             className="w-full sm:w-1/2 p-2 border border-gray-200 rounded-l-full shadow-lg 
-        hover:border-gray-500 hover:shadow-xl 
+        hover:border-gray-500 hover:shadow-2xl 
         focus:border-green-600 focus:ring-3 focus:ring-green-400 
         transition duration-300 outline-none"
             placeholder={placeholder}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onFocus={() => setPlaceholder("")}
-            onBlur={() => setPlaceholder("Enter ingredients...")}
+            onBlur={() => setPlaceholder("Enter ngredients...")}
           />
           <button className="p-3 bg-green-500 text-white rounded-r-full">
             <FaSearch />
@@ -194,15 +192,15 @@ export default function HomePage() {
       {/* category slider */}
 
       <div className="bg-gray-100 py-4">
-        <div className="max-w-screen-lg mx-auto mt-6 px-4 relative ">
+        <div className="max-w-screen-lg mx-auto mt-6 px-4 relative">
           <Slider {...sliderSettings} className="category-slider">
             {categories.map((category, index) => (
-              <div key={index} className="flex justify-center px-2 shadow-2xl ">
+              <div key={index} className="flex justify-center px-2 shadow-sm ">
                 <button
                   onClick={() => setSelectedCategory(category)}
-                  className={`w-full py-2 rounded text-gray-900 text-sm text-center transform hover:scale-105 transition duration-300 ${
+                  className={`w-full py-2 rounded-xl text-gray-900 text-sm text-center transform hover:scale-105 transition duration-300 ${
                     selectedCategory === category
-                      ? "bg-green-600 text-white rounded-full"
+                      ? "bg-green-600 text-white rounded-xl"
                       : "bg-green-400"
                   }`}
                 >
@@ -217,43 +215,39 @@ export default function HomePage() {
       {/* images grid */}
 
       {selectedCategory === "Herbs and Spices" && (
-        <div className="grid gap-4 p-4 grid-rows-2 grid-flow-col">
-          {herbsAndSpices.map((item, idx) => {
-            const isSelected = selectedIngredients.includes(item.alt);
-            return (
-              <div
-                key={idx}
-                className="relative cursor-pointer group"
-                onClick={() => handleImageClick(item.alt)}
-              >
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className={`hover:scale-105 hover:rounded-lg transition-transform duration-200 max-w-full h-auto sm:grid-rows-2`}
-                />
-                {/* text overlay when hovering */}
-                <div
-                  className="absolute inset-0 flex items-center justify-center
-                      bg-green-/50 backdrop-blur-sm text-gray-900 
-                      text-sm sm:text-lg py-2
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                  {item.alt}
-                </div>
-                {/* green V when ingredient is chosen */}
-                {isSelected && (
-                  <div
-                    className="absolute top-2 right-2 text-white text-xl rounded-full p-1"
-                    style={{ backgroundColor: "#fff" }}
-                  >
-                    ✔
-                  </div>
-                )}
-              </div>
-            );
-          })}
+  <div className="grid gap-4 p-4 grid-cols-3  lg:grid-cols-6 lg:grid-rows-2">
+    {herbsAndSpices.map((item, idx) => {
+      const isSelected = selectedIngredients.includes(item.alt);
+      return (
+        <div
+          key={idx}
+          className="relative cursor-pointer group overflow-hidden rounded-lg shadow-inner bg-gray-200 outline-3"
+          onClick={() => handleImageClick(item.alt)}
+        >
+          <img
+            src={item.src}
+            alt={item.alt}
+            className="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-105"
+          />
+          {/* text overlay when hovering */}
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-sm sm:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            {item.alt}
+          </div>
+          {/* green V when ingredient is chosen */}
+          {isSelected && (
+            <div
+              className="absolute top-2 right-2 text-green-500 text-xl rounded-full p-1 bg-white"
+            >
+              ✔
+            </div>
+          )}
         </div>
-      )}
+      );
+    })}
+  </div>
+)}
       <Footer />
     </div>
   );
