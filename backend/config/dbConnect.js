@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 mongoose.connection.on("error", (error) => {
-  console.log("DB Fehler nach initialer Verbindung:", error);
+  console.log("DB error with initial connection:", error);
 });
 
 const connectDB = async () => {

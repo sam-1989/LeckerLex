@@ -65,7 +65,7 @@ userSchema.methods.authenticate = async function (password) {
 
 // Custom method to modify the user object when converted to JSON -> remove password
 userSchema.methods.toJSON = function () {
-  const user = this.toobject();
+  const user = this.toObject();
   delete user.password;
   return user;
 };
