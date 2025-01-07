@@ -2,22 +2,23 @@ import {React, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import {FaBars, FaTimes, FaUser, FaSearch} from "react-icons/fa";
 
+
 function Header() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   return (
     <>
-        <nav className="bg-white shadow-lg">
+        <nav className="bg-gray-100 shadow rounded-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <NavLink to="/" className="text-2xl font-bold text-gray-800">
-                  LeckerLex
+                  Logo
                 </NavLink>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <FaSearch className="text-gray-800 hover:text-gray-600 cursor-pointer" />
+              <FaSearch size={20} className="text-gray-800 hover:text-gray-600 cursor-pointer m-5" />
               <div className="relative">
                 {/* Mobiles Menü-Symbol */}
                 <div className="md:hidden">
@@ -35,23 +36,24 @@ function Header() {
                 </div>
                 {/* Desktop User Icon */}
                 <FaUser
+                size={20}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="text-gray-800 hover:text-gray-600 cursor-pointer hidden md:block"
+                  className="text-gray-800 hover:text-gray-600 cursor-pointer hidden md:block active:text-blue-600"
                 />
                 {/* Dropdown-Menü */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
+                  <div className="absolute right-0 md:left-5 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <NavLink
                       to="/profile"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
-                      Profil
+                      Profile
                     </NavLink>
                     <NavLink
                       to="/settings"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
-                      Einstellungen
+                      Settings
                     </NavLink>
                     <NavLink
                       to="/favorites"
@@ -63,10 +65,10 @@ function Header() {
                       to="/recipes"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
-                      Rezepte
+                      Recipes
                     </NavLink>
                     <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      Abmelden
+                      Log out
                     </button>
                   </div>
                 )}
