@@ -7,8 +7,8 @@ const reviewSchema = new Schema({
   rating: {
     type: Number,
     required: [true, "Rating field is missing"],
-    minlength: [1, "Rating cannot be lower than 1"],
-    maxlength: [5, "Rating cannot be higher than 5"],
+    min: [1, "Rating cannot be lower than 1"],
+    max: [5, "Rating cannot be higher than 5"],
   },
   comment: {
     type: String,
