@@ -8,6 +8,8 @@ import Recipes from "../src/pages/Recipes";
 import Favorites from "../src/pages/Favorites";
 import LoginPage from "./pages/loginpage/LoginPage";
 import RegisterPage from "./pages/registerpage/RegisterPage";
+import ProfileWelcomePage from './pages/profilepage/ProfileWelcomePage';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
@@ -22,7 +24,8 @@ function App() {
           <Route path="recipes" element={<Recipes />} />
         </Route>
         <Route path="/login" element={<LoginPage />} /> {/* Login-Seite */}
-        <Route path="/register" element={<RegisterPage />}/> {/* Register-Seite */} 
+        <Route path="/register" element={<RegisterPage />}/> {/* Register-Seite */}
+        <Route path="/profile" element={<ProfileWelcomePage />} /> 
       </Routes>
     </Router>
   );
