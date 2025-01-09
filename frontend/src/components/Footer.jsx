@@ -5,7 +5,7 @@ function Footer() {
   const [activeIcon, setActiveIcon] = useState(null);
   return (
     <>
-    <footer className="bg-white rounded-xl shadow m-4 dark:bg-gray-200 fixed bottom-0 w-full hidden md:block">
+    <footer className="bg-green-100 shadow-inner rounded-lg fixed bottom-0 w-full hidden md:block">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-600 flex items-center">
             © 2024 <a href="#" className="hover:underline ml-1">Logo</a>. All Rights Reserved.
@@ -35,31 +35,31 @@ function Footer() {
         </div>
       </footer>
 
-    {/* Navigationsleiste für mobile Geräte */}
-    <nav className='bg-white rounded-lg shadow m-4 dark:bg-gray-50 fixed bottom-0 w-full black md:hidden'>
-      <ul className='flex justify-around p-4 text-sm font-medium text-gray-600 dark:text-gray-400'>
-      <li>
-            <a href="#" className={`hover:underline ${activeIcon === 'home' ? 'text-green-800' : ''}`} onClick={() => setActiveIcon('home')}>
+      {/* Navigationsleiste für mobile Geräte */}
+      <nav className='bg-green-100 rounded-lg shadow-inner mx-auto fixed bottom-0 w-full md:hidden'>
+        <ul className='flex justify-around p-4 text-sm font-medium text-gray-700'>
+          <li>
+            <a href="#" className={`hover:underline ${activeIcon === 'home' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('home')}>
               <FaHome size={18} />
             </a>
           </li>
           <li>
-            <a href="#" className={`hover:underline ${activeIcon === 'search' ? 'text-green-800' : ''}`} onClick={() => setActiveIcon('search')}>
+            <a href="#" className={`hover:underline ${activeIcon === 'search' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('search')}>
               <FaSearch size={18} />
             </a>
           </li>
           <li>
-            <a href="#" className={`hover:underline ${activeIcon === 'heart' ? 'text-green-800' : ''}`} onClick={() => setActiveIcon('heart')}>
+            <a href="#" className={`hover:underline ${activeIcon === 'heart' ? 'text-red-600' : ''}`} onClick={() => setActiveIcon('heart')}>
               <FaHeart size={18} />
             </a>
           </li>
           <li>
-            <a href="#" className={`hover:underline ${activeIcon === 'user' ? 'text-green-800' : ''}`} onClick={() => setActiveIcon('user')}>
+            <a href="#" className={`hover:underline ${activeIcon === 'user' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('user')}>
               <FaUser size={18} />
             </a>
           </li>
-      </ul>
-    </nav>
+        </ul>
+      </nav>
     </>
   );
 }
