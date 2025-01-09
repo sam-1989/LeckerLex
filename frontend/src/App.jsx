@@ -18,15 +18,15 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="profile" element={<ProfileWelcomePage />} />
-          {/* <Route path="profile" element={<Profile />} /> */}
+          <Route path="profile" element={<ProfileWelcomePage />} /> 
+          <Route path="/login" element={<LoginPage />} />  {/* Login-Seite */}
+          <Route path="/register" element={<RegisterPage />} /> {/* Register-Seite */}
           <Route path="settings" element={<Settings />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="recipes" element={<Recipes />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} /> {/* Login-Seite */}
-        <Route path="/register" element={<RegisterPage />} />{" "}
-        {/* Register-Seite */}
+
+
       </Routes>
     </Router>
   );
