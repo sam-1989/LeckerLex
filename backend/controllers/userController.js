@@ -146,7 +146,7 @@ export const loginUser = async (req, res, next) => {
     return res
       .status(200)
       .cookie("jwt", token, {
-        httpOnly: true,
+        // httpOnly: true,
         // secure: true, // Deactivated for backend-only demo purposes via Insomnia
         maxAge: 24 * 60 * 60 * 1000, // 1 day in miliseconds
       })

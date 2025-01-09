@@ -7,6 +7,7 @@ function Header() {
     <header className=" bg-green-100 shadow-inner rounded-lg">
       <Navbar />
     </header>
+
   )
 }
 
