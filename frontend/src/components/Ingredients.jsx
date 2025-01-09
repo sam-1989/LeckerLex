@@ -17,11 +17,11 @@ import Cinnamon from "../assets/Ingredients/Herbs_Spices/cinnamon.png";
 import Nutmeg from "../assets/Ingredients/Herbs_Spices/nutmeg.png";
 
 export default function Ingredients({
-    selectedCategory,
-    // selectedIngredients,
-    // setSelectedIngredients,
-    searchText,
-    setSearchText,
+  selectedCategory,
+  // selectedIngredients,
+  // setSelectedIngredients,
+  searchText,
+  setSearchText,
 }) {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
@@ -66,22 +66,16 @@ export default function Ingredients({
 
   // category 13
 
-  // check if the ingredient has already been chosen
-
- // Sync clicks -> search text
- const handleImageClick = (ingredientName) => {
-    if (selectedIngredients.includes(ingredientName)) {
-      const updated = selectedIngredients.filter((item) => item !== ingredientName);
-      setSelectedIngredients(updated);
-      setSearchText(updated.join(", "));
-    } else {
-      const updated = [...selectedIngredients, ingredientName];
-      setSelectedIngredients(updated);
-      setSearchText(updated.join(", "));
-    }
+  // Toggle the clicked ingredient and set the searchText accordingly
+  const handleImageClick = (ingredientName) => {
+    const updated = selectedIngredients.includes(ingredientName)
+      ? selectedIngredients.filter((item) => item !== ingredientName)
+      : [...selectedIngredients, ingredientName];
+    setSelectedIngredients(updated);
+    setSearchText(updated.join(", "));
   };
 
-  // Sync search text -> selected images (case-insensitive)
+  // Convert the typed text into a list of ingredients (case-insensitive)
   useEffect(() => {
     // Split by comma, lowercase & trim
     const typed = searchText
