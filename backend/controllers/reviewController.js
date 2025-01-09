@@ -38,3 +38,19 @@ export const createReview = [
     }
   },
 ];
+
+// Fetch all reviews from the logged-in user
+export const getAllUserReviews = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.userId);
+
+    const allUserReviews = await Review.find({ _id: { $in: user.reviews } });
+
+    if (allUserReviews.length === 0)
+      return res.status(404).json({ msg: "No reviews from this user found" });
+
+    return res.status(200).json(allUserReviews);
+  } catch (error) {
+    next(error);
+  }
+};
