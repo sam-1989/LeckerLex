@@ -2,10 +2,10 @@ import React from "react";
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center justify-center mt-30 font-sans ">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
         {/* Header */}
-        <h1 className="text-3xl font-bold text-center mb-6">Create Account</h1>
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Account</h1>
 
         {/* Registration Form */}
         <form>
@@ -83,7 +83,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        {/* Social Buttons */}
+        {/* Social Buttons
         <div className="mt-6 text-center">
           <div className="flex justify-center items-center space-x-4">
             <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-400 transition">
@@ -96,7 +96,7 @@ export default function RegisterPage() {
               <i className="fab fa-google mr-2"></i> Google
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
