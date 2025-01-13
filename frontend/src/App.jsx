@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/landingpage/LandingPage";
 import HomePage from "./pages/HomePage";
 import Layout from "./layouts/Layout";
-import Profile from "../src/pages/ProfilePage";
 import Settings from "../src/pages/Settings";
 import Recipes from "../src/pages/Recipes";
 import Favorites from "../src/pages/Favorites";

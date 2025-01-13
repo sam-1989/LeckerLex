@@ -25,18 +25,19 @@
   animation: gradient-x 8s ease infinite;
 }
 
-.h1 {
-  @apply font-bold;
+h1 {
+  @apply font-bold
+  bg-primary;
 }
 
-.h2 {
+h2 {
   @apply font-medium;
 }
 
-.p {
+p {
   @apply font-book;
 }
 
-.button {
+button {
   @apply font-book;
 }
