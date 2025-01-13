@@ -9,7 +9,7 @@ function SearchBar({searchText, setSearchText}) {
       <h2 className="text-xl sm:text-4xl font-bold text-gray-800 m-8">
         Got ingredients? We got the recipe! 🥘✨
       </h2>
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 flex justify-center sticky top-0">
         <input
           type="text"
           className="w-full sm:w-1/2 p-2 border border-gray-200 rounded-l-full shadow-lg

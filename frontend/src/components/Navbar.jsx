@@ -1,17 +1,36 @@
-import { React, useState } from "react";
+import  React, {useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { FaBars, FaSearch, FaTimes, FaUser } from "react-icons/fa";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(()=> {
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    };
+  }, [isDropdownOpen]);
+
   return (
     <>
       <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div className="flex justify-between h-16">
         {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
-          <NavLink to="/" className="text-2xl font-bold text-gray-800">
+          <NavLink to="/home" className="text-2xl font-bold text-gray-800">
             Logo
           </NavLink>
         </div>
@@ -37,8 +56,8 @@ function Navbar() {
               />
             )}
           </div>
-          {/* Show user icon for desktop */}
-          <div className="relative hidden md:block">
+          {/* User icon and dropdown menu */}
+          <div className="relative" ref={dropdownRef}>
             <FaUser
               size={20}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}

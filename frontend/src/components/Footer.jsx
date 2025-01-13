@@ -5,7 +5,7 @@ function Footer() {
   const [activeIcon, setActiveIcon] = useState(null);
   return (
     <>
-    <footer className="bg-green-100 shadow-inner rounded-lg fixed bottom-0 w-full hidden md:block">
+    <footer className="bg-green-100 shadow-inner rounded-lg w-full hidden md:block">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-600 flex items-center">
             © 2024 <a href="#" className="hover:underline ml-1">Logo</a>. All Rights Reserved.
