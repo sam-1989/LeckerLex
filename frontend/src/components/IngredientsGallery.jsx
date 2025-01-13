@@ -1,6 +1,7 @@
 import React from "react";
 
-function IngredientsGallery({ herbsAndSpices,
+function IngredientsGallery({ 
+  herbsAndSpices,
   vegetables,
   fruits,
   meat,
@@ -59,7 +60,8 @@ function IngredientsGallery({ herbsAndSpices,
         itemsToDisplay = [];
     }
   return (
-    <div className="grid gap-4 p-4 grid-cols-3 lg:grid-cols-6">
+    <div className="container mx-auto px-4 lg:px-56 pt-2">
+    <div className="grid gap-4 p-4 grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-5">
       {itemsToDisplay.map((item, idx) => {
         const isSelected = selectedIngredients.includes(item.alt);
 
@@ -78,13 +80,14 @@ function IngredientsGallery({ herbsAndSpices,
               {item.alt}
             </div>
             {isSelected && (
-              <div className="absolute top-2 right-2 text-green-500 text-xl rounded-full p-1 bg-white">
+              <div className="absolute top-0 right-0 text-white text-md rounded-full px-0 bg-white">
                 ✔
               </div>
             )}
           </div>
         );
       })}
+    </div>
     </div>
   );
 }
