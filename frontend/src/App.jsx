@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import RecipeContextProvider from "./context/RecipeContext";
 import LandingPage from "./pages/landingpage/LandingPage";
 import HomePage from "./pages/HomePage";
 import Layout from "./layouts/Layout";
@@ -13,23 +14,23 @@ import ResultPage from "./pages/ResultPage";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="profile" element={<ProfileWelcomePage />} /> 
-          <Route path="login" element={<LoginPage />} />  {/* Login-Seite */}
-          <Route path="register" element={<RegisterPage />} /> {/* Register-Seite */}
-          <Route path="result" element={<ResultPage />}/>
-          <Route path="settings" element={<Settings />} />
-          <Route path="favorites" element={<Favorites />} />
-          <Route path="recipes" element={<Recipes />} />
-        </Route>
-
-
-      </Routes>
-    </Router>
+    <RecipeContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="profile" element={<ProfileWelcomePage />} />
+            <Route path="login" element={<LoginPage />} /> {/* Login-Seite */}
+            <Route path="register" element={<RegisterPage />} />{" "}
+            {/* Register-Seite */}
+            <Route path="settings" element={<Settings />} />
+            <Route path="favorites" element={<Favorites />} />
+            <Route path="recipes" element={<Recipes />} />
+          </Route>
+        </Routes>
+      </Router>
+    </RecipeContextProvider>
   );
 }
 
