@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
+import { RecipeContext } from "../context/RecipeContext";
+
 
 function ResultPage() {
-  const [recipes, setRecipes] = useState([]);
-
-  useEffect(() => {
-    fetch(
-      " http://localhost:3000/search/recipes?ingredients=chicken,tomato,eggs,onion"
-    )
-      .then((response) => response.json())
-      .then((data) => setRecipes(data))
-      .catch((error) => console.error("Fehler beim Laden der Rezepte:", error));
-  }, []);
+  const { recipes } = useContext(RecipeContext);
 
   return (
     <div className="container mx-auto p-4">
