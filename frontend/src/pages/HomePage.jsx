@@ -38,7 +38,10 @@ export default function HomePage() {
     { id: "Dairy Products", name: "Dairy Products" },
     { id: "Meat", name: "Meat" },
     { id: "Seafood", name: "Seafood" },
-    { id: "Flour and Baking Ingredients", name: "Flour and Baking Ingredients" },
+    {
+      id: "Flour and Baking Ingredients",
+      name: "Flour and Baking Ingredients",
+    },
     { id: "Grains and Legumes", name: "Grains and Legumes" },
     { id: "Eggs and Proteins", name: "Eggs and Proteins" },
     { id: "Canned Goods and Sauces", name: "Canned Goods and Sauces" },
@@ -69,7 +72,7 @@ export default function HomePage() {
       const data = await response.json();
       setRecipes(data.data); // Update the recipes state with the response from backend
       console.log("recipes:", recipes); // debug log
-      navigate("recipes"); // navigate to recipes page
+      navigate("results"); // navigate to recipes page
     } catch (error) {
       console.error("Error fetching recipes", error); // debug log
       setErrorMessage("An error occured. Please try again later.");
