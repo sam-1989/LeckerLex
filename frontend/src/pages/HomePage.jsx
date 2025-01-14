@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
-import RecipeContextProvider from "../context/RecipeContext";
+import { useNavigate } from "react-router-dom";
+import { RecipeContext } from "../context/RecipeContext";
 import CategorySlider from "../components/CategorySlider";
 import Ingredients from "../components/Ingredients";
 import SearchBar from "../components/SearchBar";
 
 export default function HomePage() {
   // access setRecipes from context to store fetched recipes
-  const { setRecipes } = useContext(RecipeContextProvider);
+  const { recipes, setRecipes } = useContext(RecipeContext);
 
   // manage error message text
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,6 +20,15 @@ export default function HomePage() {
 
   // manage the search input text
   const [searchText, setSearchText] = useState("");
+
+  // selectedIngredients query format
+  const formattedIngredients = selectedIngredients.map((ingredient) =>
+    ingredient.replace(/\s+/g, "_")
+  ); // replace spaces with underscores in ingredient name
+  const ingredientQuery = formattedIngredients.join(","); // join ingredients with comma
+  console.log(ingredientQuery); // works!
+
+  const navigate = useNavigate();
 
   // List of all categories
 
@@ -46,9 +56,24 @@ export default function HomePage() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/search/recipes?ingredients=${selectedIngredients}`
+        `http://localhost:3000/search/recipes?ingredients=${ingredientQuery}`, // TODO pfad mit .env variable ersetzen
+        {
+          credentials: "include", // include cors credentials
+        }
       );
-    } catch (error) {}
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorMessage(errorData.msg || "Failed to fetch recipes");
+        return;
+      }
+      const data = await response.json();
+      setRecipes(data.data); // Update the recipes state with the response from backend
+      console.log("recipes:", recipes); // debug log
+      navigate("recipes"); // navigate to recipes page
+    } catch (error) {
+      console.error("Error fetching recipes", error); // debug log
+      setErrorMessage("An error occured. Please try again later.");
+    }
   };
 
   return (
