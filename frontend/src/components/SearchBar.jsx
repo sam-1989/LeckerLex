@@ -22,7 +22,10 @@ function SearchBar({ searchText, setSearchText, handleSearch }) {
           onFocus={() => setPlaceholder("")}
           onBlur={() => setPlaceholder("Enter your ingredients...")}
         />
-        <button className="p-4 bg-green-500 text-white rounded-r-full">
+        <button
+          className="p-4 bg-green-500 text-white rounded-r-full"
+          onClick={handleSearch}
+        >
           <FaSearch />
         </button>
       </div>

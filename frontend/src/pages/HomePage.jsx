@@ -42,9 +42,14 @@ export default function HomePage() {
       setErrorMessage("Please select at least 4 ingredients.");
       return;
     }
-  };
+    setErrorMessage(""); // clear previous errors
 
-  setErrorMessage(""); // clear previous errors
+    try {
+      const response = await fetch(
+        `http://localhost:3000/search/recipes?ingredients=${selectedIngredients}`
+      );
+    } catch (error) {}
+  };
 
   return (
     <div className="min-h-screen overflow-hidden">
