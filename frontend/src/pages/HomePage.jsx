@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import RecipeContextProvider from "../context/RecipeContext";
 import CategorySlider from "../components/CategorySlider";
 import Ingredients from "../components/Ingredients";
 import SearchBar from "../components/SearchBar";
 
 export default function HomePage() {
+  // access setRecipes from context to store fetched recipes
+  const { setRecipes } = useContext(RecipeContextProvider);
+
+  // manage error message text
+  const [errorMessage, setErrorMessage] = useState("");
+
   // category selection
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -30,11 +37,26 @@ export default function HomePage() {
     "Snacks and Side Dishes",
   ];
 
+  const handleSearch = async () => {
+    if (selectedIngredients.length < 4) {
+      setErrorMessage("Please select at least 4 ingredients.");
+      return;
+    }
+  };
+
+  setErrorMessage(""); // clear previous errors
+
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Pass searchText & setSearchText to SearchBar */}
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
-
+      <SearchBar
+        searchText={searchText}
+        setSearchText={setSearchText}
+        handleSearch={handleSearch}
+      />
+      {errorMessage && (
+        <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+      )}
       <CategorySlider
         categories={categories}
         selectedCategory={selectedCategory}
