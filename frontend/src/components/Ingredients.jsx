@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import IngredientsGallery from "./IngredientsGallery";
 
 // Images - Herbs and Spices
@@ -121,10 +121,13 @@ import Worcestershire_Sauce from "../assets/Ingredients/Canned_Goods_Sauces/worc
 
 export default function Ingredients({
   selectedCategory,
+  selectedIngredients,
+  setSelectedIngredients,
   searchText,
   setSearchText,
 }) {
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+  // const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   // Herbs and Spices
   const herbsAndSpices = [
@@ -282,7 +285,22 @@ export default function Ingredients({
       .filter(Boolean);
 
     // Filter array to matches
-    const matched = herbsAndSpices
+
+    const matched = [
+      ...herbsAndSpices,
+      ...vegetables,
+      ...fruits,
+      ...meat,
+      ...seafood,
+      ...grains_legumes,
+      ...snacks_side_dishes,
+      ...dairy_products,
+      ...oils_fats,
+      ...flour_baking_ingredients,
+      ...eggs_proteins,
+      ...canned_goods_sauces,
+    ]
+    
       .filter((h) => typed.includes(h.alt.toLowerCase()))
       .map((h) => h.alt);
 
@@ -290,7 +308,7 @@ export default function Ingredients({
     if (JSON.stringify(matched) !== JSON.stringify(selectedIngredients)) {
       setSelectedIngredients(matched);
     }
-  }, [searchText, herbsAndSpices, selectedIngredients, setSelectedIngredients]);
+  }, [searchText, selectedIngredients, setSelectedIngredients]);
 
 
   return (

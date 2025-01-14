@@ -16,8 +16,9 @@ export default function LoginComponent() {
         {/* Registration Form */}
         <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
           <form onSubmit={handleSignUp}>
+          <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Log in</h1>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2 font-heading">
+              <label className="block text-md font-semibold text-gray-800">
                 Email:
               </label>
               <input
@@ -27,7 +28,7 @@ export default function LoginComponent() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2 font-heading">
+              <label className="block text-md font-semibold text-gray-800">
                 Password:
               </label>
               <input
@@ -43,7 +44,7 @@ export default function LoginComponent() {
               Sign Up
             </button>
           </form>
-          <div className="text-center mt-4 text-sm text-gray-600">
+          <div className="text-center mt-4 text-sm text-gray-800">
             <p>
               No profile?{" "}
               <Link to="/register" className="text-indigo-600 hover:underline">
