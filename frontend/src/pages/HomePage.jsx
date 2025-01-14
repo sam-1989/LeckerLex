@@ -20,7 +20,7 @@ export default function HomePage() {
     "Vegetables",
     "Dairy Products",
     "Meat",
-    "Fish",
+    "Seafood",
     "Flour and Baking Ingredients",
     "Grains and Legumes",
     "Eggs and Proteins",
