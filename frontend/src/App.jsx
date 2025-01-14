@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import LandingPage from "./pages/landingpage/LandingPage";
 import HomePage from "./pages/HomePage";
 import Layout from "./layouts/Layout";
@@ -8,7 +9,7 @@ import Favorites from "../src/pages/Favorites";
 import LoginPage from "./pages/loginpage/LoginPage";
 import RegisterPage from "./pages/registerpage/RegisterPage";
 import ProfileWelcomePage from "./pages/profilepage/ProfileWelcomePage";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import ResultPage from "./pages/ResultPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="profile" element={<ProfileWelcomePage />} /> 
           <Route path="login" element={<LoginPage />} />  {/* Login-Seite */}
           <Route path="register" element={<RegisterPage />} /> {/* Register-Seite */}
+          <Route path="result" element={<ResultPage />}/>
           <Route path="settings" element={<Settings />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="recipes" element={<Recipes />} />

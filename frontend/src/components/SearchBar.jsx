@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function SearchBar({searchText, setSearchText}) {
   const [placeholder, setPlaceholder] = useState("Enter your ingredients...");
+
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    navigate('/home/result');
+  };
 
   return (
     <div className="text-center mb-6 px-4">
@@ -22,7 +29,7 @@ function SearchBar({searchText, setSearchText}) {
           onFocus={() => setPlaceholder("")}
           onBlur={() => setPlaceholder("Enter your ingredients...")}
         />
-        <button className="p-4 bg-green-500 text-white rounded-r-full">
+        <button className="p-4 bg-green-500 text-white rounded-r-full" onClick={handleSearch}>
           <FaSearch />
         </button>
       </div>

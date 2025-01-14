@@ -68,24 +68,24 @@ function Navbar() {
                 <NavLink
                   to="/home/profile"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  // onClick={() => setIsDropdownOpen(false)}
+                  onClick={() => setIsDropdownOpen(false)}
                 >
                   Profile
                 </NavLink>
                 <NavLink
-                  to="/settings"
+                  to="/home/settings"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                 >
                   Settings
                 </NavLink>
                 <NavLink
-                  to="/favorites"
+                  to="/home/favorites"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                 >
                   Favoriten
                 </NavLink>
                 <NavLink
-                  to="/recipes"
+                  to="/home/recipes"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                 >
                   Recipes

@@ -59,6 +59,8 @@ function IngredientsGallery({
       default:
         itemsToDisplay = [];
     }
+
+    
   return (
     <div className="container mx-auto px-4 lg:px-56 pt-2">
     <div className="grid gap-4 p-8 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-5">
@@ -80,7 +82,7 @@ function IngredientsGallery({
               {item.alt}
             </div>
             {isSelected && (
-              <div className="absolute top-0 right-0 text-white text-md rounded-full px-0 bg-white">
+              <div className="absolute top-0 right-0 text-md px-3 bg-transparent">
                 ✔
               </div>
             )}

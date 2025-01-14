@@ -27,7 +27,6 @@
 
 h1 {
   @apply font-bold
-  bg-primary;
 }
 
 h2 {
