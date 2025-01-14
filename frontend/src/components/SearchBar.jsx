@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function SearchBar({ searchText, setSearchText, handleSearch }) {
   const [placeholder, setPlaceholder] = useState("Enter your ingredients...");
 
-  const navigate = useNavigate();
+  /* const navigate = useNavigate();
 
   const handleSearch = () => {
     navigate('/home/result');
-  };
+  }; */
 
   return (
     <div className="text-center mb-6 px-4">
