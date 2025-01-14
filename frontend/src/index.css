@@ -1,8 +1,6 @@
-
-@import './assets/fonts/fonts.css';
+@import "./assets/fonts/fonts.css";
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-
 
 @tailwind base;
 @tailwind components;
@@ -26,8 +24,7 @@
 }
 
 h1 {
-  @apply font-bold
-  bg-primary;
+  @apply font-bold;
 }
 
 h2 {

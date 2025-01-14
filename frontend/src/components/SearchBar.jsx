@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-function SearchBar({searchText, setSearchText}) {
+function SearchBar({ searchText, setSearchText, handleSearch }) {
   const [placeholder, setPlaceholder] = useState("Enter your ingredients...");
 
   return (
@@ -22,7 +22,10 @@ function SearchBar({searchText, setSearchText}) {
           onFocus={() => setPlaceholder("")}
           onBlur={() => setPlaceholder("Enter your ingredients...")}
         />
-        <button className="p-4 bg-green-500 text-white rounded-r-full">
+        <button
+          className="p-4 bg-green-500 text-white rounded-r-full"
+          onClick={handleSearch}
+        >
           <FaSearch />
         </button>
       </div>
