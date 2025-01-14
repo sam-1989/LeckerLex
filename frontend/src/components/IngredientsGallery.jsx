@@ -61,20 +61,20 @@ function IngredientsGallery({
     }
   return (
     <div className="container mx-auto px-4 lg:px-56 pt-2">
-    <div className="grid gap-4 p-4 grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-5">
+    <div className="grid gap-4 p-8 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-5">
       {itemsToDisplay.map((item, idx) => {
         const isSelected = selectedIngredients.includes(item.alt);
 
         return (
           <div
             key={idx}
-            className="relative cursor-pointer group overflow-hidden rounded-3xl shadow-inner bg-gray-200 outline-3"
+            className="relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-3xl shadow-inner bg-gray-200 outline-3"
             onClick={() => handleImageClick(item.alt)}
           >
             <img
               src={item.src}
               alt={item.alt}
-              className="w-full h-full object-cover mx-auto transition-transform duration-300 transform group-hover:scale-105"
+              className="w-full h-full object-contain mx-auto transition-transform duration-300 transform group-hover:scale-105"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-sm sm:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {item.alt}
