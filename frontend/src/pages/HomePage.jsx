@@ -33,18 +33,18 @@ export default function HomePage() {
   // List of all categories
 
   const categories = [
-    "Fruits",
-    "Vegetables",
-    "Dairy Products",
-    "Meat",
-    "Seafood",
-    "Flour and Baking Ingredients",
-    "Grains and Legumes",
-    "Eggs and Proteins",
-    "Canned Goods and Sauces",
-    "Herbs and Spices",
-    "Oils and Fats",
-    "Snacks and Side Dishes",
+    { id: "Fruits", name: "Fruits" },
+    { id: "Vegetables", name: "Vegetables" },
+    { id: "Dairy Products", name: "Dairy Products" },
+    { id: "Meat", name: "Meat" },
+    { id: "Seafood", name: "Seafood" },
+    { id: "Flour and Baking Ingredients", name: "Flour and Baking Ingredients" },
+    { id: "Grains and Legumes", name: "Grains and Legumes" },
+    { id: "Eggs and Proteins", name: "Eggs and Proteins" },
+    { id: "Canned Goods and Sauces", name: "Canned Goods and Sauces" },
+    { id: "Herbs and Spices", name: "Herbs and Spices" },
+    { id: "Oils and Fats", name: "Oils and Fats" },
+    { id: "Snacks and Side Dishes", name: "Snacks and Side Dishes" },
   ];
 
   const handleSearch = async () => {

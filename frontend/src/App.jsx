@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import RecipeContextProvider from "./context/RecipeContext";
 import LandingPage from "./pages/landingpage/LandingPage";
 import HomePage from "./pages/HomePage";
@@ -9,7 +10,7 @@ import Favorites from "../src/pages/Favorites";
 import LoginPage from "./pages/loginpage/LoginPage";
 import RegisterPage from "./pages/registerpage/RegisterPage";
 import ProfileWelcomePage from "./pages/profilepage/ProfileWelcomePage";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import ResultPage from "./pages/ResultPage";
 
 function App() {
   return (

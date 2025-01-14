@@ -24,7 +24,7 @@
 }
 
 h1 {
-  @apply font-bold;
+  @apply font-bold
 }
 
 h2 {

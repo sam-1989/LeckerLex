@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import IngredientsGallery from "./IngredientsGallery";
+import CategorySlider from "./CategorySlider";
 
 // Images - Herbs and Spices
 import Chilli from "../assets/Ingredients/Herbs_Spices/chilli.png";
@@ -127,7 +128,6 @@ export default function Ingredients({
   setSearchText,
 }) {
 
-  // const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   // Herbs and Spices
   const herbsAndSpices = [
