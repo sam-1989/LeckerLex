@@ -6,7 +6,7 @@ function SearchBar({ searchText, setSearchText, handleSearch }) {
 
   return (
     <div className="text-center mb-6 px-4">
-      <h2 className="text-xl sm:text-4xl font-bold text-gray-800 m-8">
+      <h2 className="text-xl sm:text-3xl font-bold text-gray-800 m-8">
         Got ingredients? We got the recipe! 🥘✨
       </h2>
       <div className="mt-4 flex justify-center sticky top-0">
