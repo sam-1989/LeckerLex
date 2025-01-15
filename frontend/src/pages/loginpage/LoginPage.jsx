@@ -1,12 +1,54 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginComponent() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate(); // React Router's navigate function for redirection
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault(); // Prevent default form submission
-    navigate("/profile"); // Redirect to the profile page
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!email || !password) {
+      setErrorMessage("Please enter your email and password.");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setErrorMessage(
+        "Please enter a valid email address in the format example@domain.com."
+      );
+      console.log(errorMessage);
+      return;
+    }
+
+    setErrorMessage(""); // clean previous errors
+    try {
+      const response = await fetch("http://localhost:3000/users/login", {
+        // TODO: use env variables for route
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorMessage(errorData.msg || "Incorrent email or password.");
+        return;
+      }
+      const data = await response.json();
+      console.log("User data", data);
+      navigate("/home/profile");
+    } catch (error) {
+      console.error("Error fetching user data", error); // debug log
+      setErrorMessage("An error occured. Please try again later.");
+    }
   };
 
   return (
@@ -16,13 +58,17 @@ export default function LoginComponent() {
         {/* Registration Form */}
         <div className="max-w-md w-full bg-white p-8 shadow-lg rounded-lg">
           <form onSubmit={handleSignUp}>
-          <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Log in</h1>
+            <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+              Log in
+            </h1>
             <div className="mb-4">
               <label className="block text-md font-semibold text-gray-800">
                 Email:
               </label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
               />
@@ -33,15 +79,20 @@ export default function LoginComponent() {
               </label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
               />
             </div>
+            {errorMessage && (
+              <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+            )}
             <button
               type="submit"
               className="w-full px-4 py-2 text-lg bg-green-600 text-white rounded-full shadow-lg hover:bg-green-500 transition duration-300"
             >
-              Sign Up
+              Sign In
             </button>
           </form>
           <div className="text-center mt-4 text-sm text-gray-800">
@@ -58,14 +109,12 @@ export default function LoginComponent() {
   );
 }
 
-
 // import React from 'react';
 // import { Link } from "react-router-dom";
 
 // export default function LoginComponent() {
 //   return (
 //     <div className="min-h-screen flex flex-col bg-gray-100 font-sans">
-      
 
 //       {/* Main Content */}
 //       <div className="flex-grow flex items-center justify-center">

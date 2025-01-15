@@ -130,7 +130,7 @@ export const loginUser = async (req, res, next) => {
 
     if (!user) return res.status(404).json({ msg: "User not found" });
 
-    const isAuthenticated = user.authenticate(password); // Compare the clear-text password from req.body with the hashed one in the database
+    const isAuthenticated = await user.authenticate(password); // Compare the clear-text password from req.body with the hashed one in the database
 
     if (!isAuthenticated)
       return res.status(401).json({ msg: "Incorrect credentials" });
