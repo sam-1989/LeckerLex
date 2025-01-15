@@ -86,7 +86,7 @@ function IngredientsGallery({
           return (
             <div
               key={idx}
-              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-3xl shadow-inner bg-gray-200 outline-3 transition-opacity duration-500 ease-in-out ${isLoaded ? 'opacity-100 delay-' + idx * 100 : 'opacity-0'}`}
+              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-3xl hover:outline hover:outline-1 hover:outline-gray-400 shadow-inner bg-gray-200 outline-3 transition-opacity duration-500 ease-in-out ${isLoaded ? 'opacity-100 delay-' + idx * 100 : 'opacity-0'}`}
               onClick={() => handleImageClick(item.alt)}
               style={{ transitionDelay: `${delay}ms` }}
             >

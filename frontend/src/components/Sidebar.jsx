@@ -4,13 +4,13 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen, selectedIngredients, handleR
   return (
     <>
       <button
-        className="fixed top-20 left-0 ml-4 p-2 bg-blue-500 text-white rounded"
+        className="fixed top-40 left-0 ml-4 p-2 bg-blue-500 text-white rounded"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? "Close Sidebar" : `Show selected Ingredients (${selectedIngredients.length})`}
       </button>
       {isSidebarOpen && (
-        <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg p-4">
+        <div className="fixed top-60 left-0 w-64 h-full bg-white shadow-lg p-4">
           <h2 className="text-xl font-bold mb-4">Selected Ingredients</h2>
           <ul>
             {selectedIngredients.map((ingredient, index) => (
