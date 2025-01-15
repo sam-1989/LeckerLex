@@ -11,6 +11,8 @@ import LoginPage from "./pages/loginpage/LoginPage";
 import RegisterPage from "./pages/registerpage/RegisterPage";
 import ProfileWelcomePage from "./pages/profilepage/ProfileWelcomePage";
 import ResultPage from "./pages/ResultPage";
+import RecipeDetails from "./pages/RecipeDetails";
+
 
 function App() {
   return (
@@ -22,9 +24,9 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="profile" element={<ProfileWelcomePage />} />
             <Route path="login" element={<LoginPage />} /> {/* Login-Seite */}
-            <Route path="register" element={<RegisterPage />} />{" "}
-            {/* Register-Seite */}
+            <Route path="register" element={<RegisterPage />} />{" "} {/* Register-Seite */}
             <Route path="results" element={<ResultPage />} />
+            <Route path="recipe-details/:id" element={<RecipeDetails />} /> 
             <Route path="settings" element={<Settings />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recipes" element={<Recipes />} />

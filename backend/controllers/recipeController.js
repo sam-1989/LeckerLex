@@ -23,7 +23,7 @@ export const searchRecipesAndDetails = async (req, res, next) => {
   try {
     // Fetch basic recipe list based on ingredients: hard-coded salt, water, oil, sugar as something everyone has at home; parameters are set to prioritize minimising missing ingredients & limit to 5 results
     const response = await fetch(
-      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=salt,water,oil,sugar,${ingredients}&ranking=2&ignorePantry=true&number=2`, // TODO eg. number=5, how many recipes to fetch
+      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=salt,water,oil,sugar,${ingredients}&ranking=2&ignorePantry=true&number=5`, // TODO eg. number=5, how many recipes to fetch
       options
     );
     const recipes = await response.json();
@@ -31,6 +31,7 @@ export const searchRecipesAndDetails = async (req, res, next) => {
     // Fetch detailed data for each recipe
     const detailedRecipes = await Promise.all(
       recipes.map(async (recipe) => {
+        
         const detailResponse = await fetch(
           `https://api.spoonacular.com/recipes/${recipe.id}/information?includeNutrition=true`,
           options

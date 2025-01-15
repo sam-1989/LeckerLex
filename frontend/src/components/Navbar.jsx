@@ -8,6 +8,7 @@ function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const dropdownRef = useRef(null);
 
+  // function for closing the menu bar by clicking anywhere outside the menubar
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
@@ -50,7 +51,6 @@ function Navbar() {
             Logo
           </NavLink>
         </div>
-        {/* Icons */}
         <div className="flex items-center space-x-4">
           
           {/* Mobile menu button */}
@@ -68,15 +68,29 @@ function Navbar() {
                 className="text-gray-800 hover:text-gray-600 cursor-pointer"
               />
             )}
+            
           </div>
 
-          {/* User icon and dropdown menu */}
+          {/* User icon and darkmode toggle */}
+
+          <button
+            onClick={toggleDarkMode}
+            className="focus:outline-none transition duration-300 ease-in-out"
+          >
+            {isDarkMode ? (
+              <FaSun className="text-yellow-500 transition duration-300 ease-in-out" />
+            ) : (
+              <FaMoon className="text-gray-800 dark:text-gray-200 transition duration-300 ease-in-out" />
+            )}
+          </button>
+
           <div className="relative" ref={dropdownRef}>
             <FaUser
               size={20}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="text-gray-800 hover:text-gray-600 cursor-pointer active:text-blue-600"
             />
+            
             
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
@@ -87,9 +101,7 @@ function Navbar() {
                 >
                   Profile
                 </NavLink>
-                <button onClick={toggleDarkMode} className="focus:outline-none">
-              {isDarkMode ? <FaSun className="text-yellow-500" /> : <FaMoon className="text-gray-800 dark:text-gray-200" />}
-            </button>
+                
                 <NavLink
                   to="/home/favorites"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -108,7 +120,9 @@ function Navbar() {
                 </button>
               </div>
             )}
+            
           </div>
+          
         </div>
       </div>
 
