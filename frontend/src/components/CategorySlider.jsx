@@ -12,14 +12,6 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    customPaging: (i) => (
-      <button className="focus:outline-none">
-        {categories[i] ? categories[i].name : `Seite ${i + 1}`}
-      </button>
-    ),
-    appendDots: (dots) => (
-      <ul className="flex justify-center space-x-2 mt-4">{dots}</ul>
-    ),
     responsive: [
       {
         breakpoint: 1024,
@@ -71,7 +63,7 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
           {categories.map((category) => (
             <div key={category.id} className="p-2">
               <div
-                className={`p-2 rounded-xl cursor-pointer shadow-xl border-r-0 ${
+                className={`p-2 rounded-xl cursor-pointer shadow-md border-r-0 ${
                   selectedCategory === category.id ? 'bg-green-500 text-white' : 'bg-gray-100'
                 }`}
                 onClick={() => setSelectedCategory(category.id)}
