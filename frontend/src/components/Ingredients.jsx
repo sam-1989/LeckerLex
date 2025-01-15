@@ -62,7 +62,6 @@ import Couscous from "../assets/Ingredients/Grains_Legumes/couscous.png";
 import Pasta from "../assets/Ingredients/Grains_Legumes/pasta.png";
 import Macaroni from "../assets/Ingredients/Grains_Legumes/macaroni.png";
 
-
 // Images - Snacks & Side Dishes
 import Almonds from "../assets/Ingredients/Snacks_Side_Dishes/almonds.png";
 import Bread from "../assets/Ingredients/Snacks_Side_Dishes/bread.png";
@@ -71,7 +70,6 @@ import Hazelnuts from "../assets/Ingredients/Snacks_Side_Dishes/hazelnuts.png";
 import Peanuts from "../assets/Ingredients/Snacks_Side_Dishes/peanuts.png";
 import Tortilla from "../assets/Ingredients/Snacks_Side_Dishes/tortilla.png";
 import Walnuts from "../assets/Ingredients/Snacks_Side_Dishes/walnuts.png";
-
 
 // Images - Dairy products
 import Butter from "../assets/Ingredients/Dairy_Products/butter.png";
@@ -92,7 +90,6 @@ import Olive_Oil from "../assets/Ingredients/Oils_Fats/olive_oil.png";
 import Sesame_Oil from "../assets/Ingredients/Oils_Fats/sesame_oil.png";
 import Sunflower_Oil from "../assets/Ingredients/Oils_Fats/sunflower_oil.png";
 
-
 // Images - Flour & Baking Ingredients
 import Chocolate from "../assets/Ingredients/Flour_Baking_Ingredients/chocolate.png";
 import Cocoa_Powder from "../assets/Ingredients/Flour_Baking_Ingredients/cocoa_powder.png";
@@ -102,7 +99,6 @@ import Maple_Syrup from "../assets/Ingredients/Flour_Baking_Ingredients/maple_sy
 import Sugar from "../assets/Ingredients/Flour_Baking_Ingredients/sugar.png";
 import Vanilla from "../assets/Ingredients/Flour_Baking_Ingredients/vanilla.png";
 import Yeast from "../assets/Ingredients/Flour_Baking_Ingredients/yeast.png";
-
 
 // Images - Eggs & Proteins
 import Eggs from "../assets/Ingredients/Eggs_Proteins/eggs.png";
@@ -127,8 +123,6 @@ export default function Ingredients({
   searchText,
   setSearchText,
 }) {
-
-
   // Herbs and Spices
   const herbsAndSpices = [
     { src: Chilli, alt: "Chilli" },
@@ -300,34 +294,42 @@ export default function Ingredients({
       ...eggs_proteins,
       ...canned_goods_sauces,
     ]
-    
+
       .filter((h) => typed.includes(h.alt.toLowerCase()))
       .map((h) => h.alt);
 
+    console.log(
+      "Matched",
+      JSON.stringify(matched),
+      "Selected Ingredients",
+      JSON.stringify(selectedIngredients),
+      "Searched Text",
+      searchText
+    );
     // Update selectedIngredients if changed
     if (JSON.stringify(matched) !== JSON.stringify(selectedIngredients)) {
       setSelectedIngredients(matched);
+      // TODO logik weiter
     }
   }, [searchText, selectedIngredients, setSelectedIngredients]);
 
-
   return (
     <IngredientsGallery
-    herbsAndSpices={herbsAndSpices}
-    vegetables={vegetables}
-    fruits={fruits}
-    meat={meat}
-    seafood={seafood}
-    grainsAndLegumes={grains_legumes}
-    snacksAndSideDishes={snacks_side_dishes}
-    dairyProducts={dairy_products}
-    oilsAndFats={oils_fats}
-    flourAndBakingIngredients={flour_baking_ingredients}
-    eggsAndProteins={eggs_proteins}
-    cannedGoodsAndSauces={canned_goods_sauces}
-    selectedIngredients={selectedIngredients}
-    handleImageClick={handleImageClick}
-    selectedCategory={selectedCategory}
+      herbsAndSpices={herbsAndSpices}
+      vegetables={vegetables}
+      fruits={fruits}
+      meat={meat}
+      seafood={seafood}
+      grainsAndLegumes={grains_legumes}
+      snacksAndSideDishes={snacks_side_dishes}
+      dairyProducts={dairy_products}
+      oilsAndFats={oils_fats}
+      flourAndBakingIngredients={flour_baking_ingredients}
+      eggsAndProteins={eggs_proteins}
+      cannedGoodsAndSauces={canned_goods_sauces}
+      selectedIngredients={selectedIngredients}
+      handleImageClick={handleImageClick}
+      selectedCategory={selectedCategory}
     />
   );
 }

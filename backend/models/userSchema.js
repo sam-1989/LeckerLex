@@ -14,9 +14,13 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
-      unique: [true, "Email field is missing."],
+      required: [true, "Email field is missing."],
+      unique: [true, "Email already exists."],
       trim: true,
+      match: [
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Please enter a valid email address.",
+      ],
     },
     password: {
       type: String,
@@ -48,6 +52,9 @@ const userSchema = new Schema(
 
 // // Pre-save middleware to hash the user's password before saving it to the database
 userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next(); // Skip hashing if the password field hasn't been modified
+  }
   try {
     const saltRounds = 12;
     const hash = await bcrypt.hash(this.password, saltRounds);
