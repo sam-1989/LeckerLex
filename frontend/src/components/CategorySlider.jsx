@@ -3,6 +3,28 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
+function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-next-arrow`}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    />
+  );
+}
+
+function PrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-prev-arrow`}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    />
+  );
+}
+
 function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
   const sliderSettings = {
     dots: true,
@@ -42,28 +64,6 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
     ],
   };
 
-  function NextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-gray-200 rounded-full flex items-center justify-center`}
-        style={{ ...style, display: 'block' }}
-        onClick={onClick}
-      />
-    );
-  }
-
-  function PrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={`${className} bg-gray-200 rounded-full`}
-        style={{ ...style, display: 'block' }}
-        onClick={onClick}
-      />
-    );
-  }
-
   return (
     <div className="py-4">
       <div className="max-w-screen-lg mx-auto mt-4 px-4">
@@ -71,7 +71,7 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
           {categories.map((category) => (
             <div key={category.id} className="p-2">
               <div
-                className={`p-2 rounded-xl cursor-pointer shadow-md border-r-0 text-center ${
+                className={`p-2 rounded-lg cursor-pointer shadow-md border-r-0 text-center font-book ${
                   selectedCategory === category.id ? 'bg-green-700 text-slate-50' : 'bg-gray-200'
                 } hover:bg-green-500 hover:text-slate-50 hover:scale-105`}
                 onClick={() => setSelectedCategory(category.id)}
