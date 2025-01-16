@@ -8,9 +8,13 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: [true, "Name field is missing."],
-      minlength: [2, "Name has fewer than 2 characters."],
-      maxlength: [10, "Name exceeds 10 characters."],
+      minlength: [3, "Name has fewer than 2 characters."],
+      maxlength: [15, "Name exceeds 10 characters."],
       trim: true,
+      match: [
+        /^[a-zA-Z0-9_]{3,15}$/,
+        "Name can only contain letters, digits, and underscores, and must be between 3 and 15 characters long.",
+      ],
     },
     email: {
       type: String,
@@ -25,7 +29,12 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password field is missing."],
+      minlength: [6, "Password must be at least 6 characters long."],
       trim: true,
+      match: [
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#-=_+]).{6,}$/,
+        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+).",
+      ],
     },
     reviews: [
       // TODO reviews model (1-n)

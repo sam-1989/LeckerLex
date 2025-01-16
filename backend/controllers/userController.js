@@ -116,9 +116,14 @@ export const verifyUser = async (req, res, next) => {
         isEmailValidated: user.isEmailValidated,
       });
     } else {
-      return res.status(401).json({ msg: "Unauthorized: Invalid token" });
+      return res.status(404).json({ msg: "User not found or invalid token." });
     }
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ msg: "Verification token has expired" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({ msg: "Invalid token" });
+    }
     next(error);
   }
 };
