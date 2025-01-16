@@ -78,15 +78,15 @@ function IngredientsGallery({
 
     
   return (
-    <div className="container mx-auto px-4 lg:px-56 pt-2">
-      <div className="grid gap-4 p-8 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-5">
+    <div className="container mx-auto px-4 lg:px-72 pt-2">
+      <div className="grid gap-6 p-6 grid-cols-3 lg:grid-cols-6">
         {itemsToDisplay.map((item, idx) => {
           const isSelected = selectedIngredients.includes(item.alt);
           const delay = idx * 80; // control the delay time
           return (
             <div
               key={idx}
-              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-3xl hover:outline hover:outline-1 hover:outline-gray-400 shadow-inner bg-gray-200 outline-3 transition-opacity duration-500 ease-in-out ${isLoaded ? 'opacity-100 delay-' + idx * 100 : 'opacity-0'}`}
+              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-xl hover:outline hover:outline-1 hover:outline-gray-500 shadow-md bg-gray-50 outline-3 transition-opacity duration-500 ease-in-out ${isLoaded ? 'opacity-100 delay-0' + idx * 100 : 'opacity-0'}`}
               onClick={() => handleImageClick(item.alt)}
               style={{ transitionDelay: `${delay}ms` }}
             >
@@ -95,7 +95,7 @@ function IngredientsGallery({
                 alt={item.alt}
                 className="w-full h-full object-contain mx-auto transition-transform duration-300 transform group-hover:scale-105"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-sm sm:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-sm sm:text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 {item.alt}
               </div>
               {isSelected && (
