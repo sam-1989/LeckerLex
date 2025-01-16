@@ -14,7 +14,7 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
     prevArrow: <PrevArrow />,
     customPaging: (i) => (
       <button className="focus:outline-none">
-        {categories[i] ? categories[i].name : `Seite ${i + 1}`}
+        {categories[i] ? categories[i].name : `Page ${i + 1}`}
       </button>
     ),
     appendDots: (dots) => (
@@ -71,9 +71,9 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
           {categories.map((category) => (
             <div key={category.id} className="p-2">
               <div
-                className={`p-2 rounded-xl cursor-pointer shadow-xl border-r-0 ${
-                  selectedCategory === category.id ? 'bg-green-500 text-white' : 'bg-gray-100'
-                }`}
+                className={`p-2 rounded-xl cursor-pointer shadow-md border-r-0 text-center ${
+                  selectedCategory === category.id ? 'bg-green-700 text-slate-50' : 'bg-gray-200'
+                } hover:bg-green-500 hover:text-slate-50 hover:scale-105`}
                 onClick={() => setSelectedCategory(category.id)}
               >
                 {category.name}

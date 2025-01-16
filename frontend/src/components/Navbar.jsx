@@ -1,12 +1,14 @@
 import  React, {useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import { FaBars, FaSearch, FaTimes, FaUser } from "react-icons/fa";
+import { FaBars, FaSearch, FaTimes, FaUser, FaSun, FaMoon } from "react-icons/fa";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const dropdownRef = useRef(null);
 
+  // function for closing the menu bar by clicking anywhere outside the menubar
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
@@ -24,6 +26,21 @@ function Navbar() {
     };
   }, [isDropdownOpen]);
 
+  // useEffect for darkmode 
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+
   return (
     <>
       <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -34,12 +51,8 @@ function Navbar() {
             Logo
           </NavLink>
         </div>
-        {/* Icons */}
         <div className="flex items-center space-x-4">
-          <FaSearch
-            size={20}
-            className="text-gray-800 hover:text-gray-600 cursor-pointer m-5"
-          />
+          
           {/* Mobile menu button */}
           <div className="md:hidden">
             {isMobileMenuOpen ? (
@@ -55,14 +68,30 @@ function Navbar() {
                 className="text-gray-800 hover:text-gray-600 cursor-pointer"
               />
             )}
+            
           </div>
-          {/* User icon and dropdown menu */}
+
+          {/* User icon and darkmode toggle */}
+
+          <button
+            onClick={toggleDarkMode}
+            className="focus:outline-none transition duration-300 ease-in-out"
+          >
+            {isDarkMode ? (
+              <FaSun className="text-yellow-500 transition duration-300 ease-in-out" />
+            ) : (
+              <FaMoon className="text-gray-800 dark:text-gray-200 transition duration-300 ease-in-out" />
+            )}
+          </button>
+
           <div className="relative" ref={dropdownRef}>
             <FaUser
               size={20}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="text-gray-800 hover:text-gray-600 cursor-pointer active:text-blue-600"
             />
+            
+            
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                 <NavLink
@@ -72,12 +101,7 @@ function Navbar() {
                 >
                   Profile
                 </NavLink>
-                <NavLink
-                  to="/home/settings"
-                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                >
-                  Settings
-                </NavLink>
+                
                 <NavLink
                   to="/home/favorites"
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -90,12 +114,15 @@ function Navbar() {
                 >
                   Recipes
                 </NavLink>
+                
                 <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
                   Log out
                 </button>
               </div>
             )}
+            
           </div>
+          
         </div>
       </div>
 

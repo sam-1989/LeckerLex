@@ -4,6 +4,7 @@ import { RecipeContext } from "../context/RecipeContext";
 import CategorySlider from "../components/CategorySlider";
 import Ingredients from "../components/Ingredients";
 import SearchBar from "../components/SearchBar";
+import Sidebar from "../components/Sidebar";
 
 export default function HomePage() {
   // access setRecipes from context to store fetched recipes
@@ -13,13 +14,17 @@ export default function HomePage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // category selection
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("null");
 
   // collect chosen ingredients
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   // manage the search input text
   const [searchText, setSearchText] = useState("");
+
+  // manage the sidebar
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // selectedIngredients query format
   const formattedIngredients = selectedIngredients.map((ingredient) =>
@@ -79,14 +84,23 @@ export default function HomePage() {
     }
   };
 
+  const handleRemoveIngredient = (ingredient) => {
+    setSelectedIngredients(selectedIngredients.filter((item) => item !== ingredient));
+  };
+
+  const handleRemoveAll = () => {
+    setSelectedIngredients([]);
+  };
+
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Pass searchText & setSearchText to SearchBar */}
-      <SearchBar
-        searchText={searchText}
-        setSearchText={setSearchText}
-        handleSearch={handleSearch}
-      />
+      <div className="flex justify-center items-center">
+        <SearchBar
+          searchText={searchText}
+          setSearchText={setSearchText}
+          handleSearch={handleSearch}
+        />
+      </div>
       {errorMessage && (
         <p className="text-red-500 text-center mt-4">{errorMessage}</p>
       )}
@@ -95,13 +109,20 @@ export default function HomePage() {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-      {/* Pass everything needed for selecting ingredients */}
       <Ingredients
         selectedCategory={selectedCategory}
         selectedIngredients={selectedIngredients}
         setSelectedIngredients={setSelectedIngredients}
         searchText={searchText}
         setSearchText={setSearchText}
+      />
+      
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+        selectedIngredients={selectedIngredients}
+        handleRemoveIngredient={handleRemoveIngredient}
+        handleRemoveAll={handleRemoveAll}
       />
     </div>
   );
