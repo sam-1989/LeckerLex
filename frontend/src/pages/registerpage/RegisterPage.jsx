@@ -7,6 +7,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false); // terms and conditions checkbox
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track if the form is being submitted and to prevent user clicking more times
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -48,6 +49,7 @@ export default function RegisterPage() {
     }
 
     setErrorMessage(""); // clean previous errors
+    setIsSubmitting(true); // submition process started
 
     try {
       const response = await fetch("http://localhost:3000/users/signup", {
@@ -65,7 +67,7 @@ export default function RegisterPage() {
         setErrorMessage(errorData.msg || "An error occured. Please try again.");
         return;
       }
-      navigate("/home/verify-email");
+      navigate("/home/verify-email", { replace: true });
     } catch (error) {
       setErrorMessage(
         "An error occured while trying to register. Please try again later."
@@ -162,7 +164,7 @@ export default function RegisterPage() {
             type="submit"
             className="mt-6 w-full py-3 bg-blue-600 text-white rounded-md text-lg shadow-lg hover:bg-blue-500 transition duration-300"
           >
-            GET STARTED
+            {isSubmitting ? "Registering..." : "GET STARTED"}
           </button>
         </form>
 

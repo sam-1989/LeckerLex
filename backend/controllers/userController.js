@@ -44,11 +44,9 @@ export const registerUser = async (req, res, next) => {
         </p>
         <div style="text-align: center; margin: 20px 0;">
           <a 
-            href="${process.env.BASE_URL}${
-        process.env.PORT
-      }/users/verify-email/${token}" 
+            href="${process.env.FRONTEND_BASE_URL}/home/email-verify/${token}" 
             style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;"
-          >
+          > 
             Verify Email
           </a>
         </div>
@@ -56,11 +54,11 @@ export const registerUser = async (req, res, next) => {
           Or, if the button doesn't work, you can copy and paste the following link into your browser:
         </p>
         <p style="font-size: 16px; color: #555; word-wrap: break-word;">
-          <a href="${process.env.BASE_URL}${
-        process.env.PORT
-      }/users/verify-email/${token}" style="color: #4CAF50;">${
-        process.env.BASE_URL
-      }${process.env.PORT}/users/verify-email/${token}</a>
+          <a href="${
+            process.env.FRONTEND_BASE_URL
+          }/home/email-verify/${token}"  style="color: #4CAF50;">${
+        process.env.FRONTEND_BASE_URL
+      }/home/email-verify/${token}</a>
         </p>
         <p style="font-size: 14px; color: #999; text-align: center; margin-top: 30px;">
           If you didn't sign up for LeckerLex, please ignore this email.
@@ -73,7 +71,7 @@ export const registerUser = async (req, res, next) => {
       text: `
       Welcome to LeckerLex, ${newUser.name}!
       Thank you for registering. Please verify your email address by clicking the link below:
-      ${process.env.BASE_URL}${process.env.PORT}/users/verify-email/${token}
+      ${process.env.FRONTEND_BASE_URL}/home/email-verify/${token}
       
       If you didn't sign up for LeckerLex, please ignore this email.
   
@@ -95,7 +93,19 @@ export const registerUser = async (req, res, next) => {
       }
     });
   } catch (error) {
-    next(error);
+    if (error.code === 11000) {
+      // Duplicate key error (email already in use)
+      res
+        .status(400)
+        .json({
+          msg: "This email address is already in use. Please try a different email.",
+        });
+    } else {
+      // Other errors
+      res
+        .status(500)
+        .json({ msg: "An unexpected error occurred. Please try again later." });
+    }
   }
 };
 
@@ -124,7 +134,6 @@ export const verifyUser = async (req, res, next) => {
     } else if (error.name === "JsonWebTokenError") {
       return res.status(400).json({ msg: "Invalid token" });
     }
-    next(error);
   }
 };
 
