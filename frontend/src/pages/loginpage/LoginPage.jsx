@@ -34,7 +34,7 @@ export default function LoginComponent() {
       }
       const data = await response.json(); // testing purpose
       console.log("User data", data); // testing purpose
-      navigate("/home/profile");
+      navigate("/home");
     } catch (error) {
       console.error("Error by login", error); // debug log
       setErrorMessage(

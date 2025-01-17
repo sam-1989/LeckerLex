@@ -20,8 +20,6 @@ export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    // TODO validators in schema or controller or both?
-
     // Create new user and generate verification token
     const newUser = new User({ name, email, password });
     const token = generateToken({ userId: newUser._id }); // Payload with user ID
@@ -95,11 +93,9 @@ export const registerUser = async (req, res, next) => {
   } catch (error) {
     if (error.code === 11000) {
       // Duplicate key error (email already in use)
-      res
-        .status(400)
-        .json({
-          msg: "This email address is already in use. Please try a different email.",
-        });
+      res.status(400).json({
+        msg: "This email address is already in use. Please try a different email.",
+      });
     } else {
       // Other errors
       res
@@ -109,7 +105,7 @@ export const registerUser = async (req, res, next) => {
   }
 };
 
-export const verifyUser = async (req, res, next) => {
+export const verifyUser = async (req, res) => {
   try {
     const token = req.params.token; // Extract token from URL params
     jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
@@ -160,11 +156,26 @@ export const loginUser = async (req, res, next) => {
     return res
       .status(200)
       .cookie("jwt", token, {
-        // httpOnly: true,
-        // secure: true, // Deactivated for backend-only demo purposes via Insomnia
+        httpOnly: true,
+        // secure: true,
         maxAge: 24 * 60 * 60 * 1000, // 1 day in miliseconds
       })
       .json({ msg: "Successfully signed in" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutUser = async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .cookie("jwt", "", {
+        httpOnly: true,
+        // secure: true,
+        expires: new Date(0), // expires immediately by setting to a past date
+      })
+      .json({ msg: "Successfully logged out." });
   } catch (error) {
     next(error);
   }

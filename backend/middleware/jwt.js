@@ -4,7 +4,7 @@ import { User } from "../models/userSchema.js";
 // Generate a json web token with desired payload that expires in a desired time
 export const generateToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "1h",
+    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
   });
 };
 
