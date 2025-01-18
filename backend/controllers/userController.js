@@ -2,6 +2,7 @@ import { User } from "../models/userSchema.js";
 import nodemailer from "nodemailer";
 import { generateToken } from "../middleware/jwt.js";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../middleware/jwt.js";
 
 // Setup to send emails from the app using nodemailer
 const transporter = nodemailer.createTransport({
@@ -19,8 +20,6 @@ const transporter = nodemailer.createTransport({
 export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
-    // TODO validators in schema or controller or both?
 
     // Create new user and generate verification token
     const newUser = new User({ name, email, password });
@@ -44,11 +43,9 @@ export const registerUser = async (req, res, next) => {
         </p>
         <div style="text-align: center; margin: 20px 0;">
           <a 
-            href="${process.env.BASE_URL}${
-        process.env.PORT
-      }/users/verify-email/${token}" 
+            href="${process.env.FRONTEND_BASE_URL}/home/email-verify/${token}" 
             style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;"
-          >
+          > 
             Verify Email
           </a>
         </div>
@@ -56,11 +53,11 @@ export const registerUser = async (req, res, next) => {
           Or, if the button doesn't work, you can copy and paste the following link into your browser:
         </p>
         <p style="font-size: 16px; color: #555; word-wrap: break-word;">
-          <a href="${process.env.BASE_URL}${
-        process.env.PORT
-      }/users/verify-email/${token}" style="color: #4CAF50;">${
-        process.env.BASE_URL
-      }${process.env.PORT}/users/verify-email/${token}</a>
+          <a href="${
+            process.env.FRONTEND_BASE_URL
+          }/home/email-verify/${token}"  style="color: #4CAF50;">${
+        process.env.FRONTEND_BASE_URL
+      }/home/email-verify/${token}</a>
         </p>
         <p style="font-size: 14px; color: #999; text-align: center; margin-top: 30px;">
           If you didn't sign up for LeckerLex, please ignore this email.
@@ -73,7 +70,7 @@ export const registerUser = async (req, res, next) => {
       text: `
       Welcome to LeckerLex, ${newUser.name}!
       Thank you for registering. Please verify your email address by clicking the link below:
-      ${process.env.BASE_URL}${process.env.PORT}/users/verify-email/${token}
+      ${process.env.FRONTEND_BASE_URL}/home/email-verify/${token}
       
       If you didn't sign up for LeckerLex, please ignore this email.
   
@@ -95,14 +92,25 @@ export const registerUser = async (req, res, next) => {
       }
     });
   } catch (error) {
-    next(error);
+    if (error.code === 11000) {
+      // Duplicate key error (email already in use)
+      res.status(400).json({
+        msg: "This email address is already in use. Please try a different email.",
+      });
+    } else {
+      // Other errors
+      res
+        .status(500)
+        .json({ msg: "An unexpected error occurred. Please try again later." });
+    }
   }
 };
 
-export const verifyUser = async (req, res, next) => {
+export const verifyUser = async (req, res) => {
   try {
     const token = req.params.token; // Extract token from URL params
-    jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
+    console.log("Decoded token:", decoded); // Log decoded token
 
     // Find the user associated with the verification token
     const user = await User.findOne({ validationToken: token });
@@ -110,14 +118,42 @@ export const verifyUser = async (req, res, next) => {
     if (user) {
       user.isEmailValidated = true; // Set the user's emailVerified field to true
       user.validationToken = null; // Remove the registration token
-      await user.save();
+      await user.save({ validateBeforeSave: false }); // to skip validating the password after it has been hashed (this leads to errors)
       return res.status(200).json({
         msg: "Email successfully verified",
         isEmailValidated: user.isEmailValidated,
       });
     } else {
-      return res.status(401).json({ msg: "Unauthorized: Invalid token" });
+      return res.status(404).json({ msg: "User not found or invalid token." });
     }
+  } catch (error) {
+    console.error("Token verification error:", error);
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ msg: "Verification token has expired" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({ msg: "Invalid token" });
+    } else {
+      return res.status(500).json({ msg: "Internal server error" });
+    }
+  }
+};
+
+// for verifying authentication status (used in frontend protected routes for logged-in users)
+export const authenticateUser = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwt;
+
+    if (!token)
+      return res.status(401).json({ msg: "Unauthorized: no token provided." });
+
+    const decoded = verifyToken(token);
+
+    if (!decoded)
+      return res
+        .status(403)
+        .json({ msg: "Forbidden: Invalid or expired token." });
+
+    res.status(200).json({ msg: "Authenticated" });
   } catch (error) {
     next(error);
   }
@@ -146,11 +182,26 @@ export const loginUser = async (req, res, next) => {
     return res
       .status(200)
       .cookie("jwt", token, {
-        // httpOnly: true,
-        // secure: true, // Deactivated for backend-only demo purposes via Insomnia
+        httpOnly: true,
+        // secure: true,
         maxAge: 24 * 60 * 60 * 1000, // 1 day in miliseconds
       })
       .json({ msg: "Successfully signed in" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutUser = async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .cookie("jwt", "", {
+        httpOnly: true,
+        // secure: true,
+        expires: new Date(0), // expires immediately by setting to a past date
+      })
+      .json({ msg: "Successfully logged out." });
   } catch (error) {
     next(error);
   }
