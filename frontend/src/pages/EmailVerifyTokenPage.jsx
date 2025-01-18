@@ -62,6 +62,7 @@ export default function EmailVerifyTokenPage() {
       if (timer) clearTimeout(timer); // cleanup function for timeout function to prevent memory leak
     };
   }, [token]);
+
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col justify-center items-center">
       {loading ? (

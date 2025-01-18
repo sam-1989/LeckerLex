@@ -2,6 +2,7 @@ import { User } from "../models/userSchema.js";
 import nodemailer from "nodemailer";
 import { generateToken } from "../middleware/jwt.js";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../middleware/jwt.js";
 
 // Setup to send emails from the app using nodemailer
 const transporter = nodemailer.createTransport({
@@ -108,7 +109,8 @@ export const registerUser = async (req, res, next) => {
 export const verifyUser = async (req, res) => {
   try {
     const token = req.params.token; // Extract token from URL params
-    jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
+    console.log("Decoded token:", decoded); // Log decoded token
 
     // Find the user associated with the verification token
     const user = await User.findOne({ validationToken: token });
@@ -116,7 +118,7 @@ export const verifyUser = async (req, res) => {
     if (user) {
       user.isEmailValidated = true; // Set the user's emailVerified field to true
       user.validationToken = null; // Remove the registration token
-      await user.save();
+      await user.save({ validateBeforeSave: false }); // to skip validating the password after it has been hashed (this leads to errors)
       return res.status(200).json({
         msg: "Email successfully verified",
         isEmailValidated: user.isEmailValidated,
@@ -125,11 +127,35 @@ export const verifyUser = async (req, res) => {
       return res.status(404).json({ msg: "User not found or invalid token." });
     }
   } catch (error) {
+    console.error("Token verification error:", error);
     if (error.name === "TokenExpiredError") {
       return res.status(400).json({ msg: "Verification token has expired" });
     } else if (error.name === "JsonWebTokenError") {
       return res.status(400).json({ msg: "Invalid token" });
+    } else {
+      return res.status(500).json({ msg: "Internal server error" });
     }
+  }
+};
+
+// for verifying authentication status (used in frontend protected routes for logged-in users)
+export const authenticateUser = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwt;
+
+    if (!token)
+      return res.status(401).json({ msg: "Unauthorized: no token provided." });
+
+    const decoded = verifyToken(token);
+
+    if (!decoded)
+      return res
+        .status(403)
+        .json({ msg: "Forbidden: Invalid or expired token." });
+
+    res.status(200).json({ msg: "Authenticated" });
+  } catch (error) {
+    next(error);
   }
 };
 

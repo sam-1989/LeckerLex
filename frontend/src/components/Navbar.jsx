@@ -52,6 +52,7 @@ function Navbar() {
         return;
       }
       navigate("/home");
+      setIsDropdownOpen(false);
     } catch (error) {
       console.error("Error logging out:", error);
     }

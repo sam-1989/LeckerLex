@@ -18,7 +18,7 @@ export default function RegisterPage() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/; // part before "@" allows (upper- and lowercase) letters, digits and special characters (._%+-), must contain @, part after @ allows (upper- and lowercase) letters, digits and special characters (.-), last part must contain a dot (.) followed by 2-5 letters
 
     const passwordRegex =
-      /^(?=(?:.*[a-z]){1})(?=(?:.*[A-Z]){1})(?=(?:.*\d){1})(?=(?:.*[@$!%*?&^#-=_+]){1}).{6,}$/; // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+).
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#\-=_+])[A-Za-z\d@$!%*?&^#\-=_+]{6,}$/; // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+).
 
     if (!email || !password || !name) {
       setErrorMessage("Please enter your username, email and password.");

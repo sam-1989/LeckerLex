@@ -10,11 +10,11 @@ export const generateToken = (payload) => {
 
 // Check whether a token is valid (correct secret key, matching payload and header (type of token and signing algorithm) and not expired)
 // If valid and not expired, return decoded payload
-const verifyToken = (token) => {
+export const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, process.env.JWT_SECRET); // Decode and verify the token
   } catch (error) {
-    throw new Error("Invalid or expired token!");
+    throw new Error("Forbidden: Invalid or expired token!");
   }
 };
 
