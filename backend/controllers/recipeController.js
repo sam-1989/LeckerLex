@@ -15,7 +15,7 @@ export const searchRecipesAndDetails = async (req, res, next) => {
   const ingredientArray = ingredients?.split(",").map((item) => item.trim());
 
   // at least 4 ingredients needed for the search
-  if (!ingredientArray || ingredientArray.length < 4)
+  if (!ingredientArray || ingredientArray.length < 2)
     return res
       .status(400)
       .json({ msg: "Search is permitted with a minimum of 4 ingredients." });

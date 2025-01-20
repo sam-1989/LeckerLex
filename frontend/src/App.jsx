@@ -10,9 +10,12 @@ import RegisterPage from "./pages/registerpage/RegisterPage";
 import ProfileWelcomePage from "./pages/profilepage/ProfileWelcomePage";
 import ResultPage from "./pages/ResultPage";
 import RecipeDetails from "./pages/RecipeDetails";
+
+import MyShoppingList from "./pages/MyShoppingList";
 import NotFound from "./pages/NotFound";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import EmailVerifyTokenPage from "./pages/EmailVerifyTokenPage";
+
 
 function App() {
   return (
@@ -31,11 +34,11 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recipes" element={<Recipes />} />
+            <Route path="shopping-list" element={<MyShoppingList />} />
             <Route path="verify-email" element={<VerifyEmailPage />} />
             <Route
               path="email-verify/:token"
               element={<EmailVerifyTokenPage />}
-              /* TODO: 404 page not found  */
             />
           </Route>
           <Route path="*" element={<NotFound />} />

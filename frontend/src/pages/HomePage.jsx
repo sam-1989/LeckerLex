@@ -56,7 +56,7 @@ export default function HomePage() {
   ];
 
   const handleSearch = async () => {
-    if (selectedIngredients.length < 4) {
+    if (selectedIngredients.length < 2) {
       setErrorMessage("Please select at least 4 ingredients.");
       return;
     }
