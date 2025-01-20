@@ -7,7 +7,7 @@ function MyShoppingList() {
     return (
         <div className="p-4 max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">My Shopping List</h1>
-            {shoppingList && shoppingList.length > 0 ? (
+            {shoppingList.length > 0 ? (
                 <ul className="list-disc pl-6">
                     {shoppingList.map((item, index) => (
                         <li key={index} className="mb-2">

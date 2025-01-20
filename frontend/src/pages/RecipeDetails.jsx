@@ -5,13 +5,11 @@ import { RecipeContext } from "../context/RecipeContext";
 function RecipeDetails() {
     const { id } = useParams(); // Rezept-ID aus der URL
     const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
-    const { shoppingList, setShoppingList } = useContext(RecipeContext);
-
+    const { setShoppingList } = useContext(RecipeContext);
+    
     // Finde das Rezept mit der passenden ID
     const recipe = recipes.find((x) => x.id === parseInt(id));
 
-    console.log(recipes);
-    
     const [showMissingIngredients, setShowMissingIngredients] = useState(true);  // Fehlende Zutaten-Fenster
     const [visibleSection, setVisibleSection] = useState(null); // Zum Umschalten der Abschnitte
     const [showShoppingListModal, setShowShoppingListModal] = useState(false);
@@ -26,8 +24,9 @@ function RecipeDetails() {
     // Funktion, um zur Einkaufsliste hinzuzufügen
 
     const handleAddToShoppingList = () => {
-        // TODO Hier kommt die Logik zum Speichern der Einkaufsliste 
+         console.log("Adding to shopping list:", recipe.missedIngredients);  // Debug
         setShowShoppingListModal(true);
+        setShoppingList((prevList) => [...prevList, ...recipe.missedIngredients]); // Fehlende Zutaten hinzufügen
     };
 
     // Funktion, die sowohl das Shopping List Modal als auch das Missing Ingredients Fenster schließt
@@ -46,17 +45,9 @@ function RecipeDetails() {
         setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));  // Mindestens 0,5
     };
 
-    // Funktion zur Hinzufügen der fehlenden Zutaten zu "My Shopping List"
-
-    /* function handleAddToShoppingList() {
-        setShoppingList((prevList) => [...prevList, ...recipe.missedIngredients]);
-    } */
-
     // Dynamischer Text für "serving" in Singular oder Plural
 
     const servingsText = `for ${servings} ${servings === 1 || servings === 0.5 ? 'serving' : 'servings'}`;
-
-    
 
     // Falls kein Rezept gefunden wird
     if (!recipe) {
@@ -66,10 +57,10 @@ function RecipeDetails() {
     return (
         
     <div className="p-4 max-w-6xl mx-auto relative">
-        {/* Enjoy Cooking! */}
+        {/* Banner - Enjoy Cooking! */}
         <div
         className="fixed top-13 left-0 w-full bg-white text-green-500 text-center py-2 overflow-hidden">
-            <div className={`animate-marquee whitespace-nowrap text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold ${pauseBanner ? "animate-none" : ""}`}> 
+            <div className={`animate-marquee whitespace-nowrap text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold z-10 ${pauseBanner ? "animate-none" : ""}`}> 
             Enjoy Cooking!
             </div>
         </div>
