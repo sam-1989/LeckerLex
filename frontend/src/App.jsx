@@ -14,33 +14,44 @@ import MyShoppingList from "./pages/MyShoppingList";
 import NotFound from "./pages/NotFound";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import EmailVerifyTokenPage from "./pages/EmailVerifyTokenPage";
+import AuthContextProvider from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <RecipeContextProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="profile" element={<ProfileWelcomePage />} />
-            <Route path="login" element={<LoginPage />} /> {/* Login-Seite */}
-            <Route path="register" element={<RegisterPage />} />{" "}
-            {/* Register-Seite */}
-            <Route path="results" element={<ResultPage />} />
-            <Route path="recipe-details/:id" element={<RecipeDetails />} />
-            <Route path="favorites" element={<Favorites />} />
-            <Route path="shopping-list" element={<MyShoppingList />} />
-            <Route path="verify-email" element={<VerifyEmailPage />} />
-            <Route
-              path="email-verify/:token"
-              element={<EmailVerifyTokenPage />}
-            />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </RecipeContextProvider>
+    <AuthContextProvider>
+      <RecipeContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/home" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfileWelcomePage />{" "}
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="login" element={<LoginPage />} /> {/* Login-Seite */}
+              <Route path="register" element={<RegisterPage />} />{" "}
+              {/* Register-Seite */}
+              <Route path="results" element={<ResultPage />} />
+              <Route path="recipe-details/:id" element={<RecipeDetails />} />
+              <Route path="favorites" element={<Favorites />} />
+              <Route path="shopping-list" element={<MyShoppingList />} />
+              <Route path="verify-email" element={<VerifyEmailPage />} />
+              <Route
+                path="email-verify/:token"
+                element={<EmailVerifyTokenPage />}
+              />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </RecipeContextProvider>
+    </AuthContextProvider>
   );
 }
 

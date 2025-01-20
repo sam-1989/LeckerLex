@@ -112,13 +112,12 @@ function Navbar() {
                 >
                   <FaCartArrowDown className="mr-2" /> Shopping List
                 </NavLink>
-                <NavLink
-                  to="/logout"
-                  className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                  onClick={() => (onClick = { handleLogout })}
+                <button
+                  className="flex items-center w-full px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+                  onClick={handleLogout}
                 >
                   <FaSignOutAlt className="mr-2" /> Logout
-                </NavLink>
+                </button>
               </div>
             )}
           </div>
