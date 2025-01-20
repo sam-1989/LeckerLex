@@ -20,12 +20,15 @@ function ShoppingList({ chosenRecipe }) {
       }
     });
     setProducts(updatedProducts);
+
   };
 
   const handleCheckProduct = (product) => {
+
     setCheckedProducts((prev) => ({
       ...prev,
       [product]: !prev[product],
+
     }));
   };
 
@@ -69,6 +72,7 @@ function ShoppingList({ chosenRecipe }) {
               className="bg-gray-100 flex justify-between items-center py-2 px-4 rounded-md"
             >
               <div className="flex items-center space-x-3">
+
                 <input
                   type="checkbox"
                   checked={checkedProducts[product] || false}
@@ -105,5 +109,6 @@ function ShoppingList({ chosenRecipe }) {
     </div>
   );
 }
+
 
 export default ShoppingList;

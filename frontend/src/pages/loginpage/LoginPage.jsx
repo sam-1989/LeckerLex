@@ -10,18 +10,8 @@ export default function LoginComponent() {
   const handleSignUp = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
     if (!email || !password) {
       setErrorMessage("Please enter your email and password.");
-      return;
-    }
-
-    if (!emailRegex.test(email)) {
-      setErrorMessage(
-        "Please enter a valid email address in the format example@domain.com."
-      );
-      console.log(errorMessage);
       return;
     }
 
@@ -42,12 +32,14 @@ export default function LoginComponent() {
         setErrorMessage(errorData.msg || "Incorrent email or password.");
         return;
       }
-      const data = await response.json();
-      console.log("User data", data);
-      navigate("/home/profile");
+      const data = await response.json(); // testing purpose
+      console.log("User data", data); // testing purpose
+      navigate("/home");
     } catch (error) {
-      console.error("Error fetching user data", error); // debug log
-      setErrorMessage("An error occured. Please try again later.");
+      console.error("Error by login", error); // debug log
+      setErrorMessage(
+        "An error occured while trying to login. Please try again later."
+      );
     }
   };
 
