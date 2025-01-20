@@ -85,9 +85,10 @@ export default function HomePage() {
   };
 
   const handleRemoveIngredient = (index) => {
-    setSelectedIngredients((prevIngredients) =>
-      prevIngredients.filter((_, i) => i !== index)
-    );
+    setSelectedIngredients((prevIngredients) => {
+      const updatedIngredients = prevIngredients.filter((_, i) => i !== index);
+      return updatedIngredients;
+    });
   };
 
   const handleRemoveAll = () => {

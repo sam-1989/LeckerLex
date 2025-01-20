@@ -1,66 +1,79 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-function Favorites() {
-  const [cookTime, setCookTime] = useState("");
-  const [calories, setCalories] = useState("");
-  const [isVegan, setIsVegan] = useState(false);
+const Favorites = () => {
+  const [cookTime, setCookTime] = useState('');
+  const [calories, setCalories] = useState('');
+  const [nutrition, setNutrition] = useState('');
 
   return (
-    <main className="flex justify-center items-start min-h-screen bg-gray-100 py-10">
-      <div className="p-4 bg-white shadow-md rounded-lg">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
+      <main className="p-6 bg-white shadow-lg rounded-lg w-full max-w-2xl">
         <section>
-          <h1 className="text-2xl font-bold mb-4">My Favorite Recipes</h1>
-          <div className="flex flex-wrap gap-4 mb-4">
-            <input
-              type="text"
-              placeholder="Cooking time (min.)"
-              value={cookTime}
-              onChange={(e) => setCookTime(e.target.value)}
-              className="p-2 border border-gray-300 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Calories"
-              value={calories}
-              onChange={(e) => setCalories(e.target.value)}
-              className="p-2 border border-gray-300 rounded"
-            />
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={isVegan}
-                onChange={() => setIsVegan(!isVegan)}
-                className="mr-2"
-              />
-              Vegan
+          <h1 className="text-3xl font-semibold mb-6 text-gray-800">My Favorite Recipes</h1>
+          <div className="flex flex-wrap gap-4 mb-6">
+            <label className="flex flex-col">
+              <span className="mb-2 text-gray-700">Cooking time</span>
+              <select
+                value={cookTime}
+                onChange={(e) => setCookTime(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select...</option>
+                <option value="0-15">0 - 15 minutes</option>
+                <option value="15-30">15 - 30 minutes</option>
+                <option value="30-45">30 - 45 minutes</option>
+                <option value="45-60">45 - 60 minutes</option>
+                <option value="60+">60 or more</option>
+              </select>
+            </label>
+            <label className="flex flex-col">
+              <span className="mb-2 text-gray-700">Calories</span>
+              <select
+                value={calories}
+                onChange={(e) => setCalories(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select...</option>
+                <option value="0-100">0 - 100 calories</option>
+                <option value="100-200">100 - 200 calories</option>
+                <option value="200-300">200 - 300 calories</option>
+                <option value="300-400">300 - 400 calories</option>
+                <option value="400+">400 or more calories</option>
+              </select>
+            </label>
+            <label className="flex flex-col">
+              <span className="mb-2 text-gray-700">Nutrition</span>
+              <select
+                value={nutrition}
+                onChange={(e) => setNutrition(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select...</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="gluten-free">Gluten-free</option>
+                <option value="dairy-free">Gairy-free</option>
+              </select>
             </label>
           </div>
         </section>
         <section className="mt-8">
-          <p>Here are going to render the favorite recipes...</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim placeat dolores obcaecati beatae delectus labore officia ratione ullam, eligendi praesentium! At nostrum, sed sint eaque exercitationem alias optio maiores dolore.
-          Exercitationem blanditiis dolorum deserunt, libero numquam tempora dignissimos ea culpa iste cupiditate nobis, commodi aspernatur expedita. Enim, laudantium! Labore magni velit, enim illo beatae commodi dicta voluptates distinctio praesentium. Atque.
-          Voluptate, doloremque quo debitis mollitia corrupti eius, voluptatum consequatur consectetur rem assumenda quae, dicta nisi? Obcaecati autem cupiditate vitae labore beatae at iste laudantium, ipsam animi rerum facilis aliquid asperiores.
-          Quod adipisci aliquid, aut numquam obcaecati aspernatur iste, dolores eaque recusandae suscipit, dolorum sapiente dolore eius dolorem atque! Cupiditate et eius quas laboriosam fugiat reprehenderit corrupti minus omnis sit consequatur!
-          Quia delectus nisi excepturi possimus earum repudiandae dicta quasi! Ad impedit laboriosam sed, magnam provident autem odio veniam fuga eveniet rem nisi. Voluptates quis dicta ratione perspiciatis eaque perferendis omnis!
-          Odit consequuntur excepturi corrupti distinctio ad veniam cupiditate aut sit eligendi id aperiam voluptatem quas eos voluptate sunt nam, in ratione adipisci minima facere beatae perspiciatis velit dolor nostrum. Aperiam.
-          Repellendus quidem saepe debitis ratione quia sed amet natus, assumenda quisquam veniam pariatur facilis beatae nemo. Quod nobis aliquam sit eveniet omnis veritatis temporibus. Voluptate asperiores cumque adipisci id laborum.
-          Expedita fuga placeat deleniti distinctio totam nesciunt natus, consectetur soluta labore harum. Dignissimos quibusdam animi magnam? Eaque accusamus quia sunt! Assumenda aspernatur repellat explicabo soluta accusamus minima amet, sapiente dicta!
-          Itaque in totam quae consectetur libero rerum debitis earum quisquam, ipsa harum sunt dolor quaerat. Libero praesentium labore nihil quod adipisci debitis incidunt rem, nam cumque? Excepturi expedita ut nobis.
-          Enim aspernatur, quas numquam hic expedita totam, ratione alias, illum repellendus quod perferendis quaerat voluptatem molestiae et suscipit necessitatibus incidunt doloribus minima voluptas esse assumenda voluptates repellat? Possimus, dolorem deserunt!</p>
+          <p className="text-gray-600">Here are going to render the favorite recipes...</p>
+          <p className="text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim placeat dolores obcaecati beatae delectus labore officia ratione ullam, eligendi praesentium! At nostrum, sed sint eaque exercitationem alias optio maiores dolore.</p>
         </section>
-
+      </main>
+      <div className="flex justify-center mt-6 w-full">
         <button
           onClick={() => {
             // Logic to navigate back to home
             window.location.href = "/home";
           }}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Back to Home
         </button>
       </div>
-    </main>
+    </div>
   );
 }
 

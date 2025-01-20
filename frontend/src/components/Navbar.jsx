@@ -10,8 +10,9 @@ import {
 } from "react-icons/fa";
 
 function Navbar() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // state for dropdown menu
+  const [isDarkMode, setIsDarkMode] = useState(false); // state for darkMode
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // state for user-login
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -48,6 +49,7 @@ function Navbar() {
       }
       navigate("/home");
       setIsDropdownOpen(false);
+      setIsLoggedIn(false);
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -59,7 +61,7 @@ function Navbar() {
         isDarkMode ? "dark" : "light"
       }`}
     >
-      <div className="flex justify-between h-16">
+      <div className="flex justify-between h-16 z-50">
         {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
           <NavLink
@@ -82,7 +84,7 @@ function Navbar() {
             )}
           </button>
 
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative z-50" ref={dropdownRef}>
             <FaUser
               size={20}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -90,7 +92,8 @@ function Navbar() {
             />
 
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 border
+               border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50">
                 <NavLink
                   to="/home/profile"
                   className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
