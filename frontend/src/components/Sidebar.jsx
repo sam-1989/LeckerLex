@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
 function Sidebar({
@@ -9,7 +9,7 @@ function Sidebar({
   handleRemoveAll,
 }) {
 
-  // open the sidebar once an ingredient is klicked
+  // open the sidebar once an ingredient is clicked
   
   useEffect(()=> {
     if (selectedIngredients.length > 0){
@@ -17,19 +17,25 @@ function Sidebar({
     }
   }, [selectedIngredients, setIsSidebarOpen]);
 
-   // close the sidebar once "remove all" is klicked
+   // close the sidebar once "remove all" is clicked
   
    const handleRemoveAllClick = () => {
     handleRemoveAll();
     setIsSidebarOpen(false);
    };
 
+  const handleRemoveIngredientClick = (ingredientIndex) => () => {
+    handleRemoveIngredient(ingredientIndex);
+
+  };
+
   return (
     <div className="relative">
       <div
-        className={`fixed top-16 left-0 w-64 h-full bg-gray-100 shadow-2xl p-4 overflow-y-auto transition-transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-16 left-0 w-64 h-full rounded-r-3xl bg-gray-100 shadow-2xl p-4
+          overflow-y-auto transition-transform ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <h2 className="text-xl font-book mb-4">
           Chosen Ingredients {selectedIngredients.length}
@@ -42,7 +48,7 @@ function Sidebar({
             >
             {ingredient}
             <button
-                onClick={() => handleRemoveIngredient(index)}
+                onClick={handleRemoveIngredientClick(index)}
                 className="ml-4 text-red-500"
               >
                 X

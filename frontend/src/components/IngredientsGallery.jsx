@@ -71,15 +71,17 @@ function IngredientsGallery({
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-8 lg:px-64 pt-2">
-      <div className="grid gap-4 p-4 grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8">
+    <div className="max-w-screen-lg mx-auto px-2 md:px-4 lg:px-24 py-4 p-4 my-6 rounded-3xl lg:rounded-full bg-green-50 shadow-inner">
+      <div className="grid gap-4 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
         {itemsToDisplay.map((item, idx) => {
           const isSelected = selectedIngredients.includes(item.alt);
           const delay = idx * 100; // control the delay time
           return (
             <div
               key={idx}
-              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden rounded-xl hover:outline hover:outline-1 hover:outline-gray-500 shadow-md bg-gray-50 outline-3 transition-opacity duration-500 ease-in-out ${
+              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden
+                 rounded-xl hover:outline hover:outline-1 hover:outline-gray-300 shadow-md bg-gray-50 outline-3
+                  transition-opacity duration-300 ease-in-out ${
                 isLoaded ? "opacity-100" : "opacity-0"
               }`}
               onClick={() => handleImageClick(item.alt)}
@@ -88,9 +90,11 @@ function IngredientsGallery({
               <img
                 src={item.src}
                 alt={item.alt}
-                className="w-full h-full object-contain mx-auto transition-transform duration-300 transform group-hover:scale-105"
+                className="w-full h-full object-contain mx-auto transition-transform
+                 duration-100 transform group-hover:scale-105"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-100">
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20
+               text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-100">
                 {item.alt}
               </div>
               {isSelected && (
