@@ -1,39 +1,75 @@
-import React from 'react';
+import React, { useEffect} from "react";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
-function Sidebar({ isSidebarOpen, setIsSidebarOpen, selectedIngredients, handleRemoveIngredient, handleRemoveAll }) {
+function Sidebar({
+  isSidebarOpen,
+  setIsSidebarOpen,
+  selectedIngredients,
+  handleRemoveIngredient,
+  handleRemoveAll,
+}) {
+
+  // open the sidebar once an ingredient is klicked
+  
+  useEffect(()=> {
+    if (selectedIngredients.length > 0){
+    setIsSidebarOpen(true);
+    }
+  }, [selectedIngredients, setIsSidebarOpen]);
+
+   // close the sidebar once "remove all" is klicked
+  
+   const handleRemoveAllClick = () => {
+    handleRemoveAll();
+    setIsSidebarOpen(false);
+   };
+
   return (
-    <>
-      <button
-        className="fixed md:top-40 md:left-0 bottom-52 left-1/2 transform -translate-x-1/2 md:ml-4 p-2 bg-blue-500 text-white rounded-lg md:hidden"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+    <div className="relative">
+      <div
+        className={`fixed top-16 left-0 w-64 h-full bg-gray-100 shadow-2xl p-4 overflow-y-auto transition-transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
-        {isSidebarOpen ? "Close Sidebar" : `Show selected Ingredients (${selectedIngredients.length})`}
-      </button>
-      {isSidebarOpen && (
-        <div className="fixed md:top-60 md:left-0 bottom-16 left-1/2 transform -translate-x-1/2 w-11/12 md:w-64 h-auto md:h-full bg-white shadow-lg p-4 overflow-y-auto max-h-52 md:max-h-full">
-          <h2 className="text-xl font-bold mb-4">Selected Ingredients</h2>
-          <ul>
-            {selectedIngredients.map((ingredient, index) => (
-              <li key={index} className="flex justify-between items-center mb-2">
-                <span>{ingredient}</span>
-                <button
-                  className="text-red-500"
-                  onClick={() => handleRemoveIngredient(ingredient)}
-                >
-                  x
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            className="mt-4 p-2 bg-red-500 text-white rounded-lg w-full"
-            onClick={handleRemoveAll}
-          >
-            Remove All
-          </button>
-        </div>
-      )}
-    </>
+        <h2 className="text-xl font-book mb-4">
+          Chosen Ingredients {selectedIngredients.length}
+        </h2>
+        <ul>
+          {selectedIngredients.map((ingredient, index) => (
+            <li
+              key={index}
+              className="flex justify-between items-center p-2 mb-2 font-book hover:bg-gray-200"
+            >
+            {ingredient}
+            <button
+                onClick={() => handleRemoveIngredient(index)}
+                className="ml-4 text-red-500"
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button
+          className="mt-auto bg-red-500 text-white py-2 px-4 rounded-lg hover:scale-105"
+          onClick={handleRemoveAllClick}
+        >
+          Remove All
+        </button>
+      </div>
+      <div
+        className={`fixed bottom-4 left-4 transition-all duration-300 ${
+          isSidebarOpen ? "translate-x-64" : "translate-x-0"
+        }`}
+      >
+        <button
+          className="bg-blue-500 text-white px-4 py-4 rounded-full shadow-lg flex items-center justify-center"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          {isSidebarOpen ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
+      </div>
+    </div>
   );
 }
 

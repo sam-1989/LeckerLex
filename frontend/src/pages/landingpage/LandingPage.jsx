@@ -7,13 +7,6 @@ import '../../assets/fonts/fonts.css';
 import './styles.css';
 
 
-const text = "Find delicious recipes with the ingredients you already have at home – clever and uncomplicated.";
-
-const letterAnimation = {
-  initial: { opacity: 0, y: 50 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.1, ease: "easeOut" }
-};
 
 export default function LandingPage() {
   const [videoLoaded, setVideoLoaded] = useState(true);
@@ -55,14 +48,14 @@ export default function LandingPage() {
         />
       )}
 
-      {/* Website-Name */}
+      {/* Website name */}
       <motion.div
-        className="absolute top-5 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute top-5 left-1/2 transform -translate-x-1/2 z-20 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
       >
-        <h1 className="text-green-900 text-4xl md:text-5xl font-bold">
+        <h1 className="text-green-700 text-4xl md:text-5xl font-bold">
           LeckerLex
         </h1>
       </motion.div>
@@ -73,7 +66,7 @@ export default function LandingPage() {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}
-        transition={{ duration: 1, delay: 1 }}
+        transition={{ duration: 1, delay: 3 }}
       >
         <h1 className="text-gray-50 text-6xl md:text-5xl font-bold drop-shadow-2xl">
           Cooking made easy with what you have at home.
@@ -82,10 +75,10 @@ export default function LandingPage() {
 
       {/* Button mit Framer Motion */}
       <motion.div
-        className="absolute bottom-10 w-full text-center"
+        className="absolute bottom-16 w-full text-center"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 2 }}
+        transition={{ duration: 1, delay: 1 }}
       >
         <Link to="/home">
           <button className="button px-8 py-4 text-lg md:text-xl bg-green-600 text-gray-100 rounded-full shadow-2xl hover:bg-green-700 transform hover:scale-105 transition-transform duration-300">

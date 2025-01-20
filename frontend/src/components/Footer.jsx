@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
-import {FaSearch, FaHeart, FaUser, FaHome, FaInstagram, FaFacebook, FaWhatsapp} from "react-icons/fa";
+import {FaSearch, FaHeart, FaUser, FaHome, FaInstagram, FaFacebook, FaWhatsapp, FaCartArrowDown} from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 
 function Footer() {
   const [activeIcon, setActiveIcon] = useState(null);
   return (
     <>
-    <footer className="bg-green-50 shadow-inner rounded-lg w-full hidden md:block">
-        <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+    <footer className="bg-green-100 border border-r-2 shadow-md w-full hidden md:block z-50">
+        <div className="w-full mx-auto max-w-screen-2xl p-2 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-600 flex items-center">
             © 2024 <a href="#" className="hover:underline ml-1">Logo</a>. All Rights Reserved.
             <span className="flex ml-4 space-x-2">
               <NavLink to="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
-                <FaFacebook size={24} className='text-blue-600 hover:scale-125' />
+                <FaFacebook size={24} className='text-blue-500 hover:scale-125' />
               </NavLink>
               <NavLink to="https://web.whatsapp.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
                 <FaWhatsapp size={24} className='text-green-500 hover:scale-125' />
@@ -36,16 +36,18 @@ function Footer() {
         </div>
       </footer>
 
+
       {/* Navigationsleiste für mobile Geräte */}
-      <nav className='bg-green-100 rounded-lg shadow-inner mx-auto fixed bottom-0 w-full md:hidden'>
-        <ul className='flex justify-around p-4 text-sm font-medium text-gray-700'>
+
+      <nav className='bg-green-50 rounded-lg shadow-md mx-auto fixed bottom-0 w-full md:hidden'>
+        <ul className='flex justify-around p-2 text-sm font-medium text-gray-700'>
           <li className='hover:text-green-500'>
-            <NavLink to="/home" className={`hover:underline ${activeIcon === 'home' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('home')}>
-              <FaHome size={20} />
+            <NavLink to="shoppinglist" className={`hover:underline ${activeIcon === 'home' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('home')}>
+              <FaCartArrowDown size={20} />
             </NavLink>
           </li>
           <li className='hover:text-green-500'>
-            <NavLink to="#" className={`hover:underline ${activeIcon === 'search' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('search')}>
+            <NavLink to="/home" className={`hover:underline ${activeIcon === 'search' ? 'text-green-500' : ''}`} onClick={() => setActiveIcon('search')}>
               <FaSearch size={20} />
             </NavLink>
           </li>

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import IngredientsGallery from "./IngredientsGallery";
-import CategorySlider from "./CategorySlider";
 
 // Images - Herbs and Spices
 import Chilli from "../assets/Ingredients/Herbs_Spices/chilli.png";
@@ -123,6 +122,9 @@ export default function Ingredients({
   searchText,
   setSearchText,
 }) {
+
+  // All categories / ingredients
+  
   // Herbs and Spices
   const herbsAndSpices = [
     { src: Chilli, alt: "Chilli" },
@@ -258,7 +260,7 @@ export default function Ingredients({
     { src: Soy_Sauce, alt: "Soy Sauce" },
     { src: Tomato_Paste, alt: "Tomato Paste" },
     { src: Vinegar, alt: "Vinegar" },
-    { src: Worcestershire_Sauce, alt: "Worcestershire_Sauce" },
+    { src: Worcestershire_Sauce, alt: "Worcestershire" },
   ];
 
   // Toggle the clicked ingredient and set the searchText accordingly

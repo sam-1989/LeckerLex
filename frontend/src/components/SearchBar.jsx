@@ -1,34 +1,39 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
+
 function SearchBar({ searchText, setSearchText, handleSearch }) {
-  const [placeholder, setPlaceholder] = useState("Enter your ingredients...");
+  const [placeholder, setPlaceholder] = useState("Enter here your ingredients...");
 
   return (
-    <div className="text-center mb-6 px-4">
-      <h2 className="text-xl sm:text-4xl font-bold text-gray-800 m-8">
-        Got ingredients? We got the recipe! 🥘✨
-      </h2>
-      <div className="mt-4 flex justify-center sticky top-0">
-        <input
-          type="text"
-          className="w-full sm:w-1/2 p-2 border border-gray-200 rounded-l-full shadow-lg
-              hover:border-gray-400 hover:shadow-xl
-              focus:border-green-500 focus:ring-3 focus:ring-green-400
-              transition duration-300 outline-none"
-          placeholder={placeholder}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          onFocus={() => setPlaceholder("")}
-          onBlur={() => setPlaceholder("Enter your ingredients...")}
-        />
+    <div className="text-center mb-4 px-4 mt-6">
+      <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-gray-800 m-4 sm:m-8 font-medium">Find a recipe with your ingredients 🥘✨</h2>
+      <div className="mt-4 flex justify-center items-center sticky top-0">
+        <label htmlFor="ingredient-search" className="sr-only">Search for recipes by ingredients</label>
+        {/* Search Bar / Input field */}
+        <div className="relative w-full max-w-xs">
+          <input
+            id="ingredient-search"
+            type="text"
+            className="w-full p-2 border border-gray-300 rounded-full shadow-md hover:shadow-lg focus:ring-1 focus:ring-green-800 transition duration-100 font-book placeholder-black"
+            placeholder={placeholder}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onFocus={() => setPlaceholder("")}
+            onBlur={() => setPlaceholder("Enter here your ingredients...")}
+            aria-label="Search for recipes by ingredients"
+          />
+          
 
-        <button
-          className="p-4 bg-green-500 text-white rounded-r-full"
-          onClick={handleSearch}
-        >
-          <FaSearch />
-        </button>
+          
+          <button
+            className="absolute right-0 top-0 h-full px-4 bg-green-500 font-medium text-white rounded-full hover:bg-green-600 hover:scale-105 transition duration-300"
+            onClick={handleSearch}
+            aria-label="Search"
+          >
+            <FaSearch />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -10,14 +10,17 @@ export default {
         bold: ["Circular-Bold", "Arial", "sans-serif"],
       },
       fontWeight: {
-        book: 400,
+        book: 300,
         medium: 500,
         bold: 700,
       },
       colors: {
         primary: "#08AF5F",
         secondary: " ",
-      }
+      },
+      placeholderColor: {
+        black: "#333",
+      },
     },
   },
   plugins: [require("@tailwindcss/aspect-ratio")],
