@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -8,7 +9,19 @@ export default function RegisterPage() {
   const [isChecked, setIsChecked] = useState(false); // terms and conditions checkbox
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track if the form is being submitted and to prevent user clicking more times
+  const { isLoggedIn, checkLoginStatus } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUserLogin = async () => {
+      await checkLoginStatus();
+      if (isLoggedIn) {
+        navigate("/home"); // Redirect if user is already logged in
+      }
+    };
+
+    checkUserLogin();
+  }, [isLoggedIn, navigate]); // Dependencies for re-render
 
   const handleSubmit = async (e) => {
     e.preventDefault();

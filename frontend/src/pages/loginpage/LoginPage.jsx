@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { isLoggedIn, checkLoginStatus } = useContext(AuthContext);
   const navigate = useNavigate(); // React Router's navigate function for redirection
+
+  useEffect(() => {
+    const checkUserLogin = async () => {
+      await checkLoginStatus();
+      if (isLoggedIn) {
+        navigate("/home"); // Redirect if user is already logged in
+      }
+    };
+
+    checkUserLogin();
+  }, [isLoggedIn, navigate]); // Dependencies for re-render
 
   const handleSignUp = async (e) => {
     e.preventDefault(); // Prevent default form submission
