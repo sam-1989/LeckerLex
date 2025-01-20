@@ -85,6 +85,13 @@ function Navbar() {
                   >
                     Recipes
                   </NavLink>
+                  <NavLink
+                    to="/home/shopping-list"
+                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    
+                  >
+                    My Shopping List
+                  </NavLink>
 
                   <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
                     Log out

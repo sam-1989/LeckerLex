@@ -12,6 +12,7 @@ import RegisterPage from "./pages/registerpage/RegisterPage";
 import ProfileWelcomePage from "./pages/profilepage/ProfileWelcomePage";
 import ResultPage from "./pages/ResultPage";
 import RecipeDetails from "./pages/RecipeDetails";
+import MyShoppingList from "./pages/MyShoppingList";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recipes" element={<Recipes />} />
+            <Route path="shopping-list" element={<MyShoppingList />} />
           </Route>
         </Routes>
       </Router>
