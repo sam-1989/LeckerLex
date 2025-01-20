@@ -84,21 +84,28 @@ export default function HomePage() {
     }
   };
 
-  const handleRemoveIngredient = (ingredient) => {
-    setSelectedIngredients(selectedIngredients.filter((item) => item !== ingredient));
+  const handleRemoveIngredient = (index) => {
+    setSelectedIngredients((prevIngredients) =>
+      prevIngredients.filter((_, i) => i !== index)
+    );
   };
 
   const handleRemoveAll = () => {
     setSelectedIngredients([]);
+    setSearchText("");
   };
 
   return (
     <div className="min-h-screen overflow-hidden bg-white">
       <div className="flex justify-center items-center">
+      
         <SearchBar
           searchText={searchText}
           setSearchText={setSearchText}
           handleSearch={handleSearch}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+          selectedIngredients={selectedIngredients}
         />
       </div>
       {errorMessage && (

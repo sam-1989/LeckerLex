@@ -7,6 +7,8 @@ const userRouter = Router();
 userRouter
   .post("/signup", user.registerUser)
   .get("/verify-email/:token", user.verifyUser)
-  .post("/login", user.loginUser);
+  .post("/login", user.loginUser)
+  .post("/logout", user.logoutUser)
+  .get("/verify-user", user.authenticateUser);
 
 export default userRouter;
