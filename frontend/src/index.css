@@ -24,7 +24,7 @@
 }
 
 h1 {
-  @apply font-bold
+  @apply font-bold;
 }
 
 h2 {
@@ -35,10 +35,15 @@ p {
   @apply font-book;
 }
 
-button {
+div {
   @apply font-book;
 }
 
+button {
+  @apply font-medium;
+}
+
+/* Dark mode styles */
 
 .navbar.light {
   background-color: white;
@@ -50,22 +55,67 @@ button {
   color: white;
 }
 
-.custom-next-arrow, .custom-prev-arrow {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
+.custom-next-arrow,
+.custom-prev-arrow {
   width: 30px;
   height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   cursor: pointer;
+  z-index: 10;
 }
 
-.custom-next-arrow::before, .custom-prev-arrow::before {
-  font-size: 20px;
-  color: white;
+.custom-next-arrow {
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-.custom-next-arrow:hover, .custom-prev-arrow:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+.custom-prev-arrow {
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.custom-next-arrow::before,
+.custom-prev-arrow::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+}
+
+.custom-next-arrow::before {
+  transform: rotate(-45deg);
+}
+
+.custom-prev-arrow::before {
+  transform: rotate(135deg);
+}
+
+/* NotFound Page Styling */
+
+.page_404 {
+  font-family: 'Circular-Book', Arial, Helvetica, sans-serif;
+}
+
+.four_zero_four_bg h1 {
+  font-size: 100px;
+}
+
+.contant_box_404 h3 {
+  font-size: 30px;
+}
+
+
+.link_404 {
+  color: #fff;
+  padding: 10px 20px;
+  background: #3aa133;
+  display: inline-block;
+  border-radius: 5px;
+  text-decoration: none;
 }

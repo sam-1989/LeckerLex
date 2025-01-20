@@ -1,38 +1,28 @@
-import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  FaBars,
-  FaSearch,
-  FaTimes,
-  FaUser,
-  FaSun,
-  FaMoon,
-} from "react-icons/fa";
+import  React, {useState, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom";
+import { FaUser, FaSun, FaMoon, FaHeart, FaCartArrowDown, FaSignOutAlt} from "react-icons/fa";
+
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   // function for closing the menu bar by clicking anywhere outside the menubar
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-  };
-
   useEffect(() => {
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
     };
-  }, [isDropdownOpen]);
+
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -58,13 +48,8 @@ function Navbar() {
     }
   };
 
-  return (
-    <>
-      <nav
-        className={`max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative ${
-          isDarkMode ? "dark" : "light"
-        }`}
-      >
+  return (    
+      <nav className={`max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative ${isDarkMode ? 'dark' : 'light'}`}>
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
@@ -95,42 +80,45 @@ function Navbar() {
                 className="text-gray-800 hover:text-gray-500 cursor-pointer active:text-blue-600"
               />
 
-              {isDropdownOpen && (
-                <div className="absolute font-book right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
-                  <NavLink
-                    to="/home/profile"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    Profile
-                  </NavLink>
 
-                  <NavLink
-                    to="/home/favorites"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  >
-                    Favoriten
-                  </NavLink>
-                  <NavLink
-                    to="/home/recipes"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  >
-                    Recipes
-                  </NavLink>
+{isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50">
+            <NavLink
+              to="/home/profile"
+              className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              <FaUser className="mr-2" /> Profile
+            </NavLink>
+            <NavLink
+              to="/home/favorites"
+              className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              <FaHeart className="mr-2" /> Favorites
+            </NavLink>
+            <NavLink
+              to="/home/shoppinglist"
+              className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              <FaCartArrowDown className="mr-2" /> Shopping List
+            </NavLink>
+            <NavLink
+              to="/logout"
+              className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+              onClick={() => onClick={handleLogout}}
+            >
+              <FaSignOutAlt className="mr-2" /> Logout
+            </NavLink>
+          </div>
+        )}
 
-                  <button
-                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    onClick={handleLogout}
-                  >
-                    Log out
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
       </nav>
-    </>
+    
   );
 }
 
