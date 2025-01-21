@@ -1,11 +1,13 @@
 import React, { useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 
 function RecipeDetails() {
     const { id } = useParams(); // Rezept-ID aus der URL
     const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
-    const { setShoppingList } = useContext(RecipeContext);
+    const { setShoppingList } = useContext(RecipeContext); // Fehlende Zutaten aus dem Context
+
+    const navigate = useNavigate();
     
     // Finde das Rezept mit der passenden ID
     const recipe = recipes.find((x) => x.id === parseInt(id));
@@ -21,15 +23,21 @@ function RecipeDetails() {
         setPauseBanner(visibleSection === section ? false : true);  // Pause, wenn ein Fenster aktiv ist
     };
 
-    // Funktion, um zur Einkaufsliste hinzuzufügen
+    // Funktion, um zur "Einkaufsliste" hinzuzufügen
 
     const handleAddToShoppingList = () => {
-         console.log("Adding to shopping list:", recipe.missedIngredients);  // Debug
+
+         if (!isAuthenticated) {
+            // User ist nicht eingeloggt -> navigiere zur Login-Seite
+            navigate("/login", { state: {redirectTo: `recipe-details/${id}`}});
+         } else {
+            // User ist eingelogt -> Funktionalität ausführen
         setShowShoppingListModal(true);
-        setShoppingList((prevList) => [...prevList, ...recipe.missedIngredients]); // Fehlende Zutaten hinzufügen
+        setShoppingList((prevList) => [...prevList, ...recipe.missedIngredients]); // Fehlende Zutaten zu der "Einkaufsliste" hinzufügen
+        }
     };
 
-    // Funktion, die sowohl das Shopping List Modal als auch das Missing Ingredients Fenster schließt
+    // Funktion, die sowohl das "Shopping List Modal" als auch das "Missing Ingredients Fenster" schließt
 
     const handleCloseShoppingListModal = () => {
         setShowShoppingListModal(false); // Schließt das Shopping List Modal
@@ -57,16 +65,17 @@ function RecipeDetails() {
     return (
         
     <div className="p-4 max-w-6xl mx-auto relative">
+
         {/* Banner - Enjoy Cooking! */}
         <div
-        className="fixed top-13 left-0 w-full bg-white text-green-500 text-center py-2 overflow-hidden">
+        className="fixed top-13 left-0 w-full bg-white text-green-500 text-center py-2 overflow-hidden -z-10">
             <div className={`animate-marquee whitespace-nowrap text-lg sm:text-xl md:text-2xl lg:text-4xl font-semibold z-10 ${pauseBanner ? "animate-none" : ""}`}> 
             Enjoy Cooking!
             </div>
-        </div>
+        </div>  
         {/* Rezeptbild */}
-        <div id="RecipeBild">
-            <div className="relative mx-auto w-full sm:w-8/12 lg:w-6/12 h-52 sm:h-64 lg:h-80 mt-16">
+        <div  className="relative mx-auto w-full sm:w-8/12 lg:w-6/12 h-52 sm:h-64 lg:h-80 mt-16"> 
+
                 <img
                 src={recipe.image}
                 alt={recipe.title}
@@ -84,7 +93,7 @@ function RecipeDetails() {
                     </h2>
                 </div>
             </div>
-        </div>  
+        {/* </div>  */} 
         {/* Buttons - Inhaltsabschnitte */}
         <div className="mt-6 mx-4 sm:mx-8 lg:mx-10 flex flex-wrap justify-center sm:justify-around gap-4">
             <button
