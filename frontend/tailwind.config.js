@@ -4,6 +4,9 @@ export default {
   darkMode: "class", // enable dark mode with a class
   theme: {
     extend: {
+      zIndex:{
+        '-10':'-10',
+      },
       animation: {
         'spin-and-grow': 'spin-and-grow 1s ease-out',
         'shrink-and-fade': 'shrinkAndFade 0.5s ease-out forwards',
