@@ -9,19 +9,20 @@ export default function RegisterPage() {
   const [isChecked, setIsChecked] = useState(false); // terms and conditions checkbox
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track if the form is being submitted and to prevent user clicking more times
-  const { isLoggedIn, checkLoginStatus } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, loading, checkLoginStatus } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkUserLogin = async () => {
-      await checkLoginStatus();
+      if (loading) return; // Prevent execution while loading
       if (isLoggedIn) {
-        navigate("/home"); // Redirect if user is already logged in
+        navigate("/home");
       }
     };
 
     checkUserLogin();
-  }, [isLoggedIn, navigate]); // Dependencies for re-render
+  }, [loading, isLoggedIn, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,6 +88,14 @@ export default function RegisterPage() {
       );
     }
   };
+
+  if (loading || isLoggedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center mt-30 font-sans ">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">

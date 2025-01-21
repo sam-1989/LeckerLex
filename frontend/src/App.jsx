@@ -39,8 +39,22 @@ function App() {
               {/* Register-Seite */}
               <Route path="results" element={<ResultPage />} />
               <Route path="recipe-details/:id" element={<RecipeDetails />} />
-              <Route path="favorites" element={<Favorites />} />
-              <Route path="shopping-list" element={<MyShoppingList />} />
+              <Route
+                path="favorites"
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="shopping-list"
+                element={
+                  <ProtectedRoute>
+                    <MyShoppingList />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="verify-email" element={<VerifyEmailPage />} />
               <Route
                 path="email-verify/:token"

@@ -6,19 +6,20 @@ export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { isLoggedIn, checkLoginStatus } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, checkLoginStatus, loading } =
+    useContext(AuthContext);
   const navigate = useNavigate(); // React Router's navigate function for redirection
 
   useEffect(() => {
     const checkUserLogin = async () => {
-      await checkLoginStatus();
+      if (loading) return; // Prevent execution while loading
       if (isLoggedIn) {
-        navigate("/home"); // Redirect if user is already logged in
+        navigate("/home");
       }
     };
 
     checkUserLogin();
-  }, [isLoggedIn, navigate]); // Dependencies for re-render
+  }, [loading, isLoggedIn, navigate]);
 
   const handleSignUp = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -29,6 +30,7 @@ export default function LoginComponent() {
     }
 
     setErrorMessage(""); // clean previous errors
+
     try {
       const response = await fetch("http://localhost:3000/users/login", {
         // TODO: use env variables for route
@@ -45,8 +47,7 @@ export default function LoginComponent() {
         setErrorMessage(errorData.msg || "Incorrent email or password.");
         return;
       }
-      const data = await response.json(); // testing purpose
-      console.log("User data", data); // testing purpose
+      setIsLoggedIn(true);
       navigate("/home");
     } catch (error) {
       console.error("Error by login", error); // debug log
@@ -55,6 +56,13 @@ export default function LoginComponent() {
       );
     }
   };
+  if (loading || isLoggedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 font-sans">
@@ -103,7 +111,10 @@ export default function LoginComponent() {
           <div className="text-center mt-4 text-sm text-gray-800">
             <p>
               No profile?{" "}
-              <Link to="/register" className="text-indigo-600 hover:underline">
+              <Link
+                to="/home/register"
+                className="text-indigo-600 hover:underline"
+              >
                 Register here
               </Link>
             </p>

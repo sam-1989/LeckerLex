@@ -28,6 +28,10 @@ export default function AuthContextProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
+
   return (
     <div>
       <AuthContext.Provider
