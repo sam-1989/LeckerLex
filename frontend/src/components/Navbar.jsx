@@ -58,7 +58,7 @@ function Navbar() {
 
   return (
     <nav
-      className={`max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative ${
+      className={`hidden sm:block max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative ${
         isDarkMode ? "dark" : "light"
       }`}
     >
