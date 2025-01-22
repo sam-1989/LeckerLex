@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
+import { AuthContext } from "../context/AuthContext";
 
 function RecipeDetails() {
     const { id } = useParams(); // Rezept-ID aus der URL
     const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
     const { setShoppingList } = useContext(RecipeContext); // Fehlende Zutaten aus dem Context
+    const { isLoggedIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
     
     // Finde das Rezept mit der passenden ID
-    const recipe = recipes.find((x) => x.id === parseInt(id));
+    const recipe = recipes.find((x) => x.id === Number(id));
 
     const [showMissingIngredients, setShowMissingIngredients] = useState(true);  // Fehlende Zutaten-Fenster
     const [visibleSection, setVisibleSection] = useState(null); // Zum Umschalten der Abschnitte
@@ -27,9 +29,10 @@ function RecipeDetails() {
 
     const handleAddToShoppingList = () => {
 
-         if (!isAuthenticated) {
-            // User ist nicht eingeloggt -> navigiere zur Login-Seite
-            navigate("/login", { state: {redirectTo: `recipe-details/${id}`}});
+         if (!isLoggedIn) {
+            // User ist nicht eingeloggt -> navigiere zur Login-Seite mit Rezept-ID als Query-Parameter
+            navigate(`/home/login?redirectTo=/home/recipe-details/${id}`); 
+            
          } else {
             // User ist eingelogt -> Funktionalität ausführen
         setShowShoppingListModal(true);

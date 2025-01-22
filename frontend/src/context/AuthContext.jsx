@@ -5,6 +5,7 @@ export default function AuthContextProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
 
   const checkLoginStatus = async () => {
     setLoading(true);
@@ -43,6 +44,8 @@ export default function AuthContextProvider({ children }) {
           checkLoginStatus,
           loading,
           setLoading,
+          isGuest,
+          setIsGuest,
         }}
       >
         {children}

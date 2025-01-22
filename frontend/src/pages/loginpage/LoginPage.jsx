@@ -1,14 +1,27 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+
 
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { isLoggedIn, setIsLoggedIn, checkLoginStatus, loading } =
+  const { isLoggedIn, setIsLoggedIn, checkLoginStatus, loading, setIsGuest } =
     useContext(AuthContext);
   const navigate = useNavigate(); // React Router's navigate function for redirection
+  const [searchParams] = useSearchParams();
+
+  const redirectTo = searchParams.get("redirectTo") || "/home";
+  const handleGuestLogin = () => {
+    setIsGuest(true); // Gastmodus aktivieren
+
+    if (redirectTo) {
+      navigate(redirectTo);  // zurück zur vorherigen Seite
+    } else {
+      navigate("/home"); // oder zur Startseite
+    }
+  }; 
 
   useEffect(() => {
     const checkUserLogin = async () => {
@@ -117,6 +130,15 @@ export default function LoginComponent() {
               >
                 Register here
               </Link>
+              <div className="text-center mt-4 text-sm text-gray-800">
+                <button
+                className="text-indigo-600 hover:underline"
+                  onClick={handleGuestLogin}
+                >
+                  Continue as Guest
+
+                </button>
+              </div>
             </p>
           </div>
         </div>
