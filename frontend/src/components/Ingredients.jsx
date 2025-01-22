@@ -122,9 +122,8 @@ export default function Ingredients({
   searchText,
   setSearchText,
 }) {
-
   // All categories / ingredients
-  
+
   // Herbs and Spices
   const herbsAndSpices = [
     { src: Chilli, alt: "Chilli" },
@@ -269,16 +268,26 @@ export default function Ingredients({
       ? selectedIngredients.filter((item) => item !== ingredientName)
       : [...selectedIngredients, ingredientName];
     setSelectedIngredients(updated);
-    setSearchText(updated.join(","));
+    if (!searchText) {
+      setSearchText("");
+    }
   };
 
   // Convert the typed text into a list of ingredients (case-insensitive)
   useEffect(() => {
+    console.log("searchText:", searchText);
+    console.log("selectedIngredients before update:", selectedIngredients);
+    if (!searchText) return;
     // Split by comma, lowercase & trim
     const typed = searchText
       .split(",")
-      .map((item) => item.trim().toLowerCase())
-      .filter(Boolean);
+      .map((item) =>
+        item
+          .trim()
+          .toLowerCase()
+          .replace(/^\w/, (c) => c.toUpperCase())
+      )
+      .filter((ingredient) => ingredient);
 
     // Filter array to matches
 
@@ -298,7 +307,14 @@ export default function Ingredients({
     ]
 
       .filter((h) => typed.includes(h.alt.toLowerCase()))
-      .map((h) => h.alt);
+      .map(
+        (h) =>
+          h.alt.charAt(0).toUpperCase() + ingredient.alt.slice(1).toLowerCase()
+      );
+
+    const uniqueIngredients = Array.from(
+      new Set([...selectedIngredients, ...matched])
+    );
 
     console.log(
       "Matched",
@@ -308,12 +324,18 @@ export default function Ingredients({
       "Searched Text",
       searchText
     );
+
+    console.log("matched:", matched);
+
     // Update selectedIngredients if changed
-    if (JSON.stringify(matched) !== JSON.stringify(selectedIngredients)) {
-      setSelectedIngredients(matched);
+    if (
+      JSON.stringify(uniqueIngredients) !== JSON.stringify(selectedIngredients)
+    ) {
+      console.log("Updating selectedIngredients to:", matched);
+      setSelectedIngredients(uniqueIngredients);
       // TODO logik weiter
     }
-  }, [searchText, selectedIngredients, setSelectedIngredients]);
+  }, [searchText, selectedIngredients]);
 
   return (
     <IngredientsGallery

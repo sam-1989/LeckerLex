@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
+
 export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
@@ -19,7 +20,9 @@ export default function AuthContextProvider({ children }) {
         setErrorMessage("");
       } else {
         setIsLoggedIn(false);
-        setErrorMessage("This feature is available only for logged-in users.");
+        setErrorMessage(
+          "This feature is available to registered users only. Please log in to access it."
+        );
       }
     } catch (error) {
       setIsLoggedIn(false);
@@ -34,22 +37,20 @@ export default function AuthContextProvider({ children }) {
   }, []);
 
   return (
-    <div>
-      <AuthContext.Provider
-        value={{
-          isLoggedIn,
-          setIsLoggedIn,
-          errorMessage,
-          setErrorMessage,
-          checkLoginStatus,
-          loading,
-          setLoading,
-          isGuest,
-          setIsGuest,
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
-    </div>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        errorMessage,
+        setErrorMessage,
+        checkLoginStatus,
+        loading,
+        setLoading,
+        isGuest,
+        setIsGuest,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 }

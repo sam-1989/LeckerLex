@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 import CategorySlider from "../components/CategorySlider";
@@ -26,12 +26,27 @@ export default function HomePage() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // selectedIngredients query format
+  // State to hold the formatted ingredients
+  const [formattedIngredients, setFormattedIngredients] = useState([]);
+
+  /*   // selectedIngredients query format
   const formattedIngredients = selectedIngredients.map((ingredient) =>
     ingredient.replace(/\s+/g, "_")
   ); // replace spaces with underscores in ingredient name
   const ingredientQuery = formattedIngredients.join(","); // join ingredients with comma
-  console.log(ingredientQuery); // works!
+  console.log("Ingredient Query:", ingredientQuery); // works! */
+
+  // Update the formatted ingredients whenever selectedIngredients changes
+  useEffect(() => {
+    const formatted = selectedIngredients.map((ingredient) =>
+      ingredient.replace(/\s+/g, "_")
+    );
+    setFormattedIngredients(formatted); // Update formatted ingredients state
+  }, [selectedIngredients]);
+
+  // Convert formattedIngredients to a query string
+  const ingredientQuery = formattedIngredients.join(","); // join ingredients with comma
+  console.log("Ingredient Query:", ingredientQuery); // works!
 
   const navigate = useNavigate();
 
@@ -57,7 +72,7 @@ export default function HomePage() {
 
   const handleSearch = async () => {
     if (selectedIngredients.length < 2) {
-      setErrorMessage("Please select at least 4 ingredients.");
+      setErrorMessage("Please select at least 2 ingredients.");
       return;
     }
     setErrorMessage(""); // clear previous errors
@@ -92,14 +107,34 @@ export default function HomePage() {
   };
 
   const handleRemoveAll = () => {
+    console.log("Removing all ingredients...");
     setSelectedIngredients([]);
     setSearchText("");
+  };
+
+  useEffect(() => {
+    console.log("HomePage mounted");
+    return () => {
+      console.log("HomePage unmounted");
+    };
+  }, []);
+
+  // IMPORTANT Handle adding ingredients manually from the SearchBar
+  const handleAddIngredient = (ingredients) => {
+    console.log("Ingredients to Add:", ingredients);
+    setSelectedIngredients((prev) => {
+      const updated = [
+        ...prev,
+        ...ingredients.filter((ing) => !prev.includes(ing)),
+      ];
+      console.log("Updated Ingredients:", updated);
+      return updated;
+    });
   };
 
   return (
     <div className="min-h-screen overflow-hidden bg-white">
       <div className="flex justify-center items-center">
-      
         <SearchBar
           searchText={searchText}
           setSearchText={setSearchText}
@@ -107,6 +142,7 @@ export default function HomePage() {
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
           selectedIngredients={selectedIngredients}
+          handleAddIngredient={handleAddIngredient} // IMPORTANT
         />
       </div>
       {errorMessage && (
@@ -124,7 +160,7 @@ export default function HomePage() {
         searchText={searchText}
         setSearchText={setSearchText}
       />
-      
+
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
