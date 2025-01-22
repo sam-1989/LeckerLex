@@ -10,7 +10,6 @@ function SearchBar({ searchText, setSearchText, handleSearch }) {
       <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-gray-800 m-4 sm:m-8 font-medium">Find a recipe with your ingredients 🥘✨</h2>
       <div className="mt-4 flex justify-center items-center sticky top-0">
         <label htmlFor="ingredient-search" className="sr-only">Search for recipes by ingredients</label>
-        {/* Search Bar / Input field */}
         <div className="relative w-full max-w-xs m-2">
           <input
             id="ingredient-search"
@@ -24,9 +23,6 @@ function SearchBar({ searchText, setSearchText, handleSearch }) {
             onBlur={() => setPlaceholder("Enter here your ingredients...")}
             aria-label="Search for recipes by ingredients"
           />
-          
-
-          
           <button
             className="absolute right-0 top-0 h-full px-4 bg-green-500 font-medium text-white rounded-full hover:bg-green-600 hover:scale-105 
             transition duration-300"

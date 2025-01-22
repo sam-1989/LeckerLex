@@ -50,17 +50,17 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
   return (
     <div className="py-6">
       {/* Container for the slider */}
-      <div className="max-w-screen-lg mx-auto mt- px-4 py-4 bg-green-50 rounded-full shadow-inner">
+      <div className="max-w-screen-lg mx-auto mt- px-4 py-4 bg-green-50 border border-gray-200 rounded-full shadow-inner">
         <Slider {...sliderSettings}>
           {categories.map((category) => (
             <div key={category.id} className="p-2">
               {/* Category item */}
               <div
-                className={`p-3 rounded-full cursor-pointer shadow-md text-center text-md font-book transition-transform
+                className={`p-3 rounded-full cursor-pointer border border-gray-200 shadow-md text-center text-md font-book transition-transform
                    duration-200 focus:outline-none ${
                   selectedCategory === category.id
                     ? "bg-green-700 text-white"
-                    : "bg-gray-100"
+                    : "bg-gray-50"
                 } hover:bg-green-500 hover:text-white hover:scale-105`}
                 onClick={() => setSelectedCategory(category.id)}
               >

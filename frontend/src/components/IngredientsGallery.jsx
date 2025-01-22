@@ -71,17 +71,17 @@ function IngredientsGallery({
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto px-2 md:px-4 lg:px-24 py-4 p-4 my-6 rounded-3xl lg:rounded-full bg-green-50 shadow-inner">
+    <div className="max-w-screen-lg mx-auto border border-gray-200 px-2 md:px-4 lg:px-24 py-4 p-4 my-6 rounded-3xl lg:rounded-full bg-green-50 shadow-inner">
       <div className="grid gap-4 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
         {itemsToDisplay.map((item, idx) => {
           const isSelected = selectedIngredients.includes(item.alt);
-          const delay = idx * 100; // control the delay time
+          const delay = idx * 50;
           return (
             <div
               key={idx}
               className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden
                  rounded-xl hover:outline hover:outline-1 hover:outline-gray-300 shadow-md bg-gray-50 outline-3
-                  transition-opacity duration-300 ease-in-out ${
+                  transition-opacity duration-200 ease-in-out ${
                 isLoaded ? "opacity-100" : "opacity-0"
               }`}
               onClick={() => handleImageClick(item.alt)}
@@ -90,11 +90,12 @@ function IngredientsGallery({
               <img
                 src={item.src}
                 alt={item.alt}
-                className="w-full h-full object-contain mx-auto transition-transform
+                loading="lazy"
+                className="w-full h-full object-contain mx-auto border border-gray-200 shadow-md transition-transform
                  duration-100 transform group-hover:scale-105"
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20
-               text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-100">
+               text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-200">
                 {item.alt}
               </div>
               {isSelected && (
