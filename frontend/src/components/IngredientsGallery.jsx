@@ -16,7 +16,6 @@ function IngredientsGallery({
   selectedIngredients,
   handleImageClick,
   selectedCategory,
-  setSelectedCategory,
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -71,8 +70,9 @@ function IngredientsGallery({
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto border border-gray-200 px-2 md:px-4 lg:px-24 py-4 p-4 my-6 rounded-3xl lg:rounded-full bg-green-50 shadow-inner">
-      <div className="grid gap-4 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+    <div className="max-w-screen-lg mx-auto sm:my-16 border border-gray-200 md:px-4 lg:px-24 py-0 
+     rounded-3xl lg:rounded-full bg-green-200 shadow-inner">
+      <div className="grid gap-3 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
         {itemsToDisplay.map((item, idx) => {
           const isSelected = selectedIngredients.includes(item.alt);
           const delay = idx * 50;

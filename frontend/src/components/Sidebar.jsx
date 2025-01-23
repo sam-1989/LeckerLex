@@ -11,7 +11,6 @@ function Sidebar({
   // open the sidebar once an ingredient is clicked
 
   useEffect(() => {
-    console.log("Selected Ingredients:", selectedIngredients);
     if (selectedIngredients.length > 0) {
       setIsSidebarOpen(true);
     }
@@ -42,19 +41,20 @@ function Sidebar({
   return (
     <div className="relative">
       <div
-        className={`fixed top-16 left-0 w-64 h-full rounded-r-3xl bg-gray-100 shadow-2xl p-4
-          overflow-y-auto transition-transform ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`
+          fixed bottom-10 left-0 w-full h-64 rounded-r-3xl bg-slate-200 overflow-y-auto transition-transform duration-500
+          ${isSidebarOpen ? "translate-y-0" : "translate-y-full"} 
+          md:top-16 md:left-0 md:w-64 md:h-full md:${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
       >
-        <h2 className="text-xl font-book mb-4">
+        <h2 className="text-lg font-medium mb-6 m-2">
           Chosen Ingredients {selectedIngredients.length}
         </h2>
         <ul>
           {selectedIngredients.map((ingredient, index) => (
             <li
               key={index}
-              className="flex justify-between items-center p-2 mb-2 font-book hover:bg-gray-200"
+              className="flex justify-between items-center p-2 mb-2 font-normal hover:bg-gray-200"
             >
               {ingredient}
               <button
@@ -67,14 +67,14 @@ function Sidebar({
           ))}
         </ul>
         <button
-          className="mt-auto bg-red-500 text-white py-2 px-4 rounded-lg hover:scale-105"
+          className="mt-auto bg-red-500 text-white m-2 py-2 px-3 rounded-lg hover:scale-105"
           onClick={handleRemoveAllClick}
         >
           Remove All
         </button>
       </div>
       <div
-        className={`fixed bottom-4 left-4 transition-all duration-300 ${
+        className={`fixed bottom-4 left-4 transition-all duration-500 ${
           isSidebarOpen ? "translate-x-64" : "translate-x-0"
         }`}
       >
