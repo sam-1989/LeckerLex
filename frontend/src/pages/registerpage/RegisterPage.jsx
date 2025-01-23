@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function RegisterPage() {
@@ -11,13 +11,47 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track if the form is being submitted and to prevent user clicking more times
   const { isLoggedIn, setIsLoggedIn, loading, checkLoginStatus } =
     useContext(AuthContext);
+
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/home";
+
+  useEffect(() => {
+    // Überprüfen, ob die Verifizierung abgeschlossen ist
+    const checkVerification = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/users/verify-user?redirectTo=${redirectTo}`, {
+          method: "GET",
+          credentials: "include", // falls Cookies benötigt werden
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.isEmailValidated) {
+            navigate(redirectTo, {replace: true}); // Weiterleitung zur ursprünglichen Seite
+          } else {
+            console.log("Verifizierung fehlgeschlagen");
+          }
+        } else {
+          console.log("verifizierungs-Request fehlgeschlagen");
+        }
+      } catch (error) {
+        console.log("Fehler beim Verifizierungs-Request:", error.message);
+      }
+    };
+    checkVerification();
+  }, [redirectTo, navigate]);
 
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading
       if (isLoggedIn) {
-        navigate("/home");
+        /* navigate("/home");  */
+        if (redirectTo) {
+          navigate(redirectTo);
+        } else {
+          navigate("/home");
+        }
       }
     };
 
@@ -81,7 +115,15 @@ export default function RegisterPage() {
         setErrorMessage(errorData.msg || "An error occured. Please try again.");
         return;
       }
-      navigate("/home/verify-email", { replace: true });
+      /* navigate("/home/verify-email", { replace: true });  */
+
+      
+      if (redirectTo) {
+        navigate(`/home/verify-email?redirectTo=${redirectTo}`, { replace: true });
+      } else {
+        navigate("/home/verify-email", { replace: true});
+      }
+      
     } catch (error) {
       setErrorMessage(
         "An error occured while trying to register. Please try again later."
