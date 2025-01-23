@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
-
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,21 +12,32 @@ export default function LoginComponent() {
   const [searchParams] = useSearchParams();
 
   const redirectTo = searchParams.get("redirectTo") || "/home";
+
   const handleGuestLogin = () => {
     setIsGuest(true); // Gastmodus aktivieren
 
     if (redirectTo) {
-      navigate(redirectTo);  // zurück zur vorherigen Seite
+      navigate(redirectTo); // zurück zur vorherigen Seite
     } else {
       navigate("/home"); // oder zur Startseite
     }
-  }; 
+  };
+
+  const handleRedirectToRegister = () => {
+    navigate(`/home/register?redirectTo=${redirectTo}`);
+  }
 
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading
       if (isLoggedIn) {
-        navigate("/home");
+        /* navigate("/home"); */
+        if (redirectTo) {
+          navigate(redirectTo);
+        } else {
+          navigate("/home");
+        }
+
       }
     };
 
@@ -61,7 +71,13 @@ export default function LoginComponent() {
         return;
       }
       setIsLoggedIn(true);
-      navigate("/home");
+      /* navigate("/home"); */
+
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Error by login", error); // debug log
       setErrorMessage(
@@ -122,24 +138,23 @@ export default function LoginComponent() {
             </button>
           </form>
           <div className="text-center mt-4 text-sm text-gray-800">
-            <p>
+          <div className="text-center mt-4 text-sm text-gray-800"> 
               No profile?{" "}
-              <Link
-                to="/home/register"
-                className="text-indigo-600 hover:underline"
+              <button
+              className="text-indigo-600 hover: underline"
+              onClick={handleRedirectToRegister}
               >
                 Register here
-              </Link>
+              </button>
+              </div>
               <div className="text-center mt-4 text-sm text-gray-800">
                 <button
-                className="text-indigo-600 hover:underline"
-                  onClick={handleGuestLogin}
+                className="text-indigo-600 hover: underline"
+                onClick={handleGuestLogin}
                 >
                   Continue as Guest
-
                 </button>
               </div>
-            </p>
           </div>
         </div>
       </div>

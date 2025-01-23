@@ -23,6 +23,21 @@ function Sidebar({
     setIsSidebarOpen(false);
   };
 
+  useEffect(() => {
+    console.log("Sidebar mounted");
+    return () => {
+      console.log("Sidebar unmounted");
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("Selected ingredients in Sidebar:", selectedIngredients);
+  }, [selectedIngredients]);
+
+  const handleRemoveIngredientClick = (ingredientIndex) => () => {
+    handleRemoveIngredient(ingredientIndex);
+  };
+
   return (
     <div className="relative">
       <div
@@ -43,7 +58,7 @@ function Sidebar({
             >
               {ingredient}
               <button
-                onClick={() => handleRemoveIngredient(index)}
+                onClick={handleRemoveIngredientClick(index)}
                 className="ml-4 text-red-500"
               >
                 X

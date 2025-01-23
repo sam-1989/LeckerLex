@@ -4,8 +4,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-
 function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
+
   const CustomPrevArrow = (props) => {
     const { onClick } = props;
     return (
@@ -99,6 +99,7 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
                   ${selectedCategory === category.id ? "bg-green-700 text-white" : "bg-gray-50"} 
                   hover:bg-green-500 hover:text-white hover:scale-105
                 `}
+
                 onClick={() => setSelectedCategory(category.id)}
               >
                 {category.name}
