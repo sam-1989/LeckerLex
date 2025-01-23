@@ -31,7 +31,6 @@ export const searchRecipesAndDetails = async (req, res, next) => {
     // Fetch detailed data for each recipe
     const detailedRecipes = await Promise.all(
       recipes.map(async (recipe) => {
-        
         const detailResponse = await fetch(
           `https://api.spoonacular.com/recipes/${recipe.id}/information?includeNutrition=true`,
           options
@@ -89,9 +88,11 @@ export const searchRecipesAndDetails = async (req, res, next) => {
           image: recipe.image,
           usedIngredientCount: recipe.usedIngredientCount,
           missedIngredientCount: recipe.missedIngredientCount,
-          missedIngredients: recipe.missedIngredients.map(
-            (ingredient) => ingredient.original
-          ),
+          missedIngredients: recipe.missedIngredients.map((ingredient) => ({
+            name: ingredient.name,
+            amount: ingredient.amount,
+            unit: ingredient.unit,
+          })),
           usedIngredients: recipe.usedIngredients.map(
             (ingredient) => ingredient.original
           ),

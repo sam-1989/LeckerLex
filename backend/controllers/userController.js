@@ -109,7 +109,7 @@ export const registerUser = async (req, res, next) => {
 export const verifyUser = async (req, res) => {
   try {
     const token = req.params.token; // Extract token from URL params
-    const { redirectTo } = req.query;  // Query-Parameter für die Rezept-ID extrahieren
+    const { redirectTo } = req.query; // Query-Parameter für die Rezept-ID extrahieren
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
     console.log("Decoded token:", decoded); // Log decoded token
@@ -125,8 +125,8 @@ export const verifyUser = async (req, res) => {
       // Erfolgreiche Verifizierung und Weiterleitung
 
       const redirectPath = redirectTo
-      ? `/home/login?redirectTo=${redirectTo}`  // Wenn eine rezept-ID vorhanden ist
-      : "/home/login";  // Standard-Weiterleitung
+        ? `/home/login?redirectTo=${redirectTo}` // Wenn eine rezept-ID vorhanden ist
+        : "/home/login"; // Standard-Weiterleitung
 
       return res.status(200).json({
         msg: "Email successfully verified",
@@ -174,7 +174,7 @@ export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (!user) return res.status(404).json({ msg: "User not found" }); // TODO is this not managed by authenticate?
 
     const isAuthenticated = await user.authenticate(password); // Compare the clear-text password from req.body with the hashed one in the database
 
@@ -200,6 +200,34 @@ export const loginUser = async (req, res, next) => {
       .json({ msg: "Successfully signed in" });
   } catch (error) {
     next(error);
+  }
+};
+
+export const updateUsersShoppingList = async (req, res, next) => {
+  try {
+    const { shoppingList } = req.body;
+
+    if (!shoppingList) {
+      return res
+        .status(400)
+        .json({ msg: "Please provide items to add to shopping list." });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { shoppingList },
+      { new: true }
+    ); // from authenticate method
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found." });
+    }
+
+    res.status(200).json({ msg: `User's shopping list successfully updated.` });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error updating user document. Please try again later." });
   }
 };
 

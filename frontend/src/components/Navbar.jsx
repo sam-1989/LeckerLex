@@ -48,7 +48,7 @@ function Navbar() {
         console.error("Failed to logout", errorMessage); // debug log
         return;
       }
-      navigate("/home");
+      navigate("/");
       setIsDropdownOpen(false);
       setTimeout(() => setIsLoggedIn(false), 0);
     } catch (error) {
@@ -63,17 +63,16 @@ function Navbar() {
       }`}
     >
       <div className="flex justify-between h-16 z-50">
-       
-          <div className="flex-shrink-0 flex items-center">
-            <NavLink
-              to="/home"
-              className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
-            >
-              LeckerLex
-            </NavLink>
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* User icon and darkmode toggle */}
+        <div className="flex-shrink-0 flex items-center">
+          <NavLink
+            to="/home"
+            className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
+          >
+            LeckerLex
+          </NavLink>
+        </div>
+        <div className="flex items-center space-x-4">
+          {/* User icon and darkmode toggle */}
           <button
             onClick={toggleDarkMode}
             className="focus:outline-none transition duration-300 ease-in-out"
