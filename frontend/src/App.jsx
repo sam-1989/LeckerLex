@@ -29,9 +29,9 @@ function App() {
               <Route
                 path="profile"
                 element={
-                  <ProtectedRoute>
-                    <ProfileWelcomePage />{" "}
-                  </ProtectedRoute>
+                  
+                    <ProfileWelcomePage />
+                 
                 }
               />
               <Route path="login" element={<LoginPage />} /> {/* Login-Seite */}
