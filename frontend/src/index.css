@@ -20,7 +20,7 @@
   animation: gradient-x 8s ease infinite;
 }
 
-h1 {
+/* h1 {
   @apply font-bold;
 }
 
@@ -38,7 +38,7 @@ div {
 
 button {
   @apply font-medium;
-}
+} */
 
 /* Dark mode styles */
 

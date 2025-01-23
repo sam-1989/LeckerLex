@@ -63,17 +63,17 @@ function Navbar() {
       }`}
     >
       <div className="flex justify-between h-16 z-50">
-        {/* Logo */}
-        <div className="flex-shrink-0 flex items-center">
-          <NavLink
-            to="/home"
-            className="text-2xl font-medium hover:text-gray-500 text-gray-800 dark:text-gray-200"
-          >
-            Logo
-          </NavLink>
-        </div>
-        <div className="flex items-center space-x-4">
-          {/* User icon and darkmode toggle */}
+       
+          <div className="flex-shrink-0 flex items-center">
+            <NavLink
+              to="/home"
+              className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
+            >
+              LeckerLex
+            </NavLink>
+          </div>
+          <div className="flex items-center space-x-4">
+            {/* User icon and darkmode toggle */}
           <button
             onClick={toggleDarkMode}
             className="focus:outline-none transition duration-300 ease-in-out"
@@ -89,7 +89,7 @@ function Navbar() {
             <FaUser
               size={20}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-gray-800 hover:text-gray-500 cursor-pointer active:text-blue-600"
+              className="text-gray-800 hover:text-gray-500 hover:scale-110 cursor-pointer active:text-blue-600"
             />
 
             {isDropdownOpen && (

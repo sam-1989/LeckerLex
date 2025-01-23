@@ -85,17 +85,6 @@ function Footer() {
         <ul className="flex justify-around p-2 text-sm font-medium text-gray-700">
           <li className="hover:text-green-500">
             <NavLink
-              to="shopping-list"
-              className={`hover:underline ${
-                activeIcon === "home" ? "text-green-500" : ""
-              }`}
-              onClick={() => setActiveIcon("home")}
-            >
-              <FaCartArrowDown size={20} />
-            </NavLink>
-          </li>
-          <li className="hover:text-green-500">
-            <NavLink
               to="/home"
               className={`hover:underline ${
                 activeIcon === "search" ? "text-green-500" : ""
@@ -103,6 +92,17 @@ function Footer() {
               onClick={() => setActiveIcon("search")}
             >
               <FaSearch size={20} />
+            </NavLink>
+          </li>
+          <li className="hover:text-green-500">
+            <NavLink
+              to="shopping-list"
+              className={`hover:underline ${
+                activeIcon === "home" ? "text-green-500" : ""
+              }`}
+              onClick={() => setActiveIcon("home")}
+            >
+              <FaCartArrowDown size={20} />
             </NavLink>
           </li>
           <li className="hover:text-red-500">
