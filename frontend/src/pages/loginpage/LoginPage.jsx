@@ -13,6 +13,7 @@ export default function LoginComponent() {
   const [searchParams] = useSearchParams();
 
   const redirectTo = searchParams.get("redirectTo") || "/home";
+
   const handleGuestLogin = () => {
     setIsGuest(true); // Gastmodus aktivieren
 
@@ -23,11 +24,21 @@ export default function LoginComponent() {
     }
   }; 
 
+  const handleRedirectToRegister = () => {
+    navigate(`/home/register?redirectTo=${redirectTo}`);
+  }
+
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading
       if (isLoggedIn) {
-        navigate("/home");
+        /* navigate("/home"); */
+        if (redirectTo) {
+          navigate(redirectTo);
+        } else {
+          navigate("/home");
+        }
+
       }
     };
 
@@ -61,7 +72,13 @@ export default function LoginComponent() {
         return;
       }
       setIsLoggedIn(true);
-      navigate("/home");
+      /* navigate("/home"); */
+
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Error by login", error); // debug log
       setErrorMessage(
@@ -122,24 +139,29 @@ export default function LoginComponent() {
             </button>
           </form>
           <div className="text-center mt-4 text-sm text-gray-800">
-            <p>
+          <div className="text-center mt-4 text-sm text-gray-800"> 
               No profile?{" "}
-              <Link
+              {/* <Link
                 to="/home/register"
                 className="text-indigo-600 hover:underline"
               >
                 Register here
-              </Link>
+              </Link> */}
+              <button
+              className="text-indigo-600 hover: underline"
+              onClick={handleRedirectToRegister}
+              >
+                Register here
+              </button>
+              </div>
               <div className="text-center mt-4 text-sm text-gray-800">
                 <button
-                className="text-indigo-600 hover:underline"
-                  onClick={handleGuestLogin}
+                className="text-indigo-600 hover: underline"
+                onClick={handleGuestLogin}
                 >
                   Continue as Guest
-
                 </button>
               </div>
-            </p>
           </div>
         </div>
       </div>
