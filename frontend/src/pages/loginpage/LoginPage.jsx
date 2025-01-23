@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
-
 export default function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +17,11 @@ export default function LoginComponent() {
     setIsGuest(true); // Gastmodus aktivieren
 
     if (redirectTo) {
-      navigate(redirectTo);  // zurück zur vorherigen Seite
+      navigate(redirectTo); // zurück zur vorherigen Seite
     } else {
       navigate("/home"); // oder zur Startseite
     }
-  }; 
+  };
 
   const handleRedirectToRegister = () => {
     navigate(`/home/register?redirectTo=${redirectTo}`);
@@ -141,12 +140,6 @@ export default function LoginComponent() {
           <div className="text-center mt-4 text-sm text-gray-800">
           <div className="text-center mt-4 text-sm text-gray-800"> 
               No profile?{" "}
-              {/* <Link
-                to="/home/register"
-                className="text-indigo-600 hover:underline"
-              >
-                Register here
-              </Link> */}
               <button
               className="text-indigo-600 hover: underline"
               onClick={handleRedirectToRegister}

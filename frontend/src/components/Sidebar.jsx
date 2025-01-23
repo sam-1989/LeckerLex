@@ -8,25 +8,35 @@ function Sidebar({
   handleRemoveIngredient,
   handleRemoveAll,
 }) {
-
   // open the sidebar once an ingredient is clicked
-  
-  useEffect(()=> {
-    if (selectedIngredients.length > 0){
-    setIsSidebarOpen(true);
+
+  useEffect(() => {
+    console.log("Selected Ingredients:", selectedIngredients);
+    if (selectedIngredients.length > 0) {
+      setIsSidebarOpen(true);
     }
   }, [selectedIngredients, setIsSidebarOpen]);
 
-   // close the sidebar once "remove all" is clicked
-  
-   const handleRemoveAllClick = () => {
+  // close the sidebar once "remove all" is clicked
+
+  const handleRemoveAllClick = () => {
     handleRemoveAll();
     setIsSidebarOpen(false);
-   };
+  };
+
+  useEffect(() => {
+    console.log("Sidebar mounted");
+    return () => {
+      console.log("Sidebar unmounted");
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("Selected ingredients in Sidebar:", selectedIngredients);
+  }, [selectedIngredients]);
 
   const handleRemoveIngredientClick = (ingredientIndex) => () => {
     handleRemoveIngredient(ingredientIndex);
-
   };
 
   return (
@@ -46,8 +56,8 @@ function Sidebar({
               key={index}
               className="flex justify-between items-center p-2 mb-2 font-book hover:bg-gray-200"
             >
-            {ingredient}
-            <button
+              {ingredient}
+              <button
                 onClick={handleRemoveIngredientClick(index)}
                 className="ml-4 text-red-500"
               >

@@ -3,10 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
-
 function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
-  
-
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -58,10 +55,10 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
               <div
                 className={`p-3 rounded-full cursor-pointer border border-gray-200 shadow-md text-center text-md font-book transition-transform
                    duration-200 focus:outline-none ${
-                  selectedCategory === category.id
-                    ? "bg-green-700 text-white"
-                    : "bg-gray-50"
-                } hover:bg-green-500 hover:text-white hover:scale-105`}
+                     selectedCategory === category.id
+                       ? "bg-green-700 text-white"
+                       : "bg-gray-50"
+                   } hover:bg-green-500 hover:text-white hover:scale-105`}
                 onClick={() => setSelectedCategory(category.id)}
               >
                 {category.name}
