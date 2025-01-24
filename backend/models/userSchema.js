@@ -50,6 +50,18 @@ const userSchema = new Schema(
         ref: "Recipes",
       },
     ],
+    shoppingList: [
+      {
+        item: {
+          type: String,
+          required: true,
+        },
+        purchased: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     validationToken: String,
     isEmailValidated: {
       type: Boolean,
