@@ -10,6 +10,7 @@ userRouter
   .post("/login", user.loginUser)
   .post("/logout", user.logoutUser) // authenticate?
   .get("/verify-user", user.authenticateUser)
-  .patch("/update-shoppinglist", authenticate, user.updateUsersShoppingList);
+  .patch("/update-shoppinglist", authenticate, user.updateUsersShoppingList)
+  .get("/shoppinglist", authenticate, user.getUsersShoppingList);
 
 export default userRouter;

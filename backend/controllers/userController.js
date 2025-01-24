@@ -231,6 +231,25 @@ export const updateUsersShoppingList = async (req, res, next) => {
   }
 };
 
+export const getUsersShoppingList = async (req, res, next) => {
+  try {
+    const user = await User.findOne(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found." });
+    }
+
+    const shoppingList = user.shoppingList;
+    /* if (shoppingList.length < 1)
+      return res.status(200).json({ msg: "Your shopping list is empty." }); */
+
+    return res.status(200).json(shoppingList);
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error fetching user's shopping list. Please try again later.",
+    });
+  }
+};
+
 export const logoutUser = async (req, res, next) => {
   try {
     res

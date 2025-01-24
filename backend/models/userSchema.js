@@ -41,7 +41,7 @@ const userSchema = new Schema(
         name: {
           type: String,
           required: true,
-          unique: true, // to not add the same item multiple times
+          // unique: true, // to not add the same item multiple times
         },
         amount: Number, // not required if I want to manually add just eg. Milk
         unit: String,
