@@ -120,7 +120,7 @@ export default function HomePage() {
     },
     { id: "Grains and Legumes", name: "Grains and Legumes" },
     { id: "Eggs and Proteins", name: "Eggs and Proteins" },
-    { id: "Canned Goods and Sauces", name: "Canned Goods and Sauces" },
+    { id: "Canned Goods and Sauces", name: "Goods and Sauces" },
     { id: "Herbs and Spices", name: "Herbs and Spices" },
     { id: "Oils and Fats", name: "Oils and Fats" },
     { id: "Snacks and Side Dishes", name: "Snacks and Side Dishes" },
