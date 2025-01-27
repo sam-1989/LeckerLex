@@ -9,9 +9,13 @@ function ResultPage() {
   const { recipes } = useContext(RecipeContext);
   const navigate = useNavigate();
 
+  console.log(recipes);
+
   return (
     <div className="mx-auto max-w-screen-lg p-4 mb-16">
-      <h1 className="text-3xl font-bold mb-6 text-center md:text-left">Discover Delicious Recipes</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center md:text-left">
+        Discover Delicious Recipes
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {recipes.map((recipe) => (
           <div
@@ -21,6 +25,7 @@ function ResultPage() {
                        hover:outline hover:outline-1 hover:outline-gray-300 
                        hover:shadow-md"
             onClick={() => recipe.id && navigate(`/home/recipe-details/${recipe.id}`)}
+
           >
             <img
               src={recipe.image}

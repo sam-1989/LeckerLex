@@ -15,33 +15,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/home";
-
-  useEffect(() => {
-    // Überprüfen, ob die Verifizierung abgeschlossen ist
-    const checkVerification = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/users/verify-user?redirectTo=${redirectTo}`, {
-          method: "GET",
-          credentials: "include", // falls Cookies benötigt werden
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.isEmailValidated) {
-            navigate(redirectTo, {replace: true}); // Weiterleitung zur ursprünglichen Seite
-          } else {
-            console.log("Verifizierung fehlgeschlagen");
-          }
-        } else {
-          console.log("verifizierungs-Request fehlgeschlagen");
-        }
-      } catch (error) {
-        console.log("Fehler beim Verifizierungs-Request:", error.message);
-      }
-    };
-    checkVerification();
-  }, [redirectTo, navigate]);
-
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading
@@ -117,13 +90,13 @@ export default function RegisterPage() {
       }
       /* navigate("/home/verify-email", { replace: true });  */
 
-      
       if (redirectTo) {
-        navigate(`/home/verify-email?redirectTo=${redirectTo}`, { replace: true });
+        navigate(`/home/verify-email?redirectTo=${redirectTo}`, {
+          replace: true,
+        });
       } else {
-        navigate("/home/verify-email", { replace: true});
+        navigate("/home/verify-email", { replace: true });
       }
-      
     } catch (error) {
       setErrorMessage(
         "An error occured while trying to register. Please try again later."
@@ -197,8 +170,8 @@ export default function RegisterPage() {
               SELECT COUNTRY
             </label>
             <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200">
-              <option value="denmark">Denmark</option>
-              <option value="germany">Germany</option>
+              <option value="denmark">Germany</option>
+              <option value="germany">Denmark</option>
               <option value="france">France</option>
               <option value="usa">USA</option>
             </select>

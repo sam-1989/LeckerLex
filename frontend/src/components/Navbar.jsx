@@ -48,7 +48,7 @@ function Navbar() {
         console.error("Failed to logout", errorMessage); // debug log
         return;
       }
-      navigate("/home");
+      navigate("/");
       setIsDropdownOpen(false);
       setTimeout(() => setIsLoggedIn(false), 0);
     } catch (error) {
