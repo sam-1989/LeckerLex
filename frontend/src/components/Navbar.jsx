@@ -13,7 +13,7 @@ import {
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // state for dropdown menu
   const [isDarkMode, setIsDarkMode] = useState(false); // state for darkMode
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -63,17 +63,16 @@ function Navbar() {
       }`}
     >
       <div className="flex justify-between h-16 z-50">
-       
-          <div className="flex-shrink-0 flex items-center">
-            <NavLink
-              to="/home"
-              className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
-            >
-              LeckerLex
-            </NavLink>
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* User icon and darkmode toggle */}
+        <div className="flex-shrink-0 flex items-center">
+          <NavLink
+            to="/home"
+            className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
+          >
+            LeckerLex
+          </NavLink>
+        </div>
+        <div className="flex items-center space-x-4">
+          {/* User icon and darkmode toggle */}
           <button
             onClick={toggleDarkMode}
             className="focus:outline-none transition duration-300 ease-in-out"
@@ -118,12 +117,14 @@ function Navbar() {
                 >
                   <FaCartArrowDown className="mr-2" /> My Shopping List
                 </NavLink>
-                <button
-                  className="flex items-center w-full px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                  onClick={handleLogout}
-                >
-                  <FaSignOutAlt className="mr-2" /> Logout
-                </button>
+                {isLoggedIn && (
+                  <button
+                    className="flex items-center w-full px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+                    onClick={handleLogout}
+                  >
+                    <FaSignOutAlt className="mr-2" /> Logout
+                  </button>
+                )}
               </div>
             )}
           </div>
