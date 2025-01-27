@@ -36,21 +36,7 @@ const userSchema = new Schema(
         "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+).",
       ],
     },
-    shoppingList: [
-      {
-        name: {
-          type: String,
-          required: true,
-          // unique: true, // to not add the same item multiple times
-        },
-        amount: Number, // not required if I want to manually add just eg. Milk
-        unit: String,
-        purchased: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
+    /* shoppingList: { type: String, default: [] }, */
     reviews: [
       // TODO reviews model (1-n)
       {
@@ -65,18 +51,7 @@ const userSchema = new Schema(
         ref: "Recipes",
       },
     ],
-    shoppingList: [
-      {
-        item: {
-          type: String,
-          required: true,
-        },
-        purchased: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
+    shoppingList: [String],
     validationToken: String,
     isEmailValidated: {
       type: Boolean,

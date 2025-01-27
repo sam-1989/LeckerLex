@@ -1,14 +1,11 @@
-
 import React, { useContext, useEffect, useState } from "react";
-
-import { RecipeContext } from "../context/RecipeContext";
 import { Link } from "react-router-dom";
 import shoppingCartImage from "../assets/images/shoppingcart.webp";
 
 function MyShoppingList() {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
-  const { shoppingList, setShoppingList } = useContext(RecipeContext);
+  const [shoppingList, setShoppingList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [purchasedItems, setPurchasedItems] = useState([]);
@@ -44,6 +41,36 @@ function MyShoppingList() {
     getShoppingList();
   }, []);
 
+  // Save the updated shopping list to the backend
+  const saveShoppingList = async (updatedList) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/users/update-shoppinglist",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            shoppingList: updatedList,
+            action: "replace",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update shopping list.");
+      }
+      const result = await response.json();
+      console.log("Shopping list saved:", result);
+      setShowSaveButton(false);
+    } catch (error) {
+      console.error("Error saving shopping list:", error);
+      setError("Failed to save shopping list. Please try again.");
+    }
+  };
+
   // Loading state UI
   if (loading) {
     return (
@@ -62,15 +89,13 @@ function MyShoppingList() {
     );
   }
 
-
-
-  const [missingIngredients, setMissingIngredients] = useState([
+  /*   const [missingIngredients, setMissingIngredients] = useState([
     { name: "Tomatos", amount: 2, unit: "piece/s" },
     { name: "Cucumbers", amount: 1, unit: "piece/s" },
     { name: "Onions", amount: 3, unit: "piece/s" },
     { name: "Olive Oil", amount: 100, unit: "ml" },
     { name: "Salt", amount: 1, unit: "prize" },
-  ]);
+  ]); */
 
   // Function to handle the checkbox change event
   const handleIngredientChoise = (name) => {
@@ -84,13 +109,14 @@ function MyShoppingList() {
 
   // mark all items as purchased
   const markAllAsPurchased = () => {
-    setPurchasedItems(missingIngredients.map((item) => item.name));
+    setPurchasedItems(shoppingList.map((item) => item));
     setShowSaveButton(true);
   };
 
   // mark all items as not purchased
   const handleSaveAndRemoveAll = () => {
-    setMissingIngredients([]);
+    saveShoppingList([]); // Save an empty shopping list
+    setShoppingList([]);
     setPurchasedItems([]);
     setShowSaveButton(false);
   };
@@ -100,10 +126,9 @@ function MyShoppingList() {
   };
 
   const handleSaveNewIngredient = () => {
-    setMissingIngredients((prev) => [
-      ...prev,
-      { name: newIngredient, amount: 1, unit: "piece/s" },
-    ]);
+    const updatedList = [...shoppingList, newIngredient];
+    setShoppingList(updatedList);
+    saveShoppingList(updatedList); // Save the new list
     setNewIngredient("");
     setShowAddIngredient(false);
   };
@@ -179,23 +204,23 @@ function MyShoppingList() {
         </div>
 
         {/* List of missing ingredients */}
-        {missingIngredients.length > 0 ? (
+        {shoppingList.length > 0 ? (
           <ul className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {missingIngredients.map((item, index) => (
+            {shoppingList.map((item, index) => (
               <li
                 key={index}
-                onClick={() => handleIngredientChoise(item.name)}
+                onClick={() => handleIngredientChoise(item)}
                 className={`flex flex-col sm:flex-row justify-between items-center p-4 hover:bg-gray-300 rounded-3xl transition-transform transform
                                                      hover:scale-105 hover:shadow-md cursor-pointer ${
                                                        purchasedItems.includes(
-                                                         item.name
+                                                         item
                                                        )
                                                          ? "line-through text-gray-700 bg-gray-200"
                                                          : "bg-white hover:bg-gray-50"
                                                      }`}
               >
                 <div className="flex items-center mb-2 sm:mb-0">
-                  <span className="font-semibold">{item.name}</span>
+                  <span className="font-semibold">{item}</span>
                 </div>
                 <span className="text-sm text-gray-700">
                   {item.amount} {item.unit}
