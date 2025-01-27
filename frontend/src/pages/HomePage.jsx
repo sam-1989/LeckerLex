@@ -115,7 +115,7 @@ export default function HomePage() {
     { id: "Meat", name: "Meat" },
     { id: "Seafood", name: "Seafood" },
     {
-      id: "Baking Ingredients",
+      id: "Flour and Baking Ingredients",
       name: "Baking Ingredients",
     },
     { id: "Grains and Legumes", name: "Grains and Legumes" },

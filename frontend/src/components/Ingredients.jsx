@@ -262,12 +262,20 @@ export default function Ingredients({
     { src: Worcestershire_Sauce, alt: "Worcestershire" },
   ];
 
-  // Toggle the clicked ingredient and set the searchText accordingly
+
+  // Function to handle the click event on an ingredient image
   const handleImageClick = (ingredientName) => {
+    // check if the ingredient is already selected
     const updated = selectedIngredients.includes(ingredientName)
-      ? selectedIngredients.filter((item) => item !== ingredientName)
-      : [...selectedIngredients, ingredientName];
+      ? // if selected, remove it from the list
+        selectedIngredients.filter((item) => item !== ingredientName)
+      : // if not selected, add it to the list
+        [...selectedIngredients, ingredientName];
+    
+    // update the state with the new list of selected ingredients
     setSelectedIngredients(updated);
+
+    // if there is no search text, reset it to an empty string
     if (!searchText) {
       setSearchText("");
     }
@@ -277,8 +285,11 @@ export default function Ingredients({
   useEffect(() => {
     console.log("searchText:", searchText);
     console.log("selectedIngredients before update:", selectedIngredients);
+
+    // if there is no search text, exit the effect
     if (!searchText) return;
-    // Split by comma, lowercase & trim
+
+    // split the search text by commas, convert to lowercase, trim whitespace, and capitalize the first letter
     const typed = searchText
       .split(",")
       .map((item) =>
@@ -287,7 +298,7 @@ export default function Ingredients({
           .toLowerCase()
           .replace(/^\w/, (c) => c.toUpperCase())
       )
-      .filter((ingredient) => ingredient);
+      .filter((ingredient) => ingredient); // filter out any empty strings
 
     // Filter array to matches
 
@@ -308,8 +319,8 @@ export default function Ingredients({
 
       .filter((h) => typed.includes(h.alt.toLowerCase()))
       .map(
-        (h) =>
-          h.alt.charAt(0).toUpperCase() + ingredient.alt.slice(1).toLowerCase()
+        (ingredient) =>
+          ingredient.alt.charAt(0).toUpperCase() + ingredient.alt.slice(1).toLowerCase()
       );
 
     const uniqueIngredients = Array.from(
@@ -326,6 +337,8 @@ export default function Ingredients({
     );
 
     console.log("matched:", matched);
+
+   
 
     // Update selectedIngredients if changed
     if (

@@ -15,36 +15,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/home";
-
-  useEffect(() => {
-    // Überprüfen, ob die Verifizierung abgeschlossen ist
-    const checkVerification = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/users/verify-user?redirectTo=${redirectTo}`,
-          {
-            method: "GET",
-            credentials: "include", // falls Cookies benötigt werden
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.isEmailValidated) {
-            navigate(redirectTo, { replace: true }); // Weiterleitung zur ursprünglichen Seite
-          } else {
-            console.log("Verifizierung fehlgeschlagen");
-          }
-        } else {
-          console.log("verifizierungs-Request fehlgeschlagen");
-        }
-      } catch (error) {
-        console.log("Fehler beim Verifizierungs-Request:", error.message);
-      }
-    };
-    checkVerification();
-  }, [redirectTo, navigate]);
-
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading

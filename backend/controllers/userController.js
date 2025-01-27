@@ -109,7 +109,6 @@ export const registerUser = async (req, res, next) => {
 export const verifyUser = async (req, res) => {
   try {
     const token = req.params.token; // Extract token from URL params
-    const { redirectTo } = req.query; // Query-Parameter für die Rezept-ID extrahieren
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token via JWT_SECRET
     console.log("Decoded token:", decoded); // Log decoded token
@@ -122,16 +121,9 @@ export const verifyUser = async (req, res) => {
       user.validationToken = null; // Remove the registration token
       await user.save({ validateBeforeSave: false }); // to skip validating the password after it has been hashed (this leads to errors)
 
-      // Erfolgreiche Verifizierung und Weiterleitung
-
-      const redirectPath = redirectTo
-        ? `/home/login?redirectTo=${redirectTo}` // Wenn eine rezept-ID vorhanden ist
-        : "/home/login"; // Standard-Weiterleitung
-
       return res.status(200).json({
         msg: "Email successfully verified",
         isEmailValidated: user.isEmailValidated,
-        redirectPath, // Weiterleitungs-URL zurückgeben
       });
     } else {
       return res.status(404).json({ msg: "User not found or invalid token." });

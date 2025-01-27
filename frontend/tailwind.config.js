@@ -7,6 +7,9 @@ export default {
       zIndex:{
         '-10':'-10',
       },
+      transitionProperty: {
+        all: "all",
+      },
       animation: {
         'spin-and-grow': 'spin-and-grow 1s ease-out',
         'shrink-and-fade': 'shrinkAndFade 0.5s ease-out forwards',
