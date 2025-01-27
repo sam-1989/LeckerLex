@@ -166,7 +166,7 @@ export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (!user) return res.status(404).json({ msg: "User not found" }); // TODO is this not managed by authenticate?
 
     const isAuthenticated = await user.authenticate(password); // Compare the clear-text password from req.body with the hashed one in the database
 
@@ -192,6 +192,53 @@ export const loginUser = async (req, res, next) => {
       .json({ msg: "Successfully signed in" });
   } catch (error) {
     next(error);
+  }
+};
+
+export const updateUsersShoppingList = async (req, res, next) => {
+  try {
+    const { shoppingList } = req.body;
+
+    if (!shoppingList) {
+      return res
+        .status(400)
+        .json({ msg: "Please provide items to add to shopping list." });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { shoppingList },
+      { new: true }
+    ); // from authenticate method
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found." });
+    }
+
+    res.status(200).json({ msg: `User's shopping list successfully updated.` });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error updating user document. Please try again later." });
+  }
+};
+
+export const getUsersShoppingList = async (req, res, next) => {
+  try {
+    const user = await User.findOne(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found." });
+    }
+
+    const shoppingList = user.shoppingList;
+    /* if (shoppingList.length < 1)
+      return res.status(200).json({ msg: "Your shopping list is empty." }); */
+
+    return res.status(200).json(shoppingList);
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error fetching user's shopping list. Please try again later.",
+    });
   }
 };
 

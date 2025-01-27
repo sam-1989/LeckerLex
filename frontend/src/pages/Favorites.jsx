@@ -1,3 +1,4 @@
+
 import React, { useContext, useState } from 'react';
 import { RecipeContext } from '../context/RecipeContext';
 
@@ -9,6 +10,7 @@ function Favorites() {
   const [cookTime, setCookTime] = useState('');
   const [calories, setCalories] = useState('');
   const [nutrition, setNutrition] = useState('');
+
 
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
@@ -29,7 +31,9 @@ function Favorites() {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
       <main className="p-6 bg-white shadow-lg rounded-lg w-full max-w-2xl">
         <section>
-          <h1 className="text-3xl font-semibold mb-6 text-gray-800">My Favorite Recipes</h1>
+          <h1 className="text-3xl font-semibold mb-6 text-gray-800">
+            My Favorite Recipes
+          </h1>
           <div className="flex flex-wrap gap-4 mb-6">
             <label className="flex flex-col">
               <span className="mb-2 text-gray-700">Cooking time</span>
@@ -77,6 +81,19 @@ function Favorites() {
             </label>
           </div>
         </section>
+
+        <section className="mt-8">
+          <p className="text-gray-600">
+            Here are going to render the favorite recipes...
+          </p>
+          <p className="text-gray-600">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
+            placeat dolores obcaecati beatae delectus labore officia ratione
+            ullam, eligendi praesentium! At nostrum, sed sint eaque
+            exercitationem alias optio maiores dolore.
+          </p>
+        </section>
+
       </main>
 
       {/* Übertragung von RecipeDetails */}
@@ -219,7 +236,6 @@ function Favorites() {
       </div>
     </div>
   );
-}
+};
 
 export default Favorites;
-

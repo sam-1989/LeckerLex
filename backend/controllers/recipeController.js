@@ -31,7 +31,6 @@ export const searchRecipesAndDetails = async (req, res, next) => {
     // Fetch detailed data for each recipe
     const detailedRecipes = await Promise.all(
       recipes.map(async (recipe) => {
-        
         const detailResponse = await fetch(
           `https://api.spoonacular.com/recipes/${recipe.id}/information?includeNutrition=true`,
           options

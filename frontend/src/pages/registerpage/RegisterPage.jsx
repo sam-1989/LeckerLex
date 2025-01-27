@@ -15,7 +15,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/home";
-  
   useEffect(() => {
     const checkUserLogin = async () => {
       if (loading) return; // Prevent execution while loading
@@ -91,13 +90,13 @@ export default function RegisterPage() {
       }
       /* navigate("/home/verify-email", { replace: true });  */
 
-      
       if (redirectTo) {
-        navigate(`/home/verify-email?redirectTo=${redirectTo}`, { replace: true });
+        navigate(`/home/verify-email?redirectTo=${redirectTo}`, {
+          replace: true,
+        });
       } else {
-        navigate("/home/verify-email", { replace: true});
+        navigate("/home/verify-email", { replace: true });
       }
-      
     } catch (error) {
       setErrorMessage(
         "An error occured while trying to register. Please try again later."
@@ -171,8 +170,8 @@ export default function RegisterPage() {
               SELECT COUNTRY
             </label>
             <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200">
-              <option value="denmark">Denmark</option>
-              <option value="germany">Germany</option>
+              <option value="denmark">Germany</option>
+              <option value="germany">Denmark</option>
               <option value="france">France</option>
               <option value="usa">USA</option>
             </select>
