@@ -88,6 +88,7 @@ export const searchRecipesAndDetails = async (req, res, next) => {
           title: recipe.title,
           image: recipe.image,
           usedIngredientCount: recipe.usedIngredientCount,
+          missedIngredientCount: recipe.missedIngredientCount,
           missedIngredients: recipe.missedIngredients.map((ingredient) => ({
             name: ingredient.name,
             amount: ingredient.amount,

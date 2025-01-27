@@ -2,13 +2,18 @@ import React, { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 import { AuthContext } from "../context/AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+
 
 function RecipeDetails() {
     const { id } = useParams(); // Rezept-ID aus der URL
-    const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
+    const { recipes } = useContext(RecipeContext);   // Rezepte aus dem Context
     const { setShoppingList } = useContext(RecipeContext); // Fehlende Zutaten aus dem Context
     const { isLoggedIn } = useContext(AuthContext);
-
+    const { isFavorite, setIsFavorite, favorites, setFavorites } = useContext(RecipeContext);
+    console.log("Initial favorites in RecipeDetails:", favorites);
+    
     const navigate = useNavigate();
     
     // Finde das Rezept mit der passenden ID
@@ -19,10 +24,45 @@ function RecipeDetails() {
     const [showShoppingListModal, setShowShoppingListModal] = useState(false);
     const [pauseBanner, setPauseBanner] = useState(false);
     const [servings, setServings] = useState( 1 || recipe.servingsAmount);  // Standardmäßig 1
+    const [showFavoriteModal, setShowFavoriteModal] = useState(false); // Zustand für das Modul
+    
+    
     
     const toggleSection = (section) => {
         setVisibleSection(visibleSection === section ? null : section);
         setPauseBanner(visibleSection === section ? false : true);  // Pause, wenn ein Fenster aktiv ist
+    };
+
+    /* Übertragung zur Favoriten */
+
+    const toggleFavorite = () => {
+        const currentRecipe = {
+            id: recipe.id,
+            title: recipe.title,
+            image: recipe.image,
+            ingredients: recipe.ingredients.map((ingredient) => ({
+                name: ingredient.name,
+                amount: (ingredient.amount * servings).toFixed(1),
+                unit: ingredient.unit,
+            })), 
+            nutrition: recipe.nutritionPer100g,
+            preparation: recipe.steps.map((step) => step.description),
+        };
+
+        if (isFavorite.includes(recipe.id)) {
+            // Wenn schon Favorit -> Entfernen
+            setIsFavorite(isFavorite.filter((favId) => favId !== recipe.id));
+            setFavorites(favorites.filter(fav => fav.id !== recipe.id));
+        } else {
+            // Wenn nicht Favorit -> Hinzuzufügen
+            setIsFavorite([...isFavorite, recipe.id]);
+            setFavorites([...favorites, currentRecipe]);
+            console.log("updated favorites:", [...favorites, currentRecipe]);
+
+            // Modul-Fenster anzeigen
+            setShowFavoriteModal(true);
+            setTimeout(() => setShowFavoriteModal(false), 3000); // Automatisch schließen nach 3 Sekunden
+        }
     };
 
     // Funktion, um zur "Einkaufsliste" hinzuzufügen
@@ -35,8 +75,10 @@ function RecipeDetails() {
             
          } else {
             // User ist eingelogt -> Funktionalität ausführen
-        setShowShoppingListModal(true);
-        setShoppingList((prevList) => [...prevList, ...recipe.missedIngredients]); // Fehlende Zutaten zu der "Einkaufsliste" hinzufügen
+            setShowShoppingListModal(true);
+            // Fehlende Zutaten zu der "Einkaufsliste" hinzufügen
+            const ingredientsToAdd = recipe.missedIngredients.map((ingredient) => ingredient.name);
+            setShoppingList((prevList) => [...prevList, ...ingredientsToAdd]);  // Hinzfügen zur "Einkaufsliste"
         }
     };
 
@@ -77,13 +119,39 @@ function RecipeDetails() {
             </div>
         </div>  
         {/* Rezeptbild */}
-        <div  className="relative mx-auto w-full sm:w-8/12 lg:w-6/12 h-52 sm:h-64 lg:h-80 mt-16"> 
+        <div  className="relative mx-auto w-full sm:w-8/12 lg:w-6/12 h-64 sm:h-64 lg:h-80 mt-16"> 
 
                 <img
                 src={recipe.image}
                 alt={recipe.title}
                 className="w-full h-full object-contain"
                 />
+                {/* Herz für Favoriten */}
+                <div className="absolute top-4 sm:top-2 right-6 sm:right-2">
+                    <button 
+                    onClick={toggleFavorite} 
+                    className="focus:outline-none"
+                    >
+                        <FontAwesomeIcon
+                        icon={faHeart}
+                        size="2x"
+                        color={isFavorite.includes(recipe.id) ? "red" : "gray"}
+                        />
+                    </button>
+                </div>
+                {/* Modul-Fenster für Favoriten */}
+                {showFavoriteModal && (
+                    <div className="absolute bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50"
+                    style={{
+                        top: "-50px",
+                        right:"0",
+                        transform: "translateX(50%)",
+                        }}
+                    >
+                        Added to Favorites!
+                    </div>
+                )} 
+                
                 <div 
                 className="absolute top-1/2  left-1/2  transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-40 px-4 py-1 rounded-lg"
                 style={{
@@ -196,7 +264,11 @@ function RecipeDetails() {
                             key={index}
                             className="flex justify-between text-sm sm:text-base text-gray-700"
                             >
-                                {ingredient}
+                                {/* {ingredient} */}
+                                
+                                {ingredient.amount} {ingredient.unit} {ingredient.name}
+                                
+                                
                             </li>
                         ))} 
                         

@@ -5,6 +5,8 @@ export const RecipeContext = createContext();
 export default function RecipeContextProvider({ children }) {
   const [recipes, setRecipes] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
+  const [isFavorite, setIsFavorite] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   return (
     <RecipeContext.Provider
@@ -13,6 +15,10 @@ export default function RecipeContextProvider({ children }) {
         setRecipes,
         shoppingList,
         setShoppingList,
+        isFavorite,
+        setIsFavorite,
+        favorites,
+        setFavorites,
       }}
     >
       {children}
