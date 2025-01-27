@@ -191,7 +191,8 @@ function RecipeDetails() {
                   Ingredients {servingsText}
                 </p>
                 <button
-                  className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-green-500 text-white text-lg sm:text-xl   hover:bg-green-600 focus:outline-none"
+                  className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full bg-green-500 text-white text-lg sm:text-xl hover:bg-green-600 focus:outline-none"
+
                   onClick={handleIncreaseServings}
                 >
                   {"\uFF0B"} {/* Unicode Plus-Zeichen */}
@@ -241,6 +242,7 @@ function RecipeDetails() {
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 rounded-lg w-3/4 sm:w-1/2 lg:w-1/3 animate-spin-and-grow z-50">
             {/* Schließen-Button */}
             <button
+
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
               onClick={() => setShowMissingIngredients(false)}
             >
@@ -255,13 +257,14 @@ function RecipeDetails() {
                   key={index}
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
-                  {ingredient.amount} {ingredient.unit} {ingredient.name}
+                  {ingredient.name}
                 </li>
               ))}
             </ul>
             {/* Button zur Einkaufsliste hinzufügen */}
             <button
-              className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+              className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded-3xl hover:text-gray-900 focus:outline-none hover:bg-green-600"
+
               onClick={handleAddToShoppingList}
             >
               Add to Shopping List

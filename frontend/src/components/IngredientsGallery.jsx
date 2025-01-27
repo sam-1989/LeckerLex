@@ -80,7 +80,7 @@ function IngredientsGallery({
             <div
               key={idx}
               className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden
-                 rounded-xl hover:outline hover:outline-1 hover:outline-gray-300 shadow-md bg-gray-50 outline-3
+                 rounded-xl hover:outline hover:outline-1 hover:outline-gray-300 shadow-md bg-gray-50 border border-r-1 outline-2
                   transition-opacity duration-200 ease-in-out ${
                 isLoaded ? "opacity-100" : "opacity-0"
               }`}

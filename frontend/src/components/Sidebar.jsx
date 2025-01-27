@@ -79,7 +79,7 @@ function Sidebar({
         }`}
       >
         <button
-          className="bg-blue-500 text-white px-4 py-4 rounded-full shadow-lg flex items-center justify-center"
+          className="bg-blue-500 text-white mb-12 px-4 py-4 rounded-full shadow-lg flex items-center justify-center"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           {isSidebarOpen ? <FaChevronLeft /> : <FaChevronRight />}

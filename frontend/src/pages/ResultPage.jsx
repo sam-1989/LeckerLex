@@ -21,12 +21,11 @@ function ResultPage() {
           <div
             key={recipe.id}
             className="flex flex-col border rounded-lg shadow-md
-                       transition duration-100 transform hover:scale-105
+                       transition duration-100 transform hover:scale-95
                        hover:outline hover:outline-1 hover:outline-gray-300 
-                       hover:shadow-lg"
-            onClick={() =>
-              recipe.id && navigate(`/home/recipe-details/${recipe.id}`)
-            }
+                       hover:shadow-md"
+            onClick={() => recipe.id && navigate(`/home/recipe-details/${recipe.id}`)}
+
           >
             <img
               src={recipe.image}
@@ -34,28 +33,24 @@ function ResultPage() {
               className="w-full h-48 object-cover rounded-t-lg hover:opacity-90 
                          transition-opacity"
             />
-            <div
-              className="p-4 flex-1 flex flex-col justify-between hover:bg-green-100 
-                            transition-colors"
-            >
-              <h2 className="text-xl font-thin mb-2 flex items-center">
+            <div className="p-4 flex-1 flex flex-col justify-between bg-white hover:bg-green-50 
+                            transition-colors">
+              <h2 className="text-xl font-semibold mb-2">
                 {recipe.title}
               </h2>
-              <p className="text-gray-700 font-thin text-sm mb-2">
-                {recipe.preparationTime} mins
-              </p>
-              <p className="text-gray-700 font-thin text-sm mb-2">
-                {recipe.nutritionPerServing.calories} kcal
-              </p>
-              {recipe.diet.vegan && <FaLeaf className="ml-2 text-green-500" />}
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-gray-700 font-light text-sm">{recipe.preparationTime} mins</p>
+                {recipe.diet.vegan && <FaLeaf className="text-green-500" />}
+                <p className="text-gray-700 font-light text-sm">{recipe.nutritionPerServing.calories} kcal</p>
+              </div>
             </div>
           </div>
         ))}
       </div>
       <div className="flex justify-center mt-6">
         <button
-          className="p-2 m-2 rounded bg-gray-200 hover:bg-gray-400 transition-colors"
-          onClick={() => navigate("/home")}
+          className="px-5 py-2 bg-blue-500 text-white rounded-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => navigate('/home')}
         >
           Back to Home
         </button>

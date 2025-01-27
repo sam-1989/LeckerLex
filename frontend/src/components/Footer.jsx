@@ -15,7 +15,7 @@ function Footer() {
   const [activeIcon, setActiveIcon] = useState(null);
   return (
     <>
-      <footer className="bg-green-100 border border-r-2 shadow-md w-full hidden md:block z-50">
+      <footer className="bg-green-100 border border-r-2 rounded-t-full p-1 shadow-md w-full hidden md:block z-50">
         <div className="w-full mx-auto max-w-screen-2xl p-2 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-600 flex items-center">
             © 2024{" "}
