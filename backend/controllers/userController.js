@@ -92,6 +92,7 @@ export const registerUser = async (req, res, next) => {
       }
     });
   } catch (error) {
+    console.log(error);
     if (error.code === 11000) {
       // Duplicate key error (email already in use)
       res.status(400).json({
@@ -196,27 +197,37 @@ export const loginUser = async (req, res, next) => {
 };
 
 export const updateUsersShoppingList = async (req, res, next) => {
+  console.log("PATCH request received");
   try {
-    const { shoppingList } = req.body;
+    const { shoppingList, action } = req.body;
 
-    if (!shoppingList) {
-      return res
-        .status(400)
-        .json({ msg: "Please provide items to add to shopping list." });
-    }
-
-    const user = await User.findByIdAndUpdate(
-      req.user.userId,
-      { shoppingList },
-      { new: true }
-    ); // from authenticate method
-
+    const user = await User.findOne(req.body.userId);
     if (!user) {
-      return res.status(404).json({ msg: "User not found." });
+      return res.status(404).json({ msg: "User not found" });
     }
+
+    if (action === "add") {
+      // Add items from RecipeDetails page
+      const updatedShoppingList = [...user.shoppingList];
+      shoppingList.forEach((newItem) => {
+        if (!updatedShoppingList.includes(newItem)) {
+          updatedShoppingList.push(newItem);
+        }
+      });
+      user.shoppingList = updatedShoppingList;
+    } else if (action === "replace") {
+      // Replace the shopping list from ShoppingList page
+      user.shoppingList = shoppingList;
+    } else {
+      // Invalid action
+      return res.status(400).json({ msg: "Invalid action specified" });
+    }
+
+    await user.save({ validateBeforeSave: false });
 
     res.status(200).json({ msg: `User's shopping list successfully updated.` });
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ msg: "Error updating user document. Please try again later." });
