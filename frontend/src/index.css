@@ -3,42 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes gradient-x {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+:root {
+  font-family: "Open Sans", "Sans Serif";
 }
-
-.button--animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 8s ease infinite;
-}
-
-/* h1 {
-  @apply font-bold;
-}
-
-h2 {
-  @apply font-medium;
-}
-
-p {
-  @apply font-book;
-}
-
-div {
-  @apply font-book;
-}
-
-button {
-  @apply font-medium;
-} */
 
 /* Dark mode styles */
 
@@ -53,59 +20,10 @@ button {
 }
 
 
-/* Arrows - category slider  */
-
-.custom-next-arrow,
-.custom-prev-arrow {
-  width: 30px;
-  height: 30px;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 10;
-  color: black; 
-}
-
-.custom-next-arrow {
-  right: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
-}
-
-.custom-prev-arrow {
-  left: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
-}
-
-.custom-next-arrow::before,
-.custom-prev-arrow::before {
-  content: "";
-  display: block;
-  width: 15px;
-  height: 15px;
-  color: black;
-  border: solid black;
-  border-width: 0 3px 3px 0;
-}
-
-.custom-next-arrow::before {
-  transform: rotate(-45deg);
-}
-
-.custom-prev-arrow::before {
-  transform: rotate(135deg);
-}
-
-
-
 /* NotFound Page Styling */
 
 .page_404 {
-  font-family: 'Circular-Book', Arial, Helvetica, sans-serif;
+  font-family: 'Open Sars', Arial, Helvetica, sans-serif;
 }
 
 .four_zero_four_bg h1 {
