@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import shoppingCartImage from "../assets/images/shoppingcart.webp";
 
@@ -89,14 +89,6 @@ function MyShoppingList() {
     );
   }
 
-  /*   const [missingIngredients, setMissingIngredients] = useState([
-    { name: "Tomatos", amount: 2, unit: "piece/s" },
-    { name: "Cucumbers", amount: 1, unit: "piece/s" },
-    { name: "Onions", amount: 3, unit: "piece/s" },
-    { name: "Olive Oil", amount: 100, unit: "ml" },
-    { name: "Salt", amount: 1, unit: "prize" },
-  ]); */
-
   // Function to handle the checkbox change event
   const handleIngredientChoise = (name) => {
     setPurchasedItems(
@@ -125,10 +117,21 @@ function MyShoppingList() {
     setShowAddIngredient(true);
   };
 
+  // change ingredients to lowercase
   const handleSaveNewIngredient = () => {
-    const updatedList = [...shoppingList, newIngredient];
+    const formattedIngredient = newIngredient.trim().toLowerCase(); // Normalize input
+    if (formattedIngredient === "") {
+      openModal("Ingredient field cannot be empty!");
+      return;
+    }
+
+    if (shoppingList.includes(formattedIngredient)) {
+      openModal("This ingredient is already in your shopping list!");
+      return;
+    }
+    const updatedList = [...shoppingList, formattedIngredient];
     setShoppingList(updatedList);
-    saveShoppingList(updatedList); // Save the new list
+    saveShoppingList(updatedList); // Save the new list to backend
     setNewIngredient("");
     setShowAddIngredient(false);
   };
