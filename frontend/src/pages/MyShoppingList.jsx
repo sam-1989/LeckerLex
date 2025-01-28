@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import shoppingCartImage from "../assets/images/shoppingcart.webp";
 
@@ -119,8 +119,17 @@ function MyShoppingList() {
   };
 
   // if an ingredient is already in the list, user will be notified and ingredient won't be add
+  // ingredients to lower case
   const handleSaveNewIngredient = () => {
-    if (shoppingList.includes(newIngredient)) {
+    const formattedIngredient = newIngredient.trim().toLowerCase(); // Normalize input
+    if (formattedIngredient === "") {
+      setNotification("Ingredient field cannot be empty!")
+            setTimeout(() => {
+        setNotification("");
+      }, 3000);
+      return;
+    }
+    if (shoppingList.includes(formattedIngredient)) {
       setNotification(
         "This Ingredient has been already added to the shopping list"
       );
@@ -129,9 +138,9 @@ function MyShoppingList() {
       }, 3000);
       return;
     }
-    const updatedList = [...shoppingList, newIngredient];
+    const updatedList = [...shoppingList, formattedIngredient];
     setShoppingList(updatedList);
-    saveShoppingList(updatedList); // Save the new list
+    saveShoppingList(updatedList); // Save the new list to backend
     setNewIngredient("");
     setShowAddIngredient(false);
     setNotification("");

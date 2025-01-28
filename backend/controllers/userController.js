@@ -115,22 +115,25 @@ export const verifyUser = async (req, res) => {
     console.log("Decoded token:", decoded); // Log decoded token
 
     // Find the user associated with the verification token
-    const user = await User.findOne({ validationToken: token });
+    // const user = await User.findOne({ validationToken: token });
 
-    if (user) {
-      user.isEmailValidated = true; // Set the user's emailVerified field to true
-      user.validationToken = null; // Remove the registration token
-      await user.save({ validateBeforeSave: false }); // to skip validating the password after it has been hashed (this leads to errors)
+    const updatedUser = await User.findOneAndUpdate(
+      { validationToken: token },
+      { isEmailValidated: true, validationToken: null }
+    );
 
-      return res.status(200).json({
-        msg: "Email successfully verified",
-        isEmailValidated: user.isEmailValidated,
-      });
-    } else {
-      return res.status(404).json({ msg: "User not found or invalid token." });
-    }
+    // user.isEmailValidated = true; // Set the user's emailVerified field to true
+    // user.validationToken = null; // Remove the registration token
+    // await user.save({ validateBeforeSave: false }); // to skip validating the password after it has been hashed (this leads to errors)
+
+    console.log("Updated User:", updatedUser);
+    return res.status(200).json({
+      msg: "Email successfully verified",
+      /* isEmailValidated: user.isEmailValidated, */
+    });
   } catch (error) {
     console.error("Token verification error:", error);
+
     if (error.name === "TokenExpiredError") {
       return res.status(400).json({ msg: "Verification token has expired" });
     } else if (error.name === "JsonWebTokenError") {
@@ -197,34 +200,27 @@ export const loginUser = async (req, res, next) => {
 };
 
 export const updateUsersShoppingList = async (req, res, next) => {
-  console.log("PATCH request received");
   try {
-    const { shoppingList, action } = req.body;
+    let { shoppingList, action } = req.body;
+    if (!Array.isArray(shoppingList))
+      return res.status(400).json({ msg: "Shopping List should be an array." });
 
-    const user = await User.findOne(req.body.userId);
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
+    shoppingList = shoppingList.map((item) => item.trim().toLowerCase());
 
     if (action === "add") {
       // Add items from RecipeDetails page
-      const updatedShoppingList = [...user.shoppingList];
-      shoppingList.forEach((newItem) => {
-        if (!updatedShoppingList.includes(newItem)) {
-          updatedShoppingList.push(newItem);
-        }
+      await User.findByIdAndUpdate(req.user.userId, {
+        $addToSet: { shoppingList: { $each: shoppingList } }, // addToSet prevents adding duplicate items
       });
-      user.shoppingList = updatedShoppingList;
     } else if (action === "replace") {
-      // Replace the shopping list from ShoppingList page
-      user.shoppingList = shoppingList;
+      // Replace the shopping list from MyShoppingList page
+      await User.findByIdAndUpdate(req.user.userId, {
+        $set: { shoppingList },
+      });
     } else {
       // Invalid action
       return res.status(400).json({ msg: "Invalid action specified" });
     }
-
-    await user.save({ validateBeforeSave: false });
-
     res.status(200).json({ msg: `User's shopping list successfully updated.` });
   } catch (error) {
     console.log(error);
