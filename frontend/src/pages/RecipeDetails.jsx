@@ -291,7 +291,7 @@ function RecipeDetails() {
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
                   {/* {ingredient} */}
-                  {ingredient.name}
+                 {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>
