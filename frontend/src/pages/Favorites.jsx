@@ -81,19 +81,6 @@ function Favorites() {
             </label>
           </div>
         </section>
-
-        <section className="mt-8">
-          <p className="text-gray-600">
-            Here are going to render the favorite recipes...
-          </p>
-          <p className="text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
-            placeat dolores obcaecati beatae delectus labore officia ratione
-            ullam, eligendi praesentium! At nostrum, sed sint eaque
-            exercitationem alias optio maiores dolore.
-          </p>
-        </section>
-
       </main>
 
       {/* Übertragung von RecipeDetails */}
