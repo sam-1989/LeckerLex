@@ -290,8 +290,8 @@ function RecipeDetails() {
                   key={index}
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
-                  {/* {ingredient} */}
-                 {ingredient.amount} {ingredient.unit} {ingredient.name}
+                  {/* {ingredient}  */}
+                  {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>

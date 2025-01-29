@@ -1,23 +1,28 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { RecipeContext } from '../context/RecipeContext';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
 
 function Favorites() {
-  const { favorites } = useContext(RecipeContext);
-  console.log("Favorites:", favorites);
+  const { favorites, setFavorites } = useContext(RecipeContext);
+  const { shoppingList, setShoppingList } = useContext(RecipeContext);
+  
 
+  
   const [cookTime, setCookTime] = useState('');
   const [calories, setCalories] = useState('');
   const [nutrition, setNutrition] = useState('');
 
-
-
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
+  const [missingIngredients,setMissingIngredients] = useState({});
   
   const toggleDetails = (id) => {
     setSelectedRecipeId((prevId) => (prevId === id ? null : id));  // Zustand toggeln
-   }
+   };
 
   const handleIncreaseServings = () => {
     setServings((prev) => Math.round((prev + 0.5) * 10) / 10);
@@ -25,15 +30,104 @@ function Favorites() {
   const handleDecreaseServings = () => {
     setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
+
+
+
+  // Diese Funktion verwaltet das Hinzufügen / Entfernen von Zutaten zur missingIngredients-Liste, basierend auf dem recipeId. Sie aktualisiert auch die Menge der fehlenden Zutaten abhängig von servings.
+  const toggleMissingIngredient = (recipeId, ingredient) => {
+    setMissingIngredients((prev) => {
+      const updated = { ...prev };
+      
+
+      if (!updated[recipeId]) {
+        // Wenn die Zutat schon fehlt, entfernen wir sie
+        updated[recipeId] = [];
+      } 
+
+      const existingIndex = updated[recipeId].findIndex(
+        (item) => item.name === ingredient.name);
+        
+      if (existingIndex > -1) {
+        // Entfernen, wenn bereits vorhanden
+        updated[recipeId].splice(existingIndex, 1);  // Entferne die Zutat, wenn sie schon da ist
+      } else {
+        // Hinzufügen mit angepasster Menge
+        updated[recipeId].push({
+          name: ingredient.name,
+          amount: (ingredient.amount * servings).toFixed(1),
+          unit: ingredient.unit,
+        });
+      }
+      // Speichern in Favoriten, damit die Daten bestehen bleiben
+    setFavorites((prevFavorites) => 
+    prevFavorites.map((fav) =>
+    fav.id === recipeId ? { ...fav, missingIngredients: updated[recipeId] } : fav
+    )
+  );
+  
+  return updated;
+  });
+};
+
+// useEffect zur automatischen Aktualisierung der Mengen. Wenn servings geändert wird, wird die Menge der bereits gespeicherten fehlenden Zutaten aktualisiert.
+  useEffect(() => {
+    setMissingIngredients((prev) => {
+      const updatedMissing = { ...prev };
+      Object.keys(updatedMissing).forEach((recipeId) => {
+        updatedMissing[recipeId] = updatedMissing[recipeId].map((ingredient) => {
+          const originalIngredient = favorites
+          .find((r) => r.id === parseInt(recipeId))?.ingredients
+          .find((ing) => ing.name === ingredient.name);
+
+          return originalIngredient
+          ? {
+            ...ingredient,
+            amount: (originalIngredient.amount * servings).toFixed(1)
+          }
+          : ingredient;
+      });
+    });
+      return updatedMissing;
+    });
+  }, [servings]); // Abhängig von servings, um neu zu berechnen
+
+  // useEffect zum Laden der gespeicherten fehlenden Zutaten aus favorites. Wenn ein Rezept aus den Favoriten ausgewählt wird, lädt dieser Effekt die missingIngredients.
+
+  useEffect(() => {
+    if (selectedRecipeId) {
+      const storedMissing = favorites.find((fav) => fav.id === selectedRecipeId)?.missingIngredients || [];
+      setMissingIngredients((prev) => ({ ...prev, [selectedRecipeId]: storedMissing}));
+      console.log("Loaded missing ingredients:", storedMissing);
+    }
+  }, [selectedRecipeId, favorites]);
+
+  // addMissingToShoppingList, diese Funktion fügt die fehlenden Zutaten(nur name) zur Shopping-Liste hinzu.
+
+  const addMissingToShoppingList = () => {
+    console.log("Button clicked!");
+    if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return; 
+    
+    const missingNames = missingIngredients[selectedRecipeId]
+    .filter(ingredient => ingredient.name)  // Sicherstellen, dass nur gültige Zutaten enthalten sind
+    .map(ingredient => ingredient.name);
+    
+    setShoppingList(prevList => {
+      const updatedList = new Set([...prevList, ...missingNames]); // Fügt nur neue Zutaten hinzu
+      console.log("Updated Shopping List:", [...updatedList]);
+      return [...updatedList]; // Konventiere das Set zurück zu einem Array
+    });
+  };
+ 
+
   const servingsText = `for ${servings} ${servings === 1 || servings === 0.5 ? 'serving' : 'servings'}`;
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-10">
+      {/* Bedingung: Wenn kein Rezept augewählt wurde, dann die Filterleiste anzeigen */}
+      {!selectedRecipeId && (
       <main className="p-6 bg-white shadow-lg rounded-lg w-full max-w-2xl">
         <section>
-          <h1 className="text-3xl font-semibold mb-10 text-center text-gray-800">
-            My Recipe Highlights
-          </h1>
+          
           <div className="flex flex-wrap justify-around gap-4 mb-6">
             <label className="flex flex-col">
               <span className="mb-2 text-gray-700">Cooking time</span>
@@ -82,6 +176,7 @@ function Favorites() {
           </div>
         </section>
       </main>
+      )}
 
       {/* Übertragung von RecipeDetails */}
       <div className='p-4 max-w-6xl mx-auto'>
@@ -96,7 +191,7 @@ function Favorites() {
                 {/* Zurück-Button */}
                 <button
                 onClick={() => setSelectedRecipeId(null)}
-                className='bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none'
+                className='bg-green-500 text-white px-1 py-1 text-xs rounded-3xl shadow-md hover:bg-green-600 focus:outline-none'
                 >
                   Back to Favorites
                 </button>
@@ -119,7 +214,7 @@ function Favorites() {
                 <ul className="list-disc pl-6">
                   <div className="flex items-center mb-4">
                     <button
-                    className=" w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-green-500 text-white text-lg sm:text-xl   hover:bg-green-600 focus:outline-none"
+                    className=" w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-gray-100 text-green-500 text-lg font-extrabold sm:text-xl   hover:bg-green-600 hover:text-white focus:outline-none"
                     onClick={handleDecreaseServings}
                     >
                       {"\u2212"} {/* Unicode Minus-zeichen */}
@@ -128,23 +223,47 @@ function Favorites() {
                         Ingredients {servingsText}
                       </p>
                         <button
-                          className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-green-500 text-white text-lg sm:text-xl   hover:bg-green-600 focus:outline-none"
+                          className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-gray-100 text-green-500 text-lg font-extrabold sm:text-xl   hover:bg-green-600 hover:text-white focus:outline-none"
                           onClick={handleIncreaseServings}
                           >
                             {"\uFF0B"}  {/* Unicode Plus-Zeichen */}
                           </button>
                     </div>
+                      
+                      
                       {recipe.ingredients.map((ingredient, index) => (
-                        <li key={index}>
-                        {(ingredient.amount * servings).toFixed(1)} {ingredient.unit} {ingredient.name}
-                        
-                        
+                        <li key={index} className='flex items-center gap-2'>
+                          <input
+                          type='checkbox'
+                          checked={(missingIngredients[recipe.id] || []).some((item) => item.name === ingredient.name)}
+                          onChange={() => toggleMissingIngredient(recipe.id,ingredient)}
+                          />
+                          {(ingredient.amount * servings).toFixed(1)} {ingredient.unit} {ingredient.name}
                         </li>
                       ))}
                     </ul>
 
                 {/* Missing Ingredients */}
                 <h3 className='text-md font-semibold mt-6'>Missing Ingredients</h3>
+                <div> 
+                  
+                <p className='text-gray-600 mb-2 mt-2'>
+                  Select the ingredients you are missing from the list above. 
+                </p>
+                </div>
+                <ul className='list-disc pl-6'>
+                  {favorites.find(fav => fav.id === recipe.id)?.missingIngredients?.map((ingredient, index) => (
+                    <li key={index}>
+                      {ingredient.amount} {ingredient.unit} {ingredient.name}
+                    </li>
+                  ))}
+                  <button
+                onClick={addMissingToShoppingList}
+                className='bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none mt-4'>
+                  <FontAwesomeIcon icon={faShoppingCart} className='text-xl' />
+                </button>
+                </ul>
+                
                 
 
                 {/* Preparation */}
@@ -156,7 +275,7 @@ function Favorites() {
                 </ol>
 
                 {/* Nutrition */}
-                <h3 className='text-md font-semibold mt-6'>Nutrition</h3>
+                <h3 className='text-md font-semibold mt-6'>Nutrition (pro 100g)</h3>
                 <ul className='list-disc pl-6'>
                   {Object.entries(recipe.nutrition).map(([key, value]) => (
                     <li key={key}>
@@ -209,7 +328,8 @@ function Favorites() {
           </div>
         )}
       </div>
-
+      {/* Bedingung: wenn kein Rezept ausgewählt wurde,dann dann den Button anzeigen */}
+      {!selectedRecipeId && (
       <div className="flex justify-center mt-6 w-full">
         <button
           onClick={() => {
@@ -221,6 +341,7 @@ function Favorites() {
           Back to Home
         </button>
       </div>
+      )}
     </div>
   );
 };
