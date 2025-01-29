@@ -1,1 +1,3 @@
 # LeckerLex
+
+More info coming soon...

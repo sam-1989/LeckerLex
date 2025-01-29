@@ -1,0 +1,45 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Open Sans", "Sans Serif";
+}
+
+/* Dark mode styles */
+
+.navbar.light {
+  background-color: white;
+  color: black;
+}
+
+.navbar.dark {
+  background-color: black;
+  color: white;
+}
+
+
+/* NotFound Page Styling */
+
+.page_404 {
+  font-family: 'Open Sars', Arial, Helvetica, sans-serif;
+}
+
+.four_zero_four_bg h1 {
+  font-size: 100px;
+}
+
+.contant_box_404 h3 {
+  font-size: 30px;
+}
+
+
+.link_404 {
+  color: #fff;
+  padding: 10px 20px;
+  background: #3aa133;
+  display: inline-block;
+  border-radius: 5px;
+  text-decoration: none;
+}
