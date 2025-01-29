@@ -90,8 +90,8 @@ export const searchRecipesAndDetails = async (req, res, next) => {
           missedIngredientCount: recipe.missedIngredientCount,
           missedIngredients: recipe.missedIngredients.map((ingredient) => ({
             name: ingredient.name,
-            amount: ingredient.amount,
-            unit: ingredient.unit,
+            amount: ingredient.amount || 0,
+            unit: ingredient.unit || "",
           })),
           usedIngredients: recipe.usedIngredients.map(
             (ingredient) => ingredient.original
