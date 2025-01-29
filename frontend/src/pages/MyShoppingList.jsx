@@ -235,7 +235,7 @@ function MyShoppingList() {
             {showSaveButton && (
               <button
                 onClick={handleSaveAndRemoveAll}
-                className="bg-green-600 text-white px-3 py-3 lg:mt-28 rounded-full lg:rounded-full hover:bg-green-700
+                className="bg-green-600 text-white px-3 py-3 rounded-full lg:rounded-full hover:bg-green-700
                      shadow-md transition inline-block"
               >
                 Save and Remove All
