@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { RecipeContext } from "../context/RecipeContext";
 import { Link } from "react-router-dom";
 import shoppingCartImage from "../assets/images/shoppingcart.webp";
 
@@ -11,6 +12,7 @@ function MyShoppingList() {
   const [purchasedItems, setPurchasedItems] = useState([]);
   const [newIngredient, setNewIngredient] = useState("");
   const [markedForRemoval, setMarkedForRemoval] = useState([]);
+  /* const { shoppingList, setShoppingList} = useContext(RecipeContext); */
 
   // get request on mount (empty dependency array)
   useEffect(() => {
