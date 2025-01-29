@@ -42,7 +42,6 @@ function SearchBar({
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl text-gray-800 font-medium sm:m-4">
           Cook with <span className="text-blue-600">What You've Got 😊</span>
         </h2>
-        <p className="text-sm">Search here for your ingredients</p>
         <div className="mt-4 flex justify-center items-center sticky top-0">
           <label htmlFor="ingredient-search" className="sr-only">
             Search for recipes by ingredients

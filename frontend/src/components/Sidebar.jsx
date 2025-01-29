@@ -44,7 +44,7 @@ function Sidebar({
         className={`
           fixed bottom-10 left-0 w-full h-64 rounded-r-3xl bg-slate-200 overflow-y-auto transition-transform duration-500
           ${isSidebarOpen ? "translate-y-0" : "translate-y-full"} 
-          md:top-16 md:left-0 md:w-64 md:h-full md:${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:top-20 md:left-0 md:w-64 md:h-full md:${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         <h2 className="text-lg font-medium mb-6 m-2">
@@ -79,7 +79,7 @@ function Sidebar({
         }`}
       >
         <button
-          className="bg-blue-500 text-white mb-12 px-4 py-4 rounded-full shadow-lg flex items-center justify-center"
+          className="bg-blue-500 text-white md:mb-10 mb-72 px-4 py-4 rounded-full shadow-lg flex items-center justify-center"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           {isSidebarOpen ? <FaChevronLeft /> : <FaChevronRight />}

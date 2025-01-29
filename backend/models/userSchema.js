@@ -63,7 +63,17 @@ const userSchema = new Schema(
 
 // // Pre-save middleware to hash the user's password before saving it to the database
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+  try {
+    if (this.isModified("password")) {
+      // only hash if the password has been modified
+      const hash = await bcrypt.hash(this.password, 12);
+      this.password = hash;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+  /* if (!this.isModified("password")) {
     return next(); // Skip hashing if the password field hasn't been modified
   }
   try {
@@ -72,7 +82,7 @@ userSchema.pre("save", async function (next) {
     this.password = hash;
   } catch (error) {
     next(error);
-  }
+  } */
 });
 
 // Custom method to validate the user's password during login

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { RecipeContext } from "../context/RecipeContext";
+import { RecipeContext } from "../context/RecipeContext"
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import shoppingCartImage from "../assets/images/shoppingcart.webp";
 
@@ -11,8 +11,8 @@ function MyShoppingList() {
   const [error, setError] = useState(null);
   const [purchasedItems, setPurchasedItems] = useState([]);
   const [newIngredient, setNewIngredient] = useState("");
-  const [markedForRemoval, setMarkedForRemoval] = useState([]);
-  /* const { shoppingList, setShoppingList} = useContext(RecipeContext); */
+  const [placeholderVisible, setPlaceholderVisible] = useState(true);
+  const [notification, setNotification] = useState("");
 
   // get request on mount (empty dependency array)
   useEffect(() => {
@@ -91,14 +91,6 @@ function MyShoppingList() {
     );
   }
 
-  /*   const [missingIngredients, setMissingIngredients] = useState([
-    { name: "Tomatos", amount: 2, unit: "piece/s" },
-    { name: "Cucumbers", amount: 1, unit: "piece/s" },
-    { name: "Onions", amount: 3, unit: "piece/s" },
-    { name: "Olive Oil", amount: 100, unit: "ml" },
-    { name: "Salt", amount: 1, unit: "prize" },
-  ]); */
-
   // Function to handle the checkbox change event
   const handleIngredientChoise = (name) => {
     setPurchasedItems(
@@ -127,12 +119,32 @@ function MyShoppingList() {
     setShowAddIngredient(true);
   };
 
+  // if an ingredient is already in the list, user will be notified and ingredient won't be add
+  // ingredients to lower case
   const handleSaveNewIngredient = () => {
-    const updatedList = [...shoppingList, newIngredient];
+    const formattedIngredient = newIngredient.trim().toLowerCase(); // Normalize input
+    if (formattedIngredient === "") {
+      setNotification("Ingredient field cannot be empty!")
+            setTimeout(() => {
+        setNotification("");
+      }, 3000);
+      return;
+    }
+    if (shoppingList.includes(formattedIngredient)) {
+      setNotification(
+        "This Ingredient has been already added to the shopping list"
+      );
+      setTimeout(() => {
+        setNotification("");
+      }, 3000);
+      return;
+    }
+    const updatedList = [...shoppingList, formattedIngredient];
     setShoppingList(updatedList);
-    saveShoppingList(updatedList); // Save the new list
+    saveShoppingList(updatedList); // Save the new list to backend
     setNewIngredient("");
     setShowAddIngredient(false);
+    setNotification("");
   };
 
   return (
@@ -147,17 +159,9 @@ function MyShoppingList() {
       </div>
 
       {/* Shopping List Section */}
-      <div className="p-8 m-10 w-full lg:w-2/3 bg-gray-100 rounded-3xl shadow-md">
-        {/* Link to navigate back to recipe details */}
-        <Link
-          to="/recipe-details"
-          className="bg-green-600 text-white px-4 py-3 mb-8 rounded-full hover:bg-green-700 shadow-md transition inline-block"
-        >
-          Back to your Recipe
-        </Link>
-
+      <div className="p-8 m-10 w-full lg:w-2/3 bg-gray-100 border border-1 rounded-3xl shadow-lg">
         {/* Title of the shopping list page */}
-        <h1 className="text-3xl font-medium mb-16 text-center">
+        <h1 className="text-3xl font-medium mb-24 text-center">
           Shop Smart, Stay Organized
         </h1>
 
@@ -165,13 +169,13 @@ function MyShoppingList() {
         <div className="flex flex-col justify-between mb-8 relative">
           <div className="flex justify-between mb-8">
             <button
-              className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-full hover:bg-blue-600 shadow-md transition"
+              className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-full hover:bg-blue-600 hover:shadow-xl shadow-md transition"
               onClick={markAllAsPurchased}
             >
               Mark All as Purchased
             </button>
             <button
-              className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-full hover:bg-blue-600 shadow-md transition"
+              className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-full hover:bg-blue-600 hover:shadow-xl shadow-md transition"
               onClick={handleAddIngredientClick}
             >
               Add an Ingredient
@@ -181,12 +185,14 @@ function MyShoppingList() {
           {/* add a new ingredient */}
 
           {showAddIngredient && (
-            <div className="absolute -top-16 left-80 mt-2 bg-white p-4 rounded-3xl shadow-md">
-              <h2 className="text-xl mb-2">Add a new ingredient</h2>
+            <div className="absolute -top-12 lg:left-96 mt-1 bg-white p-4 rounded-3xl shadow-md">
               <input
                 type="text"
                 value={newIngredient}
+                placeholder={placeholderVisible ? "Add an Ingredient..." : ""}
                 onChange={(e) => setNewIngredient(e.target.value)}
+                onFocus={() => setPlaceholderVisible(false)}
+                onBlur={() => setPlaceholderVisible(true)}
                 className="border p-2 mb-2 w-full"
               />
               <button
@@ -205,6 +211,13 @@ function MyShoppingList() {
           )}
         </div>
 
+        {/* Notification message */}
+        {notification && (
+          <div className="bg-red-500 text-white p-2 rounded-full mb-4">
+            {notification}
+            </div>
+          )}
+
         {/* List of missing ingredients */}
         {shoppingList.length > 0 ? (
           <ul className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -212,7 +225,7 @@ function MyShoppingList() {
               <li
                 key={index}
                 onClick={() => handleIngredientChoise(item)}
-                className={`flex flex-col sm:flex-row justify-between items-center p-4 hover:bg-gray-300 rounded-3xl transition-transform transform
+                className={`flex flex-col sm:flex-row justify-between items-center p-4 hover:bg-gray-300 border border-1 rounded-3xl transition-transform transform
                                                      hover:scale-105 hover:shadow-md cursor-pointer ${
                                                        purchasedItems.includes(
                                                          item
@@ -232,7 +245,7 @@ function MyShoppingList() {
             {showSaveButton && (
               <button
                 onClick={handleSaveAndRemoveAll}
-                className="bg-green-600 text-white px-4 py-3 mb-8 rounded-full hover:bg-green-700
+                className="bg-green-600 text-white px-3 py-3 lg:mt-28 rounded-full lg:rounded-full hover:bg-green-700
                      shadow-md transition inline-block"
               >
                 Save and Remove All

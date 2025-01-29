@@ -8,7 +8,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 function RecipeDetails() {
   const { id } = useParams(); // Rezept-ID aus der URL
   const { recipes } = useContext(RecipeContext); // Rezepte aus dem Context
-  
   const { isLoggedIn } = useContext(AuthContext);
   const { isFavorite, setIsFavorite, favorites, setFavorites } =
     useContext(RecipeContext);
@@ -73,9 +72,13 @@ function RecipeDetails() {
       } else {
         // User ist eingelogt -> Funktionalität ausführen
         setShowShoppingListModal(true);
-        const shoppingListItems = recipe.missedIngredients.map(
+        let shoppingListItems = recipe.missedIngredients.map(
           (item) => item.name
         ); // Add missed ingredients
+        /* shoppingList = shoppingList.map((item) => item.trim().toLowerCase()); */
+        const formattedShoppingListItems = shoppingListItems.map((item) =>
+          item.trim().toLowerCase()
+        );
 
         const response = await fetch(
           "http://localhost:3000/users/update-shoppinglist",
@@ -83,7 +86,7 @@ function RecipeDetails() {
             // TODO: use env variables for route
             method: "PATCH",
             body: JSON.stringify({
-              shoppingList: shoppingListItems,
+              shoppingList: formattedShoppingListItems,
               action: "add",
             }),
             headers: {
