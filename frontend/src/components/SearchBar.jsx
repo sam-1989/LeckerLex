@@ -9,7 +9,7 @@ function SearchBar({
   selectedIngredients,
 }) {
   const [placeholder, setPlaceholder] = useState(
-    "Enter here your ingredients..."
+    "Enter ingredients, separated by commas..."
   );
 
   // Handle input changes IMPORTANT
