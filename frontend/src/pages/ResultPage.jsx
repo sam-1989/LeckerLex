@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { RecipeContext } from "../context/RecipeContext";
 import { FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 function ResultPage() {
-  // const { recipes } = useContext(RecipeContext);
-
   // const { recipes } = useContext(RecipeContext);
   const recipes = [
     {
@@ -193,7 +191,7 @@ function ResultPage() {
         {
           number: 4,
           description:
-            "Heat until warm, add chick peas and heat until warm.Crumble bacon  and optional red pepper and add to olive oil and chickpea mixture and toss with cooked drained linguini.  Top with dry parmesan or asaigo chese",
+            "Heat until warm, add chick peas and heat until warm.Crumble bacon and optional red pepper and add to olive oil and chickpea mixture and toss with cooked drained linguini. Top with dry parmesan or asaigo chese",
         },
       ],
     },
@@ -481,7 +479,7 @@ function ResultPage() {
         {
           number: 4,
           description:
-            "Crack and beat an egg on a plate. On a separate plate  add breadcrumbs.",
+            "Crack and beat an egg on a plate. On a separate plate add breadcrumbs.",
         },
         {
           number: 5,
@@ -490,7 +488,7 @@ function ResultPage() {
         {
           number: 6,
           description:
-            "Then coat it with breadcrumbs.  Repeat step 5 and 6 with the remaining agnolotti until egg and breadcrumbs are finished.",
+            "Then coat it with breadcrumbs. Repeat step 5 and 6 with the remaining agnolotti until egg and breadcrumbs are finished.",
         },
         {
           number: 7,
@@ -678,7 +676,7 @@ function ResultPage() {
         {
           number: 2,
           description:
-            "Arrange basil leaves in a stack, roll like a cigar and proceed to cut crosswise.  This technique is called chiffonade.",
+            "Arrange basil leaves in a stack, roll like a cigar and proceed to cut crosswise. This technique is called chiffonade.",
         },
         {
           number: 3,
@@ -1017,12 +1015,12 @@ function ResultPage() {
         {
           number: 1,
           description:
-            "In a 13 x 9 Baking Pan add all the ingredients and mix well.  Put in the oven at 425 degrees for 40 minutes with aluminum foil on top of baking pan.",
+            "In a 13 x 9 Baking Pan add all the ingredients and mix well. Put in the oven at 425 degrees for 40 minutes with aluminum foil on top of baking pan.",
         },
         {
           number: 2,
           description:
-            "Mix a few times while cooking.  Take off foil and cook for another 15 minutes until the potatoes get a bit crispy.You can garnish with scallions.",
+            "Mix a few times while cooking. Take off foil and cook for another 15 minutes until the potatoes get a bit crispy.You can garnish with scallions.",
         },
         {
           number: 3,
@@ -1226,12 +1224,12 @@ function ResultPage() {
         {
           number: 3,
           description:
-            "Sprinkle with a little salt and allow some water to seep out of the zucchini, about 20 minutes. You can squeeze some of the water out with your hands if you're in a hurry. This part can be completed ahead of time and the shredded zucchini can stay in your refrigerator overnight if you would like to do this recipe in stages.In a large mixing bowl, add shredded zucchini, green onion, basil, cheddar cheese, and salt.  Stir to combine. Crack the eggs in a separate bowl and beat them.",
+            "Sprinkle with a little salt and allow some water to seep out of the zucchini, about 20 minutes. You can squeeze some of the water out with your hands if you're in a hurry. This part can be completed ahead of time and the shredded zucchini can stay in your refrigerator overnight if you would like to do this recipe in stages.In a large mixing bowl, add shredded zucchini, green onion, basil, cheddar cheese, and salt. Stir to combine. Crack the eggs in a separate bowl and beat them.",
         },
         {
           number: 4,
           description:
-            "Pour the egg mixture into the bowl with the veggies and stir to combine all ingredients. Preheat your oven to 350 degrees F.  In a 10 inch cast iron skillet, heat 1 to 2 tablespoons grape seed oil (or olive oil).",
+            "Pour the egg mixture into the bowl with the veggies and stir to combine all ingredients. Preheat your oven to 350 degrees F. In a 10 inch cast iron skillet, heat 1 to 2 tablespoons grape seed oil (or olive oil).",
         },
         {
           number: 5,
@@ -1241,7 +1239,7 @@ function ResultPage() {
         {
           number: 6,
           description:
-            "Heat to medium then add the egg/zucchini mixture, and make sure the mixture is evenly distributed.    Cook until the egg begins to cook to the sides of the skillet, about 3 to 5 minutes. Use a pot holder to place skillet in the oven.",
+            "Heat to medium then add the egg/zucchini mixture, and make sure the mixture is evenly distributed. Cook until the egg begins to cook to the sides of the skillet, about 3 to 5 minutes. Use a pot holder to place skillet in the oven.",
         },
         {
           number: 7,
@@ -2024,10 +2022,13 @@ function ResultPage() {
   const [visibleCount, setVisibleCount] = useState(8);
   const navigate = useNavigate();
 
-  const showMore = () => setVisibleCount((prev) => prev + 8);
+  const showMore = () => {
+    const nextVisibleCount = visibleCount + 8;
+    setVisibleCount(nextVisibleCount); // Update visibleCount to show more items
+  };
 
   return (
-    <div className="mx-auto max-w-screen-lg p-4 mb-16">
+    <div className="mx-auto max-w-screen-lg p-4 pb-12">
       <h1 className="text-3xl font-bold mb-6 text-center md:text-left">
         Discover Delicious Recipes
       </h1>
@@ -2035,10 +2036,12 @@ function ResultPage() {
         {recipes.slice(0, visibleCount).map((recipe) => (
           <div
             key={recipe.id}
-            className="flex flex-col border rounded-lg shadow-md
-                       transition duration-100 transform hover:scale-95
+            className={`flex flex-col border rounded-lg shadow-md
+                        transform hover:scale-95
                        hover:outline hover:outline-1 hover:outline-gray-300 
-                       hover:shadow-md"
+                       hover:shadow-md   hover:bg-green-50 
+                            transition-colors bg-white
+                       }`}
             onClick={() =>
               recipe.id && navigate(`/home/recipe-details/${recipe.id}`)
             }
@@ -2049,10 +2052,7 @@ function ResultPage() {
               className="w-full h-48 object-cover rounded-t-lg hover:opacity-90 
                          transition-opacity"
             />
-            <div
-              className="p-4 flex-1 flex flex-col justify-between bg-white hover:bg-green-50 
-                            transition-colors"
-            >
+            <div className="p-4 flex-1 flex flex-col justify-between">
               <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
               <div className="flex justify-between items-center mb-2">
                 <p className="text-gray-700 font-light text-sm">
@@ -2060,7 +2060,7 @@ function ResultPage() {
                 </p>
                 {recipe.diet.vegan && <FaLeaf className="text-green-500" />}
                 <p className="text-gray-700 font-light text-sm">
-                  {recipe.nutritionPerServing.calories} kcal
+                  {recipe.nutritionPer100g.calories} kcal
                 </p>
               </div>
             </div>
@@ -2071,7 +2071,7 @@ function ResultPage() {
         {visibleCount < recipes.length ? (
           <button
             onClick={showMore}
-            className="px-5 py-2 mt-5  text-white rounded-3xl bg-green-500 hover:bg-green-600 focus:outline-none focus-ring-2 focus:ring-green-500 transition duration-300"
+            className="px-5 py-2 mt-5 text-white rounded-3xl bg-green-500 hover:bg-green-600 focus:outline-none focus-ring-2 focus:ring-green-500 transition duration-300"
           >
             Show more
           </button>
