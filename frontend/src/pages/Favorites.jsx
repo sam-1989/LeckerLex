@@ -10,8 +10,6 @@ function Favorites() {
   const { favorites, setFavorites } = useContext(RecipeContext);
   const { shoppingList, setShoppingList } = useContext(RecipeContext);
   
-
-  
   const [cookTime, setCookTime] = useState('');
   const [calories, setCalories] = useState('');
   const [nutrition, setNutrition] = useState('');
@@ -125,16 +123,15 @@ function Favorites() {
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-10">
       {/* Bedingung: Wenn kein Rezept augewählt wurde, dann die Filterleiste anzeigen */}
       {!selectedRecipeId && (
-      <main className="p-6 bg-white shadow-lg rounded-lg w-full max-w-2xl">
+      <main className="p-6 bg-white shadow-md rounded-3xl w-full max-w-2xl">
         <section>
-          
           <div className="flex flex-wrap justify-around gap-4 mb-6">
             <label className="flex flex-col">
               <span className="mb-2 text-gray-700">Cooking time</span>
               <select
                 value={cookTime}
                 onChange={(e) => setCookTime(e.target.value)}
-                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="p-2 border border-gray-200 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
               >
                 <option value="">Select...</option>
                 <option value="0-15">0 - 15 minutes</option>
@@ -149,7 +146,7 @@ function Favorites() {
               <select
                 value={calories}
                 onChange={(e) => setCalories(e.target.value)}
-                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
               >
                 <option value="">Select...</option>
                 <option value="0-100">0 - 100 calories</option>
@@ -164,7 +161,7 @@ function Favorites() {
               <select
                 value={nutrition}
                 onChange={(e) => setNutrition(e.target.value)}
-                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
               >
                 <option value="">Select...</option>
                 <option value="vegetarian">Vegetarian</option>
@@ -191,7 +188,7 @@ function Favorites() {
                 {/* Zurück-Button */}
                 <button
                 onClick={() => setSelectedRecipeId(null)}
-                className='bg-green-500 text-white px-1 py-1 text-xs rounded-3xl shadow-md hover:bg-green-600 focus:outline-none'
+                className='bg-green-500 text-white px-3 py-3 text-xs rounded-3xl shadow-md hover:bg-green-600 focus:outline-none'
                 >
                   Back to Favorites
                 </button>
@@ -305,12 +302,13 @@ function Favorites() {
                     <img 
                     src={recipe.image}
                     alt={recipe.title}
-                    className='w-full h-48 object-contain rounded-md mb-4'
+                    className='w-full h-48 object-cover rounded-t-lg hover:opacity-90 
+                         transition-opacity'
                     />
                   </div>
                 {/* Titel */}
                 <div className='mt-4  flex  items-center justify-center  h-16'>
-                <h2 className='text-lg font-semibold '>{recipe.title}</h2>
+                <h2 className='text-xl font-semibold mb-2'>{recipe.title}</h2>
                 </div>
                 </div>
 
@@ -318,7 +316,7 @@ function Favorites() {
                 <div className='flex items-center justify-center mt-4 mb-4'>
                   <button
                   onClick={() => toggleDetails(recipe.id)}
-                  className='bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none'
+                  className='bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none'
                   >
                     View Details
                   </button>

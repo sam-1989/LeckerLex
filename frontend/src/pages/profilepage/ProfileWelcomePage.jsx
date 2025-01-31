@@ -11,6 +11,9 @@ export default function ProfileWelcomePage() {
   const [profilePhoto, setProfilePhoto] = useState(null); // Zustand für das Profilfoto
   const [isMobileView, setIsMobileView] = useState(false);
 
+  // const { isLoggedIn, setIsLoggedIn, checkLoginStatus, loading, setIsGuest, user, setUser } = useContext(AuthContext);
+
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setIsMobileView(true); // Wechsel in mobilen Modus
@@ -31,7 +34,7 @@ export default function ProfileWelcomePage() {
         return <AccountSettings />;
       case "changePassword":
         return <ChangePassword />;
-      case "privacy":
+      case "deleteAccount":
         return <PrivacySettings />;
       case "changePhoto":
         return <ChangePhoto profilePhoto={profilePhoto} setProfilePhoto={setProfilePhoto} />;
@@ -39,16 +42,16 @@ export default function ProfileWelcomePage() {
         return <MealPlan />;
       default:
         return (
-          <div className="text-center">
-            <h1 className="text-3xl font-semibold text-gray-800 mt-5 mb-6">Welcome</h1>
-            <p className="text-gray-800 text-sm">
+          <div className="text-center flex flex-col items-center justify-center">
+            <h1 className="text-3xl font-semibold text-gray-800 mt-5 mb-6">Welcome, {"username!"}</h1>
+            <p className="text-gray-800 text-lg mb-6">
               Explore the menu on the left to manage your account, update settings, or view activity.
             </p>
-            <div className="w-60 h-60 rounded-full overflow-hidden flex items-center justify-center mb-2">
+            <div className="w-80 h-80 rounded-full overflow-hidden flex items-center justify-center mb-2">
               <img
-                src={profilePhoto || welcomeImage}
-                alt="Profile"
-                className="w-full h-full object-cover"
+          src={profilePhoto || welcomeImage}
+          alt="Profile"
+          className="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -59,13 +62,13 @@ export default function ProfileWelcomePage() {
   return (
     <div
       id="custom-container"
-      className="min-h-screen flex items-center justify-center font-sans mt-0 md:mt-[-40px]"
+      className="min-h-screen flex items-center justify-center font-medium mt-0 md:mt-[-40px]"
     >
-      <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md w-full max-w-4xl">
+      <div className="flex flex-col md:flex-row w-full rounded-3xl max-w-4xl">
         {!isMobileView && (
-          <div className="w-full md:w-1/4 bg-gray-50 border-r p-4">
+          <div className="w-full md:w-1/4 bg-green-200 border-l rounded-2xl p-4">
             <div className="flex flex-col items-center">
-              <div className="w-40 h-40 rounded-full bg-gray-300 flex items-center justify-center mb-2">
+              <div className="w-40 h-40 rounded-full bg-gray-100 flex items-center justify-center mb-2">
                 {profilePhoto ? (
                   <img
                     src={profilePhoto}
@@ -73,7 +76,7 @@ export default function ProfileWelcomePage() {
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-500">No Image</span>
+                  <span className="text-gray-600">No Image</span>
                 )}
               </div>
               {isMobileView && activeTab === "welcome" && ( // Nur in mobiler Ansicht und im Welcome-Zustand anzeigen
@@ -91,36 +94,39 @@ export default function ProfileWelcomePage() {
                   </div>
                 </div>
               )}
-              <h2 className="text-sm font-semibold text-gray-800">Name</h2>
             </div>
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-6 space-y-3 bg-gray-50 p-4 rounded-2xl border  shadow">
               {[
                 { icon: "fas fa-user", label: "Account", action: () => handleTabChange("account") },
                 { icon: "fas fa-key", label: "Change password", action: () => handleTabChange("changePassword") },
-                { icon: "fas fa-lock", label: "Privacy", action: () => handleTabChange("privacy") },
                 { icon: "fas fa-camera", label: "Change photo", action: () => handleTabChange("changePhoto") },
-                { icon: "fas fa-calendar-alt", label: "Meal plan", action: () => handleTabChange("mealPlan") },
+                { icon: "fas fa-lock", label: "Delete Account", action: () => handleTabChange("deleteAccount") },
+                // { icon: "fas fa-calendar-alt", label: "Meal plan", action: () => handleTabChange("mealPlan") },
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="w-full flex items-center border border-gray-200 rounded-full p-2 hover:bg-green-500 hover:text-white rounded-l-full transition duration-300 cursor-pointer"
+                  className="w-full flex items-center bg-gray-100 border border-gray-200 
+                 rounded-xl py-3 px-3 text-gray-800 
+                 hover:bg-gradient-to-r from-green-400 to-green-500 
+                 hover:text-white transition-shadow shadow-sm hover:shadow"
                   onClick={item.action}
                 >
-                  <div className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-white">
+                  <div className="w-6 h-6 flex items-center justify-center">
                     <i className={item.icon}></i>
                   </div>
-                  <div className="ml-2 text-sm text-gray-600 hover:text-white">{item.label}</div>
+                  <div className="ml-2 text-sm">{item.label}</div>
                 </li>
               ))}
             </ul>
           </div>
         )}
-        <div className="flex-grow p-6">
+        <div className="flex-grow p-6 bg-white rounded-2xl border shadow-md">
           {isMobileView ? (
             <div>
               <button
                 onClick={handleBackToMenu}
-                className="mb-4 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
+                className="mb-4 px-4 py-2 bg-green-500 text-white rounded-full 
+             hover:bg-green-600 transition shadow-md hover:shadow-lg"
               >
                 Back to Menu
               </button>

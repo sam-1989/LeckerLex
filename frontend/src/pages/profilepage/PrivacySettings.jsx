@@ -17,38 +17,12 @@ export default function PrivacySettings() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl text-center font-semibold text-gray-800 mt-5 mb-6">Privacy Settings</h2>
-
-      {/* Profile Visibility */}
-      <div className="flex flex-col">
-        <label className="text-md font-semibold text-gray-800">Profile Visibility</label>
-        <select
-          className="mt-1 px-3 py-2 border border-gray-300 rounded-md"
-          value={profileVisibility}
-          onChange={(e) => setProfileVisibility(e.target.value)}
-        >
-          <option value="public">Public</option>
-          <option value="friends">Friends Only</option>
-          <option value="private">Private</option>
-        </select>
-      </div>
-
-      {/* Consent Management */}
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          id="emailConsent"
-          className="mr-2"
-          checked={emailConsent}
-          onChange={(e) => setEmailConsent(e.target.checked)}
-        />
-        <label htmlFor="emailConsent" className="text-sm text-gray-800">
-          I agree to receive email updates.
-        </label>
-      </div>
+      <h2 className="text-3xl text-center font-semibold text-gray-800 mt-5 mb-6">
+        Delete Account
+      </h2>
 
       {/* Account Deletion Section */}
-      <div className="mt-6 p-4 border border-red-300 rounded-lg bg-red-50">
+      <div className="mt-6 p-4 border border-red-100 rounded-lg bg-red-50">
         <h3 className="text-lg font-semibold text-red-700">Deleting Account</h3>
         <p className="text-sm text-red-600">
           Deleting your account will remove all of your information from our
@@ -71,10 +45,10 @@ export default function PrivacySettings() {
           />
         </div>
         <button
-          className="mt-4 px-4 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 transition"
+          className="mt-4 text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-full shadow transition-colors duration-200"
           onClick={handleDeleteAccount}
         >
-          Delete Account
+          Confirm Deletion
         </button>
       </div>
     </div>
