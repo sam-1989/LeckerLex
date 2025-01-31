@@ -78,11 +78,11 @@ function ResultPage() {
           <div
             key={recipe.id}
             className={`flex flex-col border rounded-lg shadow-md
-                        transform hover:scale-95
-                       hover:outline hover:outline-1 hover:outline-gray-300 
-
-                       hover:shadow-md"
-
+                      transform hover:scale-95
+                     hover:outline hover:outline-1 hover:outline-gray-300 
+                     hover:shadow-md   hover:bg-green-50 
+                          transition-colors bg-white
+                     }`}
             onClick={() =>
               recipe.id && navigate(`/home/recipe-details/${recipe.id}`)
             }
@@ -97,7 +97,6 @@ function ResultPage() {
               className="p-4 flex-1 flex flex-col justify-between bg-white hover:bg-green-50 
                             transition-colors"
             >
-
               <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
               <div className="flex justify-between items-center mb-2">
                 <p className="text-gray-700 font-light text-sm">
