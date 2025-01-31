@@ -6,8 +6,8 @@ import {
   FaSun,
   FaMoon,
   FaHeart,
-  FaCartArrowDown,
   FaSignOutAlt,
+  FaCartArrowDown,
 } from "react-icons/fa";
 
 function Navbar() {
@@ -96,13 +96,23 @@ function Navbar() {
                 className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 border
                border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50"
               >
-                <NavLink
-                  to="/home/profile"
-                  className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  <FaUser className="mr-2" /> Profile
-                </NavLink>
+                {isLoggedIn ? (
+                  <NavLink
+                    to="/home/profile"
+                    className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <FaUser className="mr-2" /> Profile
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to="/home/login"
+                    className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <FaUser className="mr-2" /> Log In
+                  </NavLink>
+                )}
                 <NavLink
                   to="/home/favorites"
                   className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
@@ -115,7 +125,7 @@ function Navbar() {
                   className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <FaCartArrowDown className="mr-2" /> My Shopping List
+                  <FaCartArrowDown className="mr-2" /> Shopping List
                 </NavLink>
                 {isLoggedIn && (
                   <button

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { FaEye, FaEyeSlash, FaEnvelope, FaUser, FaLock } from "react-icons/fa";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -9,8 +10,11 @@ export default function RegisterPage() {
   const [isChecked, setIsChecked] = useState(false); // terms and conditions checkbox
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // State to track if the form is being submitted and to prevent user clicking more times
-  const { isLoggedIn, setIsLoggedIn, loading, checkLoginStatus } =
-    useContext(AuthContext);
+  const { isLoggedIn, loading } = useContext(AuthContext);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(""); 
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -36,10 +40,35 @@ export default function RegisterPage() {
 
     const nameRegex = /^[a-zA-Z0-9_]{3,15}$/; // 3-15 chars long, only letters (uppercase, lowercase), digits, and underscores
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/; // part before "@" allows (upper- and lowercase) letters, digits and special characters (._%+-), must contain @, part after @ allows (upper- and lowercase) letters, digits and special characters (.-), last part must contain a dot (.) followed by 2-5 letters
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/; // part before "@" allows (upper- and lowercase) letters, digits and special characters (._%+-),
+    //  must contain @, part after @ allows (upper- and lowercase) letters, digits and special characters (.-), last part must contain a dot (.) followed by 2-5 letters
 
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#\-=_+])[A-Za-z\d@$!%*?&^#\-=_+]{6,}$/; // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+).
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#\-=_+])[A-Za-z\d@$!%*?&^#\-=_+]{6,}$/;
+      // Password must:
+      //  - be at least 6 characters
+      //  - contain at least one uppercase letter
+      //  - contain at least one lowercase letter
+      //  - contain at least one digit
+      //  - contain at least one special character from [@$!%*?&^#\-=_+]
+
+
+      // validate user inputs
+
+      if (!emailRegex.test(email)) {
+        setErrorMessage("Please enter a valid email format.");
+        console.log(errorMessage);
+        return;
+      }
+      
+      if (!passwordRegex.test(password)) {
+        setErrorMessage(
+          "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+)."
+        );
+        console.log(errorMessage);
+        return;
+      }
+
 
     if (!email || !password || !name) {
       setErrorMessage("Please enter your username, email and password.");
@@ -54,11 +83,8 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      setErrorMessage(
-        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&^#-=_+)."
-      );
-      console.log(errorMessage);
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match!");
       return;
     }
 
@@ -71,6 +97,8 @@ export default function RegisterPage() {
 
     setErrorMessage(""); // clean previous errors
     setIsSubmitting(true); // submition process started
+
+    // attempt registration
 
     try {
       const response = await fetch("http://localhost:3000/users/signup", {
@@ -113,76 +141,102 @@ export default function RegisterPage() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center mt-30 font-sans ">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+      <div className="bg-white p-8 rounded-3xl border shadow-lg max-w-lg w-full">
         {/* Header */}
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+        <h1 className="text-2xl font-medium text-gray-800 text-center mb-6">
           Create Account
         </h1>
 
+        
+
         {/* Registration Form */}
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-3">
             {/* Username */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 USERNAME
               </label>
-              <input
-                type="text"
-                placeholder="Enter your username"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <div className="relative">
+                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Enter your username"
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring focus:ring-indigo-200"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
             </div>
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 YOUR E-MAIL
               </label>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <div className="relative">
+                <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring focus:ring-indigo-200"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
             </div>
           </div>
 
           {/* Password */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              CREATE PASSWORD
-            </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          {/* Country Dropdown */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              SELECT COUNTRY
-            </label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200">
-              <option value="denmark">Germany</option>
-              <option value="germany">Denmark</option>
-              <option value="france">France</option>
-              <option value="usa">USA</option>
-            </select>
-          </div>
-
-          {/* Terms & Conditions */}
+                <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  CREATE PASSWORD
+                </label>
+                <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  placeholder="Enter your password"
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring focus:ring-indigo-200"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <div
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                  >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </div>
+                </div>
+                </div>
+                <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  CONFIRM PASSWORD
+                </label>
+                <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm your password"
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring focus:ring-indigo-200"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  />
+                  <div
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </div>
+                </div>
+                </div>
+                {/* Terms & Conditions */}
           <div className="mt-4 flex items-center">
             <input
               type="checkbox"
               id="terms"
-              className="w-5 h-5 border-gray-300 rounded focus:ring focus:ring-indigo-200"
+              className="w-4 h-4 border-gray-300 rounded"
               checked={isChecked}
               onChange={(e) => setIsChecked(e.target.checked)}
             />
@@ -197,28 +251,30 @@ export default function RegisterPage() {
             <p className="text-red-500 text-center mt-4">{errorMessage}</p>
           )}
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="mt-6 w-full py-3 bg-blue-600 text-white rounded-md text-lg shadow-lg hover:bg-blue-500 transition duration-300"
-          >
-            {isSubmitting ? "Registering..." : "GET STARTED"}
-          </button>
-        </form>
+                <button
+                type="submit"
+                className="w-full mt-8 bg-green-500 text-white font-medium py-2 px-2 rounded-full hover:bg-green-600 focus:outline-none"
+                
+                >
+                {isSubmitting ? "Registering..." : "GET STARTED"}
+                </button>
+              </form>
+              
 
-        {/* Social Buttons
-        <div className="mt-6 text-center">
-          <div className="flex justify-center items-center space-x-4">
-            <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-400 transition">
-              <i className="fab fa-twitter mr-2"></i> Twitter
-            </button>
-            <button className="flex items-center px-4 py-2 text-white bg-blue-800 rounded-md hover:bg-blue-700 transition">
-              <i className="fab fa-facebook mr-2"></i> Facebook
-            </button>
-            <button className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-500 transition">
-              <i className="fab fa-google mr-2"></i> Google
-            </button>
-          </div>
-        </div> */}
+              {/* Social Buttons
+              <div className="mt-6 text-center">
+                <div className="flex justify-center items-center space-x-4">
+                <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-400 transition">
+                  <i className="fab fa-twitter mr-2"></i> Twitter
+                </button>
+                <button className="flex items-center px-4 py-2 text-white bg-blue-800 rounded-md hover:bg-blue-700 transition">
+                  <i className="fab fa-facebook mr-2"></i> Facebook
+                </button>
+                <button className="flex items-center px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-500 transition">
+                  <i className="fab fa-google mr-2"></i> Google
+                </button>
+                </div>
+              </div> */}
       </div>
     </div>
   );

@@ -187,7 +187,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-100 overflow-hidden bg-white">
+
+    <div className="min-h-screen overflow-hidden bg-gray-50">
+
       <div className="flex justify-center items-center">
         <SearchBar
           searchText={searchText}
