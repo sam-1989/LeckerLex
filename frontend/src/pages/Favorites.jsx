@@ -1,14 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { RecipeContext } from '../context/RecipeContext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import shoppingCartImage from "../assets/images/shoppingcart.webp";
+
 
 
 function Favorites() {
   const { favorites, setFavorites } = useContext(RecipeContext);
-  const { shoppingList, setShoppingList } = useContext(RecipeContext);
+  const { setShoppingList } = useContext(RecipeContext);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  
   
   const [cookTime, setCookTime] = useState('');
   const [calories, setCalories] = useState('');
@@ -17,6 +19,7 @@ function Favorites() {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
   const [missingIngredients,setMissingIngredients] = useState({});
+  const [pendingShoppingListUpdate, setPendingShoppingListUpdate] = useState(null);
   
   const toggleDetails = (id) => {
     setSelectedRecipeId((prevId) => (prevId === id ? null : id));  // Zustand toggeln
@@ -99,22 +102,67 @@ function Favorites() {
     }
   }, [selectedRecipeId, favorites]);
 
-  // addMissingToShoppingList, diese Funktion fügt die fehlenden Zutaten(nur name) zur Shopping-Liste hinzu.
+  // addMissingToShoppingList, diese Funktion speichert die Zutaten nur temporär in "pendingShoppingListUpdate", anstatt "setShoppinglist direkt im Render-Prozess auszuführen"
 
-  const addMissingToShoppingList = () => {
-    console.log("Button clicked!");
+  const addMissingToShoppingList = async () => {
+  
     if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return; 
-    
+
+    // Liste der fehlenden Zutaten nur mit Namen formatieren
     const missingNames = missingIngredients[selectedRecipeId]
     .filter(ingredient => ingredient.name)  // Sicherstellen, dass nur gültige Zutaten enthalten sind
-    .map(ingredient => ingredient.name);
+    .map(ingredient => ingredient.name.trim().toLowerCase());
+
+    if (missingNames.length === 0) return; // Falls keine Zutaten fehlen, nichts tun (abbrechen)
     
-    setShoppingList(prevList => {
-      const updatedList = new Set([...prevList, ...missingNames]); // Fügt nur neue Zutaten hinzu
-      console.log("Updated Shopping List:", [...updatedList]);
-      return [...updatedList]; // Konventiere das Set zurück zu einem Array
-    });
+    try {
+      const response = await fetch("http://localhost:3000/users/update-shoppinglist", {
+        method: "PATCH",
+        body: JSON.stringify({
+          shoppingList: missingNames,
+          action: "add",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Falls Authentifizierung nötig ist
+      });
+
+      if (response.ok) {
+        console.log("Shopping list updated successfully");
+
+        // Entferne die hinzugefügten Zutaten aus "missingIngredients"
+        setMissingIngredients((prev) => {
+          const updated = { ...prev};
+          delete updated[selectedRecipeId]; // Köscht die Zutaten für das aktuelle Rezept
+          return updated;
+        });
+      } else {
+        console.log("Failed to update shopping list.");
+      }
+    } catch (error) {
+      console.log("Error while updating shopping list:", error);
+    }
   };
+
+  // useEffect wartet auf "pendingShoppingListUpdate und aktualisiert dann shoppingList". Nach der Aktualisierung wird "pendingShoppingListUpdate auf null gesetzt, damit es nicht erneut ungewollt  ausgelöst(getriggert) wird."
+  useEffect(() => {
+    if (!hasInitialized) {
+      // hasInitialized sorgt dafür, dass useEffect erst nach dem ersten render triggert
+      setHasInitialized(true); // Nur beim ersten Mal setzen
+      return; // Verhindert, dass die Shopping List direkt beim ersten Render aktualisiert wird
+    }
+
+    if (pendingShoppingListUpdate) {
+      setShoppingList(prevList => {
+        const updatedList = new Set([...prevList, ...pendingShoppingListUpdate]);
+        console.log("Auto-updated Shopping List:", updatedList);
+        return [...updatedList];
+      });
+
+      setPendingShoppingListUpdate(null);  // Setzt die Variable zurück, um erneute Updates zu vermeiden
+    }
+  }, [pendingShoppingListUpdate]);  // Wird nur ausgeführt, wenn "pendingShoppingListUpdate" sich ändert
  
 
   const servingsText = `for ${servings} ${servings === 1 || servings === 0.5 ? 'serving' : 'servings'}`;
@@ -205,9 +253,9 @@ function Favorites() {
                 
                 <h2 className='text-2xl font-semibold  mt-4 text-center'>{recipe.title}</h2>
 
-                {/* Ingredients */}
-                <h3 className='text-md font-semibold mt-6 mb-4'>Ingredients</h3>
+                {/* Serving + Ingredients */}
                 
+                <h3 className='text-md font-semibold mt-6 mb-4'>Servings</h3>
                 <ul className="list-disc pl-6">
                   <div className="flex items-center mb-4">
                     <button
@@ -226,41 +274,46 @@ function Favorites() {
                             {"\uFF0B"}  {/* Unicode Plus-Zeichen */}
                           </button>
                     </div>
+                    <h3 className='text-md font-semibold mt-6 mb-2'>Ingredients</h3>
                       
-                      
-                      {recipe.ingredients.map((ingredient, index) => (
-                        <li key={index} className='flex items-center gap-2'>
-                          <input
-                          type='checkbox'
-                          checked={(missingIngredients[recipe.id] || []).some((item) => item.name === ingredient.name)}
-                          onChange={() => toggleMissingIngredient(recipe.id,ingredient)}
-                          />
-                          {(ingredient.amount * servings).toFixed(1)} {ingredient.unit} {ingredient.name}
-                        </li>
-                      ))}
-                    </ul>
+                      <h4 className='text-sm font-semibold p-1 text-green-500 mb-3'>Choose ingredients you are missing</h4>
+                      {recipe.ingredients.map((ingredient, index) => {
+                        const isSelected = (missingIngredients[recipe.id] || []).some(
+                          (item) => item.name === ingredient.name
+                        );
+                        return (
+                          <li
+                          key={index}
+                          onClick={() => toggleMissingIngredient(recipe.id, ingredient)}
+                          className={`flex items-center gap-2 p-2 cursor-pointer rounded-3xl transition-colors duration-200 ${isSelected ? "bg-green-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
+                          >
+                            {(ingredient.amount * servings).toFixed(1)} {ingredient.unit} {ingredient.name}
+                          </li>
+                        );
+                      })}
+                      </ul>
 
                 {/* Missing Ingredients */}
-                <h3 className='text-md font-semibold mt-6'>Missing Ingredients</h3>
-                <div> 
-                  
-                <p className='text-gray-600 mb-2 mt-2'>
-                  Select the ingredients you are missing from the list above. 
-                </p>
-                </div>
-                <ul className='list-disc pl-6'>
+                <h3 className='text-md font-semibold mt-4 mb-4'>Missing Ingredients</h3>
+                
+                <ul
+                 className='list-disc pl-6'>
                   {favorites.find(fav => fav.id === recipe.id)?.missingIngredients?.map((ingredient, index) => (
-                    <li key={index}>
+                     <li key={index}>
                       {ingredient.amount} {ingredient.unit} {ingredient.name}
                     </li>
+                    
                   ))}
+                  </ul>
+                  <div className='relative group'>
                   <button
                 onClick={addMissingToShoppingList}
-                className='bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none mt-4'>
+                className='bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none mt-4'>
                   <FontAwesomeIcon icon={faShoppingCart} className='text-xl' />
                 </button>
-                </ul>
-                
+                {/* Tooltip */}
+                <span className='absolut left-full ml-2 top-1/2 transform -translate-x-1/2  opacity-0 group-hover:opacity-100 bg-green-500 text-white text-xs rounded-md py-1 px-2 transition-opacity duration-300 whitespace-nowrap'>Add to Shopping List</span>
+                </div>
                 
 
                 {/* Preparation */}

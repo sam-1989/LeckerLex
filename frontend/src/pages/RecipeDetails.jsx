@@ -75,11 +75,11 @@ function RecipeDetails() {
         let shoppingListItems = recipe.missedIngredients.map(
           (item) => item.name
         ); // Add missed ingredients
-        /* shoppingList = shoppingList.map((item) => item.trim().toLowerCase()); */
+        
         const formattedShoppingListItems = shoppingListItems.map((item) =>
           item.trim().toLowerCase()
         );
-
+        
         const response = await fetch(
           "http://localhost:3000/users/update-shoppinglist",
           {
@@ -290,12 +290,12 @@ function RecipeDetails() {
                   key={index}
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
-                  {/* {ingredient}  */}
+                  
                   {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>
-            {/* Button zur Einkaufsliste hinzufügen */}
+            {/* Button "zur Einkaufsliste hinzufügen" */}
             <button
               className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
               onClick={handleAddToShoppingList}
