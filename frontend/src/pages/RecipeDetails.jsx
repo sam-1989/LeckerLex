@@ -75,11 +75,11 @@ function RecipeDetails() {
         let shoppingListItems = recipe.missedIngredients.map(
           (item) => item.name
         ); // Add missed ingredients
-        
+
         const formattedShoppingListItems = shoppingListItems.map((item) =>
           item.trim().toLowerCase()
         );
-        
+
         const response = await fetch(
           "http://localhost:3000/users/update-shoppinglist",
           {
@@ -290,7 +290,6 @@ function RecipeDetails() {
                   key={index}
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
-                  
                   {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
