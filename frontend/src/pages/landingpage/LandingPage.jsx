@@ -148,6 +148,7 @@ export default function LandingPage() {
           <button
             className="button px-6 py-3 text-md md:text-lg bg-green-700 text-gray-100 rounded-full hover:bg-green-800 hover:scale-105"
             aria-label="Get inspired button"
+
           >
             Get Inspired
           </button>

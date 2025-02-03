@@ -3,16 +3,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faHeart, faLeaf, faSeedling, faWheatAlt, faTint, faUtensils, faFire, faSlash } from "@fortawesome/free-solid-svg-icons";
 
 function RecipeDetails() {
-  const { id } = useParams();
-  const { recipes, isFavorite, setIsFavorite, favorites, setFavorites } = useContext(RecipeContext);
+  const { id } = useParams(); // Rezept-ID aus der URL
+  const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
   const { isLoggedIn } = useContext(AuthContext);
+  const { isFavorite, setIsFavorite, favorites, setFavorites } =useContext(RecipeContext);
+  
+
+  console.log("Initial favorites in RecipeDetails:", favorites);
+
   const navigate = useNavigate();
 
-  // Find the recipe by ID
-  const recipe = recipes.find((x) => x.id === Number(id));
+  // Finde das Rezept mit der passenden ID
+  const recipe = recipes.find((x) => x.id === Number(id));  
+
 
   // State declarations
   const [showMissingIngredients, setShowMissingIngredients] = useState(true);
@@ -36,12 +42,23 @@ function RecipeDetails() {
       image: recipe.image,
       ingredients: recipe.ingredients.map((ingredient) => ({
         name: ingredient.name,
-        amount: (ingredient.amount * servings).toFixed(1),
+        amount: Number.isInteger(ingredient.amount * servings)
+          ? ingredient.amount * servings   // Ganze Zahl ohne Dezimalstellen
+          : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
         unit: ingredient.unit,
       })),
-      nutrition: recipe.nutritionPer100g,
       preparation: recipe.steps.map((step) => step.description),
+      preparationTime: recipe.preparationTime,
+      diet: {
+        vegetarian: recipe.diet?.vegetarian || false,
+        vegan: recipe.diet?.vegan || false,
+        glutenFree: recipe.diet?.glutenFree || false,
+        dairyFree: recipe.diet?.dairyFree || false
+      },
+      nutrition: recipe.nutritionPer100g,
+      calories: recipe.nutritionPer100g?.calories,
     };
+    console.log("Current Recipe being saved:", currentRecipe);
 
     if (isFavorite.includes(recipe.id)) {
       setIsFavorite(isFavorite.filter((favId) => favId !== recipe.id));
@@ -61,20 +78,32 @@ function RecipeDetails() {
         navigate(`/home/login?redirectTo=/home/recipe-details/${id}`);
       } else {
         setShowShoppingListModal(true);
-        const shoppingListItems = recipe.missedIngredients.map((item) => item.name);
+        let shoppingListItems = recipe.missedIngredients.map(
+          (item) => item.name
+        ); // Add missed ingredients
+
         const formattedShoppingListItems = shoppingListItems.map((item) =>
           item.trim().toLowerCase()
         );
-        const response = await fetch("http://localhost:3000/users/update-shoppinglist", {
-          method: "PATCH",
-          body: JSON.stringify({
-            shoppingList: formattedShoppingListItems,
-            action: "add",
-          }),
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-        if (!response.ok) {
+
+        const response = await fetch(
+          "http://localhost:3000/users/update-shoppinglist",
+          {
+            // TODO: use env variables for route
+            method: "PATCH",
+            body: JSON.stringify({
+              shoppingList: formattedShoppingListItems,
+              action: "add",
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          console.log("Shopping list updated successfully");
+        } else {
           console.log("Failed to update shopping list.");
         }
       }
@@ -133,10 +162,35 @@ function RecipeDetails() {
           <h2 className="text-center text-2xl md:text-3xl font-bold px-4">
             {recipe.title}
           </h2>
-        </div>
-      </div>
+          </div>
 
-      {/* Section Control Buttons */}
+          {/* Kochzeit, Kalorien und Ernährungs-Icons */}
+          <div className='flex justify-between items-center mt-4 text-gray-600 mb-6 '>
+
+            {/* Kochzeit */}
+            <div className='flex items-center gap-2 mt-2'>
+              <FontAwesomeIcon icon={faClock} className='text-lg' />
+              <span className="text-md text-gray-500">{recipe.preparationTime} min</span> 
+            </div>
+
+            {/* Ernährung */}
+            <div className="flex items-center gap-10 mt-2">
+              {recipe.diet?.vegetarian && <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="vegetarian" />}
+              {recipe.diet?.vegan && <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="vegan" />}
+              {!recipe.diet?.glutenFree && <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="contains gluten" />}
+              {!recipe.diet?.dairyFree && <FontAwesomeIcon icon={faTint} className="text-blue-500" title="contains dairy" />}
+              {!recipe.diet?.vegetarian && !recipe.diet?.vegan && recipe.diet?.glutenFree && recipe.diet?.dairyFree && <FontAwesomeIcon icon={faUtensils} className="text-gray-500" title="no diet" />}
+            </div>
+
+            {/* Kalorien */}
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
+              <span className="text-md text-gray-500">{recipe.nutritionPer100g?.calories || "N/A"} kcal</span> 
+            </div>
+          </div>
+        </div>
+      
+      {/* Buttons - Inhaltsabschnitte */}
       <div className="mt-10 flex flex-wrap justify-center gap-6">
         <button
           className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-full shadow-lg transition-colors"
@@ -203,7 +257,11 @@ function RecipeDetails() {
             <ul className="list-disc pl-4 space-y-2 text-gray-300">
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index}>
-                  {(ingredient.amount * servings).toFixed(1)} {ingredient.unit} {ingredient.name}
+                  {/* {(ingredient.amount * servings).toFixed(1)} {ingredient.unit}{" "}
+                  {ingredient.name} */}
+                  {Number.isInteger(ingredient.amount * servings)
+                            ? (ingredient.amount * servings)
+                            : (ingredient.amount *servings).toFixed(1)} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>
@@ -252,41 +310,52 @@ function RecipeDetails() {
         recipe.missedIngredients &&
         recipe.missedIngredients.length > 0 && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-            <div className="bg-white text-gray-900 p-8 rounded-2xl w-11/12 sm:w-2/3 lg:w-1/3 transform transition-all animate-fade-in">
-              <button
-                className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
-                onClick={() => setShowMissingIngredients(false)}
-              >
-                &times;
-              </button>
-              <h3 className="text-2xl font-bold mb-4 text-center">Missing Ingredients</h3>
-              <ul className="space-y-2 text-gray-700">
-                {recipe.missedIngredients.map((ingredient, index) => (
-                  <li key={index}>
-                    {ingredient.amount} {ingredient.unit} {ingredient.name}
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="mt-6 w-full bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors"
-                onClick={handleAddToShoppingList}
-              >
-                Add to Shopping List
-              </button>
-              {showShoppingListModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-                  <div className="bg-white rounded-2xl shadow-xl p-8 w-11/12 sm:w-2/3 lg:w-1/3">
-                    <h2 className="text-2xl font-bold mb-4 text-center">Item Added to Shopping List</h2>
-                    <p className="text-gray-700 text-center mb-6">
-                      The missing ingredients have been added to your shopping list.
-                    </p>
-                    <button
-                      className="bg-green-600 text-white px-4 py-3 rounded-xl hover:bg-green-700 w-full transition-colors"
-                      onClick={handleCloseShoppingListModal}
-                    >
-                      Close
-                    </button>
-                  </div>
+            {/* Schließen-Button */}
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              onClick={() => setShowMissingIngredients(false)}
+            >
+              x
+            </button>
+            <h3 className="text-lg font-semibold mb-4 text-center">
+              Missing Ingredients
+            </h3>
+            <ul className="space-y-2">
+              {recipe.missedIngredients.map((ingredient, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between text-sm sm:text-base text-gray-700"
+                >
+                  {Number.isInteger(ingredient.amount * servings)
+                  ? (ingredient.amount * servings)
+                  : (ingredient.amount *servings).toFixed(1)} {ingredient.unit} {ingredient.name}
+                </li>
+              ))}
+            </ul>
+            {/* Button "zur Einkaufsliste hinzufügen" */}
+            <button
+              className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+              onClick={handleAddToShoppingList}
+            >
+              Add to Shopping List
+            </button>
+            {/* Modales Fenster für "Zur Einkaufsliste hinzugefügt" */}
+            {showShoppingListModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-3/4 sm:w-1/2 lg:w-1/3">
+                  <h2 className="text-lg font-semibold mb-4 text-center">
+                    Item Added to Shopping List
+                  </h2>
+                  <p className="text-gray-700 text-center mb-6">
+                    The missing ingredients have been added to your shopping
+                    list.
+                  </p>
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full"
+                    onClick={handleCloseShoppingListModal}
+                  >
+                    Close
+                  </button>
                 </div>
               )}
             </div>

@@ -6,6 +6,7 @@ import {
   FaHeart,
   FaSignOutAlt,
   FaCartArrowDown,
+  FaUtensils,
 } from "react-icons/fa";
 
 const HoverEffect = () => (
@@ -94,6 +95,14 @@ function Navbar() {
           <HoverEffect />
         </NavLink>
 
+               <NavLink
+                  to="/home/journal"
+                  className="relative group text-orange-100 text-md w-max flex items-center"
+                >
+                  <FaUtensils className="mr-2" /> Culinary Journal
+                  <HoverEffect />
+                </NavLink>
+
         {isLoggedIn ? (
           <button
             onClick={handleLogout}
@@ -112,6 +121,7 @@ function Navbar() {
             Log In
             <HoverEffect />
           </NavLink>
+          
         )}
       </div>
     </nav>
