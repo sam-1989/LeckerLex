@@ -1,12 +1,12 @@
-import { Review } from "../models/reviewSchema.js";
+import { Journal } from "../models/journalSchema.js";
 import { User } from "../models/userSchema.js";
 import upload from "../config/cloudinary.js";
 
-export const createReview = [
+export const createJournalEntry = [
   upload.single("imageUrl"), // middleware to handle imageUpload
   async (req, res, next) => {
     try {
-      const { comment, rating } = req.body;
+      const { notes, recipeId, recipeName } = req.body;
       if (!req.file)
         return res
           .status(400)
@@ -16,41 +16,45 @@ export const createReview = [
 
       // TODO const {recipeId} = req.query ?
 
-      const user = await User.findById(req.user.userId); // Get user from authentication middleware: req.user = { userId: user._id }
-
       // Create and save the new review
-      const newReview = await Review.create({
-        rating,
-        comment,
+      const newJournalEntry = await Journal.create({
+        notes,
         imageUrl,
-        user,
+        user: req.user.userId,
+        recipeId,
+        recipeName,
       });
 
       // Add the new review's id to user's reviews (1-n relationship)
-      user.reviews.push(newReview._id);
-      await user.save();
+      await User.findByIdAndUpdate(req.user.userId, {
+        $addToSet: { journal: newJournalEntry._id },
+      });
 
       res
         .status(201)
-        .json({ msg: "Review successfully posted", review: newReview });
+        .json({ msg: "Journal entry successfully saved", newJournalEntry });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   },
 ];
 
 // Fetch all reviews from the logged-in user
-export const getAllUserReviews = async (req, res, next) => {
+export const getAllUserJournalEntries = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.userId);
 
-    const allUserReviews = await Review.find({ _id: { $in: user.reviews } });
+    const allUserJournalEntries = await Journal.find({
+      _id: { $in: user.journal },
+    });
 
-    if (allUserReviews.length === 0)
+    if (allUserJournalEntries.length === 0)
       return res.status(404).json({ msg: "No reviews from this user found" });
 
-    return res.status(200).json(allUserReviews);
+    return res.status(200).json(allUserJournalEntries);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

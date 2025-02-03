@@ -89,11 +89,11 @@ function RecipeDetails() {
         let shoppingListItems = recipe.missedIngredients.map(
           (item) => item.name
         ); // Add missed ingredients
-        
+
         const formattedShoppingListItems = shoppingListItems.map((item) =>
           item.trim().toLowerCase()
         );
-        
+
         const response = await fetch(
           "http://localhost:3000/users/update-shoppinglist",
           {

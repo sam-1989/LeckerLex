@@ -37,11 +37,11 @@ const userSchema = new Schema(
       ],
     },
     /* shoppingList: { type: String, default: [] }, */
-    reviews: [
+    journal: [
       // TODO reviews model (1-n)
       {
         type: Schema.Types.ObjectId, // Reference to reviews created by the user
-        ref: "Review",
+        ref: "Journal",
       },
     ],
     favorites: [
