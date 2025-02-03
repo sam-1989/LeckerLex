@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ChangePassword from "./ChangePassword";
-import PrivacySettings from "./PrivacySettings";
+import DeleteAccount from "./DeleteAccount";
 import AccountSettings from "./AccountSettings";
 import ChangePhoto from "./ChangePhoto";
 import welcomeImage from "../../assets/imgforprofile/welcome.png";
@@ -12,7 +12,6 @@ export default function ProfileWelcomePage() {
   const [isMobileView, setIsMobileView] = useState(false);
 
   // const { isLoggedIn, setIsLoggedIn, checkLoginStatus, loading, setIsGuest, user, setUser } = useContext(AuthContext);
-
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -35,23 +34,31 @@ export default function ProfileWelcomePage() {
       case "changePassword":
         return <ChangePassword />;
       case "deleteAccount":
-        return <PrivacySettings />;
+        return <DeleteAccount />;
       case "changePhoto":
-        return <ChangePhoto profilePhoto={profilePhoto} setProfilePhoto={setProfilePhoto} />;
+        return (
+          <ChangePhoto
+            profilePhoto={profilePhoto}
+            setProfilePhoto={setProfilePhoto}
+          />
+        );
       case "mealPlan":
         return <MealPlan />;
       default:
         return (
           <div className="text-center flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-semibold text-gray-800 mt-5 mb-6">Welcome, {"username!"}</h1>
+            <h1 className="text-3xl font-semibold text-gray-800 mt-5 mb-6">
+              Welcome, {"username!"}
+            </h1>
             <p className="text-gray-800 text-lg mb-6">
-              Explore the menu on the left to manage your account, update settings, or view activity.
+              Explore the menu on the left to manage your account, update
+              settings, or view activity.
             </p>
             <div className="w-80 h-80 rounded-full overflow-hidden flex items-center justify-center mb-2">
               <img
-          src={profilePhoto || welcomeImage}
-          alt="Profile"
-          className="w-full h-full object-cover"
+                src={profilePhoto || welcomeImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -79,28 +86,48 @@ export default function ProfileWelcomePage() {
                   <span className="text-gray-600">No Image</span>
                 )}
               </div>
-              {isMobileView && activeTab === "welcome" && ( // Nur in mobiler Ansicht und im Welcome-Zustand anzeigen
-                <div className="text-center mb-4">
-                  <h1 className="text-2xl font-semibold text-gray-800">Welcome</h1>
-                  <p className="text-gray-600 text-sm">
-                    Explore the menu to manage your account, update settings, or view activity.
-                  </p>
-                  <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center mt-4">
-                    <img
-                      src={welcomeImage}
-                      alt="Welcome"
-                      className="w-full h-full object-cover"
-                    />
+              {isMobileView &&
+                activeTab === "welcome" && ( // Nur in mobiler Ansicht und im Welcome-Zustand anzeigen
+                  <div className="text-center mb-4">
+                    <h1 className="text-2xl font-semibold text-gray-800">
+                      Welcome
+                    </h1>
+                    <p className="text-gray-600 text-sm">
+                      Explore the menu to manage your account, update settings,
+                      or view activity.
+                    </p>
+                    <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center mt-4">
+                      <img
+                        src={welcomeImage}
+                        alt="Welcome"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
             <ul className="mt-6 space-y-3 bg-gray-50 p-4 rounded-2xl border  shadow">
               {[
-                { icon: "fas fa-user", label: "Account", action: () => handleTabChange("account") },
-                { icon: "fas fa-key", label: "Change password", action: () => handleTabChange("changePassword") },
-                { icon: "fas fa-camera", label: "Change photo", action: () => handleTabChange("changePhoto") },
-                { icon: "fas fa-lock", label: "Delete Account", action: () => handleTabChange("deleteAccount") },
+                {
+                  icon: "fas fa-user",
+                  label: "Account",
+                  action: () => handleTabChange("account"),
+                },
+                {
+                  icon: "fas fa-key",
+                  label: "Change password",
+                  action: () => handleTabChange("changePassword"),
+                },
+                {
+                  icon: "fas fa-camera",
+                  label: "Change photo",
+                  action: () => handleTabChange("changePhoto"),
+                },
+                {
+                  icon: "fas fa-lock",
+                  label: "Delete Account",
+                  action: () => handleTabChange("deleteAccount"),
+                },
                 // { icon: "fas fa-calendar-alt", label: "Meal plan", action: () => handleTabChange("mealPlan") },
               ].map((item, index) => (
                 <li
@@ -140,9 +167,6 @@ export default function ProfileWelcomePage() {
     </div>
   );
 }
-
-
-
 
 // import React, { useState } from "react";
 // import ChangePassword from "./ChangePassword";
@@ -261,28 +285,6 @@ export default function ProfileWelcomePage() {
 //     </div>
 //   );
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState } from "react";
 // import ChangePassword from "./ChangePassword";

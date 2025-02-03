@@ -2,10 +2,10 @@ import React from 'react'
 import Navbar from "../components/Navbar";
 
 
-function Header({ isDarkMode, toggleDarkMode}) {
+function Header() {
   return (
-    <header className={`bg-green-100 shadow-sm rounded-b-full border border-r-2 sticky top-0 z-50 ${isDarkMode ? 'dark' : 'light'} dark:bg-black`}>
-      <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>
+    <header className={`bg-current sticky top-0`}>
+      <Navbar/>
     </header>
 
   )

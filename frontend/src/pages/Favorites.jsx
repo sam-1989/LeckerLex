@@ -5,60 +5,41 @@ import { faShoppingCart, faTint, faUtensils, faWheatAlt } from "@fortawesome/fre
 import { faClock, faLeaf, faSeedling, faFire } from '@fortawesome/free-solid-svg-icons';
 
 
-
-
-
 function Favorites() {
-  const { favorites, setFavorites } = useContext(RecipeContext);
-  const { setShoppingList } = useContext(RecipeContext);
+  const { favorites, setFavorites, setShoppingList } = useContext(RecipeContext);
   const [hasInitialized, setHasInitialized] = useState(false);
-  
-  
   const [cookTime, setCookTime] = useState('');
   const [calories, setCalories] = useState('');
   const [nutrition, setNutrition] = useState('');
-
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
-  const [missingIngredients,setMissingIngredients] = useState({});
+  const [missingIngredients, setMissingIngredients] = useState({});
   const [pendingShoppingListUpdate, setPendingShoppingListUpdate] = useState(null);
   
-
-  
   const toggleDetails = (id) => {
-    setSelectedRecipeId((prevId) => (prevId === id ? null : id));  // Zustand toggeln
-   };
+    setSelectedRecipeId(prevId => (prevId === id ? null : id));
+  };
 
   const handleIncreaseServings = () => {
-    setServings((prev) => Math.round((prev + 0.5) * 10) / 10);
+    setServings(prev => Math.round((prev + 0.5) * 10) / 10);
   };
+
   const handleDecreaseServings = () => {
-    setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
+    setServings(prev => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
-
-  
-
 
 
   // Diese Funktion verwaltet das Hinzufügen / Entfernen von Zutaten zur missingIngredients-Liste, basierend auf dem recipeId. Sie aktualisiert auch die Menge der fehlenden Zutaten abhängig von servings.
   const toggleMissingIngredient = (recipeId, ingredient) => {
-    setMissingIngredients((prev) => {
+    setMissingIngredients(prev => {
       const updated = { ...prev };
-      
-
       if (!updated[recipeId]) {
-        // Wenn die Zutat schon fehlt, entfernen wir sie
         updated[recipeId] = [];
-      } 
-
-      const existingIndex = updated[recipeId].findIndex(
-        (item) => item.name === ingredient.name);
-        
+      }
+      const existingIndex = updated[recipeId].findIndex(item => item.name === ingredient.name);
       if (existingIndex > -1) {
-        // Entfernen, wenn bereits vorhanden
-        updated[recipeId].splice(existingIndex, 1);  // Entferne die Zutat, wenn sie schon da ist
+        updated[recipeId].splice(existingIndex, 1);
       } else {
-        // Hinzufügen mit angepasster Menge
         updated[recipeId].push({
           name: ingredient.name,
           amount: Number.isInteger(ingredient.amount * servings)
@@ -67,27 +48,23 @@ function Favorites() {
           unit: ingredient.unit,
         });
       }
-      // Speichern in Favoriten, damit die Daten bestehen bleiben
-    setFavorites((prevFavorites) => 
-    prevFavorites.map((fav) =>
-    fav.id === recipeId ? { ...fav, missingIngredients: updated[recipeId] } : fav
-    )
-  );
-  
-  return updated;
-  });
-};
+      setFavorites(prevFavorites => 
+        prevFavorites.map(fav =>
+          fav.id === recipeId ? { ...fav, missingIngredients: updated[recipeId] } : fav
+        )
+      );
+      return updated;
+    });
+  };
 
-// useEffect zur automatischen Aktualisierung der Mengen. Wenn servings geändert wird, wird die Menge der bereits gespeicherten fehlenden Zutaten aktualisiert.
   useEffect(() => {
-    setMissingIngredients((prev) => {
+    setMissingIngredients(prev => {
       const updatedMissing = { ...prev };
-      Object.keys(updatedMissing).forEach((recipeId) => {
-        updatedMissing[recipeId] = updatedMissing[recipeId].map((ingredient) => {
+      Object.keys(updatedMissing).forEach(recipeId => {
+        updatedMissing[recipeId] = updatedMissing[recipeId].map(ingredient => {
           const originalIngredient = favorites
-          .find((r) => r.id === parseInt(recipeId))?.ingredients
-          .find((ing) => ing.name === ingredient.name);
-
+            .find(r => r.id === parseInt(recipeId))?.ingredients
+            .find(ing => ing.name === ingredient.name);
           return originalIngredient
           ? {
             ...ingredient,
@@ -98,28 +75,19 @@ function Favorites() {
           }
           : ingredient;
       });
-    });
       return updatedMissing;
     });
-  }, [servings]); // Abhängig von servings, um neu zu berechnen
-
-  // useEffect zum Laden der gespeicherten fehlenden Zutaten aus favorites. Wenn ein Rezept aus den Favoriten ausgewählt wird, lädt dieser Effekt die missingIngredients.
+  }, [servings, favorites]);
 
   useEffect(() => {
     if (selectedRecipeId) {
-      const storedMissing = favorites.find((fav) => fav.id === selectedRecipeId)?.missingIngredients || [];
-      setMissingIngredients((prev) => ({ ...prev, [selectedRecipeId]: storedMissing}));
-      console.log("Loaded missing ingredients:", storedMissing);
+      const storedMissing = favorites.find(fav => fav.id === selectedRecipeId)?.missingIngredients || [];
+      setMissingIngredients(prev => ({ ...prev, [selectedRecipeId]: storedMissing }));
     }
   }, [selectedRecipeId, favorites]);
 
-  // addMissingToShoppingList, diese Funktion speichert die Zutaten nur temporär in "pendingShoppingListUpdate", anstatt "setShoppinglist direkt im Render-Prozess auszuführen"
-
   const addMissingToShoppingList = async () => {
-  
-    if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return; 
-
-    // Liste der fehlenden Zutaten nur mit Namen formatieren
+    if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return;
     const missingNames = missingIngredients[selectedRecipeId]
     .filter(ingredient => ingredient.name.trim())  // Sicherstellen, dass nur gültige Zutaten enthalten sind
     .map(ingredient => ingredient.name.trim().toLowerCase());
@@ -133,12 +101,9 @@ function Favorites() {
           shoppingList: missingNames,
           action: "add",
         }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Falls Authentifizierung nötig ist
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
-
       if (response.ok) {
         console.log("Shopping list updated successfully");
 
@@ -157,8 +122,6 @@ function Favorites() {
         : fav
         )
       );
-
-
       } else {
         console.log("Failed to update shopping list.");
       }
@@ -167,86 +130,79 @@ function Favorites() {
     }
   };
 
-  // useEffect wartet auf "pendingShoppingListUpdate und aktualisiert dann shoppingList". Nach der Aktualisierung wird "pendingShoppingListUpdate auf null gesetzt, damit es nicht erneut ungewollt  ausgelöst(getriggert) wird."
   useEffect(() => {
     if (!hasInitialized) {
-      // hasInitialized sorgt dafür, dass useEffect erst nach dem ersten render triggert
-      setHasInitialized(true); // Nur beim ersten Mal setzen
-      return; // Verhindert, dass die Shopping List direkt beim ersten Render aktualisiert wird
+      setHasInitialized(true);
+      return;
     }
-
     if (pendingShoppingListUpdate) {
       setShoppingList(prevList => {
         const updatedList = new Set([...prevList, ...pendingShoppingListUpdate]);
-        console.log("Auto-updated Shopping List:", updatedList);
         return [...updatedList];
       });
-
-      setPendingShoppingListUpdate(null);  // Setzt die Variable zurück, um erneute Updates zu vermeiden
+      setPendingShoppingListUpdate(null);
     }
-  }, [pendingShoppingListUpdate]);  // Wird nur ausgeführt, wenn "pendingShoppingListUpdate" sich ändert
- 
+  }, [pendingShoppingListUpdate, setShoppingList]);
 
   const servingsText = `for ${servings} ${servings === 1 || servings === 0.5 ? 'serving' : 'servings'}`;
 
   console.log("Favoriten in Favorites.jsx:", favorites);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-50 py-10">
-      {/* Bedingung: Wenn kein Rezept augewählt wurde, dann die Filterleiste anzeigen */}
+    <div className="min-h-screen bg-black py-10 z-0">
+      {/* Filter Section */}
       {!selectedRecipeId && (
-      <main className="p-6 bg-white shadow-md rounded-3xl w-full max-w-2xl">
-        <section>
-          <div className="flex flex-wrap justify-around gap-4 mb-6">
-            <label className="flex flex-col">
-              <span className="mb-2 text-gray-700">Cooking time</span>
-              <select
-                value={cookTime}
-                onChange={(e) => setCookTime(e.target.value)}
-                className="p-2 border border-gray-200 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
-              >
-                <option value="">Select...</option>
-                <option value="0-15">0 - 15 minutes</option>
-                <option value="15-30">15 - 30 minutes</option>
-                <option value="30-45">30 - 45 minutes</option>
-                <option value="45-60">45 - 60 minutes</option>
-                <option value="60+">60 or more</option>
-              </select>
-            </label>
-            <label className="flex flex-col">
-              <span className="mb-2 text-gray-700">Calories</span>
-              <select
-                value={calories}
-                onChange={(e) => setCalories(e.target.value)}
-                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
-              >
-                <option value="">Select...</option>
-                <option value="0-100">0 - 100 calories</option>
-                <option value="100-200">100 - 200 calories</option>
-                <option value="200-300">200 - 300 calories</option>
-                <option value="300-400">300 - 400 calories</option>
-                <option value="400+">400 or more calories</option>
-              </select>
-            </label>
-            <label className="flex flex-col">
-              <span className="mb-2 text-gray-700">Nutrition</span>
-              <select
-                value={nutrition}
-                onChange={(e) => setNutrition(e.target.value)}
-                className="p-2 border border-gray-300 rounded-3xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-gray-50 "
-              >
-                <option value="">Select...</option>
-                <option value="vegetarian">Vegetarian</option>
-                <option value="vegan">Vegan</option>
-                <option value="gluten-free">Gluten-free</option>
-                <option value="dairy-free">Dairy-free</option>
-              </select>
-            </label>
-          </div>
-        </section>
-      </main>
+        <main className="bg-[#11151E] shadow-xl rounded-3xl w-full max-w-2xl mx-auto p-6 mb-10">
+          <section>
+            <div className="flex flex-wrap justify-around gap-4 mb-6">
+              <label className="flex flex-col items-center">
+                <span className="mb-2 text-gray-200">Cooking Time</span>
+                <select
+                  value={cookTime}
+                  onChange={(e) => setCookTime(e.target.value)}
+                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
+                >
+                  <option value="">Select...</option>
+                  <option value="0-15">0 - 15 minutes</option>
+                  <option value="15-30">15 - 30 minutes</option>
+                  <option value="30-45">30 - 45 minutes</option>
+                  <option value="45-60">45 - 60 minutes</option>
+                  <option value="60+">60 or more</option>
+                </select>
+              </label>
+              <label className="flex flex-col items-center">
+                <span className="mb-2 text-gray-200">Calories</span>
+                <select
+                  value={calories}
+                  onChange={(e) => setCalories(e.target.value)}
+                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
+                >
+                  <option value="">Select...</option>
+                  <option value="0-100">0 - 100 calories</option>
+                  <option value="100-200">100 - 200 calories</option>
+                  <option value="200-300">200 - 300 calories</option>
+                  <option value="300-400">300 - 400 calories</option>
+                  <option value="400+">400 or more calories</option>
+                </select>
+              </label>
+              <label className="flex flex-col items-center">
+                <span className="mb-2 text-gray-200">Nutrition</span>
+                <select
+                  value={nutrition}
+                  onChange={(e) => setNutrition(e.target.value)}
+                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
+                >
+                  <option value="">Select...</option>
+                  <option value="vegetarian">Vegetarian</option>
+                  <option value="vegan">Vegan</option>
+                  <option value="gluten-free">Gluten-free</option>
+                  <option value="dairy-free">Dairy-free</option>
+                </select>
+              </label>
+            </div>
+          </section>
+        </main>
       )}
-
        
         {/* Bedingte Darstellung */}
         {selectedRecipeId ? (
@@ -473,7 +429,7 @@ function Favorites() {
             // Logic to navigate back to home
             window.location.href = "/home";
             }}
-            className="px-6 py-3 bg-blue-500 text-white rounded-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-6 py-3 bg-green-500 text-white rounded-3xl hover:bg-green-700 focus:outline-none"
             >
             Back to Home
           </button>
@@ -481,6 +437,6 @@ function Favorites() {
       )}
     </div>
   );
-};
+}
 
 export default Favorites;
