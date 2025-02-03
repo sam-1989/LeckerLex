@@ -3,20 +3,23 @@ import { useParams, useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faHeart, faLeaf, faSeedling, faWheatAlt, faTint, faUtensils, faFire, faSlash } from "@fortawesome/free-solid-svg-icons";
 
 function RecipeDetails() {
   const { id } = useParams(); // Rezept-ID aus der URL
-  const { recipes } = useContext(RecipeContext); // Rezepte aus dem Context
+  const { recipes } = useContext(RecipeContext);  // Rezepte aus dem Context
   const { isLoggedIn } = useContext(AuthContext);
-  const { isFavorite, setIsFavorite, favorites, setFavorites } =
-    useContext(RecipeContext);
+  const { isFavorite, setIsFavorite, favorites, setFavorites } =useContext(RecipeContext);
+  
+
   console.log("Initial favorites in RecipeDetails:", favorites);
 
   const navigate = useNavigate();
 
   // Finde das Rezept mit der passenden ID
-  const recipe = recipes.find((x) => x.id === Number(id));
+  const recipe = recipes.find((x) => x.id === Number(id));  
+
+  
 
   const [showMissingIngredients, setShowMissingIngredients] = useState(true); // Fehlende Zutaten-Fenster
   const [visibleSection, setVisibleSection] = useState(null); // Zum Umschalten der Abschnitte
@@ -39,12 +42,23 @@ function RecipeDetails() {
       image: recipe.image,
       ingredients: recipe.ingredients.map((ingredient) => ({
         name: ingredient.name,
-        amount: (ingredient.amount * servings).toFixed(1),
+        amount: Number.isInteger(ingredient.amount * servings)
+          ? ingredient.amount * servings   // Ganze Zahl ohne Dezimalstellen
+          : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
         unit: ingredient.unit,
       })),
-      nutrition: recipe.nutritionPer100g,
       preparation: recipe.steps.map((step) => step.description),
+      preparationTime: recipe.preparationTime,
+      diet: {
+        vegetarian: recipe.diet?.vegetarian || false,
+        vegan: recipe.diet?.vegan || false,
+        glutenFree: recipe.diet?.glutenFree || false,
+        dairyFree: recipe.diet?.dairyFree || false
+      },
+      nutrition: recipe.nutritionPer100g,
+      calories: recipe.nutritionPer100g?.calories,
     };
+    console.log("Current Recipe being saved:", currentRecipe);
 
     if (isFavorite.includes(recipe.id)) {
       // Wenn schon Favorit -> Entfernen
@@ -185,11 +199,36 @@ function RecipeDetails() {
           <h2 className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-center">
             {recipe.title}
           </h2>
+          </div>
+
+          {/* Kochzeit, Kalorien und Ernährungs-Icons */}
+          <div className='flex justify-between items-center mt-4 text-gray-600 mb-6 '>
+
+            {/* Kochzeit */}
+            <div className='flex items-center gap-2 mt-2'>
+              <FontAwesomeIcon icon={faClock} className='text-lg' />
+              <span className="text-md text-gray-500">{recipe.preparationTime} min</span> 
+            </div>
+
+            {/* Ernährung */}
+            <div className="flex items-center gap-10 mt-2">
+              {recipe.diet?.vegetarian && <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="vegetarian" />}
+              {recipe.diet?.vegan && <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="vegan" />}
+              {!recipe.diet?.glutenFree && <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="contains gluten" />}
+              {!recipe.diet?.dairyFree && <FontAwesomeIcon icon={faTint} className="text-blue-500" title="contains dairy" />}
+              {!recipe.diet?.vegetarian && !recipe.diet?.vegan && recipe.diet?.glutenFree && recipe.diet?.dairyFree && <FontAwesomeIcon icon={faUtensils} className="text-gray-500" title="no diet" />}
+            </div>
+
+            {/* Kalorien */}
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
+              <span className="text-md text-gray-500">{recipe.nutritionPer100g?.calories || "N/A"} kcal</span> 
+            </div>
+          </div>
         </div>
-      </div>
-      {/* </div>  */}
+      
       {/* Buttons - Inhaltsabschnitte */}
-      <div className="mt-6 mx-4 sm:mx-8 lg:mx-10 flex flex-wrap justify-center sm:justify-around gap-4">
+      <div className="mt-16 mx-4 sm:mx-8 lg:mx-10 flex flex-wrap justify-center sm:justify-around gap-4">
         <button
           className="px-4 py-2 w-full sm:w-auto bg-green-500 text-white rounded-lg shadow-md text-sm sm:text-base"
           onClick={() => toggleSection("ingredients")}
@@ -234,8 +273,11 @@ function RecipeDetails() {
               </div>
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index}>
-                  {(ingredient.amount * servings).toFixed(1)} {ingredient.unit}{" "}
-                  {ingredient.name}
+                  {/* {(ingredient.amount * servings).toFixed(1)} {ingredient.unit}{" "}
+                  {ingredient.name} */}
+                  {Number.isInteger(ingredient.amount * servings)
+                            ? (ingredient.amount * servings)
+                            : (ingredient.amount *servings).toFixed(1)} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>
@@ -290,8 +332,9 @@ function RecipeDetails() {
                   key={index}
                   className="flex justify-between text-sm sm:text-base text-gray-700"
                 >
-                  
-                  {ingredient.amount} {ingredient.unit} {ingredient.name}
+                  {Number.isInteger(ingredient.amount * servings)
+                  ? (ingredient.amount * servings)
+                  : (ingredient.amount *servings).toFixed(1)} {ingredient.unit} {ingredient.name}
                 </li>
               ))}
             </ul>

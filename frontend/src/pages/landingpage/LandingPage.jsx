@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {motion} from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
-import HintergrundVideo from '../../assets/videos/kochenderTopf.mp4';
+import HintergrundVideo from "../../assets/videos/fallingTomatoes.mp4";
 import '../../assets/fonts/fonts.css';
 import './styles.css';
 
@@ -45,7 +45,7 @@ export default function LandingPage() {
             loop
             muted
             playsInline
-            aria-label='Background video of a cooking pot'
+            aria-label='Background video of falling tomatoes'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -53,13 +53,13 @@ export default function LandingPage() {
         )}
 
         <motion.div
-          className="absolute top-5 left-2/5 transform -translate-x-1/2 z-20 text-center"
+          className="absolute top-8 /* left-2/5 transform -translate-x-1/2 */ z-20 text-left"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
           <h1 className="text-green-700 text-4xl md:text-5xl font-bold">
-            LeckerLex
+            <span className='text-green-400 text-7xl'>Lecker</span><span className='text-white'>Lex</span>
           </h1>
         </motion.div>
 
