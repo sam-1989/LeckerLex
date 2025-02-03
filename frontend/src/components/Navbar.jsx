@@ -3,21 +3,25 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import {
   FaUser,
-  FaSun,
-  FaMoon,
   FaHeart,
   FaSignOutAlt,
   FaCartArrowDown,
 } from "react-icons/fa";
 
+const HoverEffect = () => (
+  <>
+    <span className="absolute -bottom-1 left-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
+    <span className="absolute -bottom-1 right-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
+  </>
+);
+
 function Navbar() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // state for dropdown menu
-  const [isDarkMode, setIsDarkMode] = useState(false); // state for darkMode
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // function for closing the menu bar by clicking anywhere outside the menubar
+  // Close the dropdown menu if clicking outside of it.
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -31,21 +35,16 @@ function Navbar() {
     };
   }, [dropdownRef]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:3000/users/logout", {
-        // TODO: use env variables for route
         method: "POST",
         credentials: "include",
       });
 
       if (!response.ok) {
         const errorMessage = await response.json();
-        console.error("Failed to logout", errorMessage); // debug log
+        console.error("Failed to logout", errorMessage);
         return;
       }
       navigate("/");
@@ -57,88 +56,63 @@ function Navbar() {
   };
 
   return (
-    <nav
-      className={`hidden sm:block max-w-full mx-auto px-4 sm:px-6 lg:px-8 relative ${
-        isDarkMode ? "dark" : "light"
-      }`}
-    >
-      <div className="flex justify-between h-16 z-50">
-        <div className="flex-shrink-0 flex items-center">
+    <nav className="hidden md:flex items-center justify-between p-8 mr-6 ml-6 bg-transparent z-50">
+      <div className="flex items-center">
+        {/* Logo or Brand Name */}
+        <NavLink to="/home" className="text-2xl font-bold text-orange-200">
+          LeckerLex
+        </NavLink>
+      </div>
+      {/* Increase horizontal gap between navlinks */}
+      <div className="flex items-center space-x-8">
+        {isLoggedIn && (
           <NavLink
-            to="/home"
-            className="text-2xl font-medium hover:text-gray-500 hover:scale-105 text-gray-800 dark:text-gray-200 font-sans"
+            to="/home/profile"
+            className="relative group text-orange-100 text-md w-max flex items-center"
           >
-            LeckerLex
+            <FaUser className="mr-2" />
+            Profile
+            <HoverEffect />
           </NavLink>
-        </div>
-        <div className="flex items-center space-x-4">
-          {/* User icon and darkmode toggle */}
+        )}
+
+        <NavLink
+          to="/home/favorites"
+          className="relative group text-orange-100 text-md w-max flex items-center"
+        >
+          <FaHeart className="mr-2" />
+          Favorites
+          <HoverEffect />
+        </NavLink>
+
+        <NavLink
+          to="/home/shopping-list"
+          className="relative group text-orange-100 text-md w-max flex items-center"
+        >
+          <FaCartArrowDown className="mr-2" />
+          Shopping List
+          <HoverEffect />
+        </NavLink>
+
+        {isLoggedIn ? (
           <button
-            onClick={toggleDarkMode}
-            className="focus:outline-none transition duration-300 ease-in-out"
+            onClick={handleLogout}
+            className="relative group text-orange-100 text-md w-max flex items-center"
           >
-            {isDarkMode ? (
-              <FaSun className="text-yellow-500 transition duration-300 ease-in-out" />
-            ) : (
-              <FaMoon className="text-gray-800 dark:text-gray-200 transition duration-300 ease-in-out" />
-            )}
+            <FaSignOutAlt className="mr-2" />
+            Log Out
+            <HoverEffect />
           </button>
-
-          <div className="relative z-50" ref={dropdownRef}>
-            <FaUser
-              size={20}
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-gray-800 hover:text-gray-500 hover:scale-110 cursor-pointer active:text-blue-600"
-            />
-
-            {isDropdownOpen && (
-              <div
-                className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 border
-               border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50"
-              >
-                {isLoggedIn ? (
-                  <NavLink
-                    to="/home/profile"
-                    className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    <FaUser className="mr-2" /> Profile
-                  </NavLink>
-                ) : (
-                  <NavLink
-                    to="/home/login"
-                    className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    <FaUser className="mr-2" /> Log In
-                  </NavLink>
-                )}
-                <NavLink
-                  to="/home/favorites"
-                  className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  <FaHeart className="mr-2" /> Favorites
-                </NavLink>
-                <NavLink
-                  to="/home/shopping-list"
-                  className="flex items-center px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  <FaCartArrowDown className="mr-2" /> Shopping List
-                </NavLink>
-                {isLoggedIn && (
-                  <button
-                    className="flex items-center w-full px-4 py-2 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200"
-                    onClick={handleLogout}
-                  >
-                    <FaSignOutAlt className="mr-2" /> Logout
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        ) : (
+          <NavLink
+            to="/home/login"
+            className="relative group text-orange-100 text-md w-max flex items-center"
+          >
+            <FaUser className="mr-2" />
+            Log In
+            <HoverEffect />
+          </NavLink>
+        )}
       </div>
     </nav>
   );

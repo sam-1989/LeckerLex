@@ -6,17 +6,6 @@
   font-family: "Open Sans", "Sans Serif";
 }
 
-/* Dark mode styles */
-
-.navbar.light {
-  background-color: white;
-  color: black;
-}
-
-.navbar.dark {
-  background-color: black;
-  color: white;
-}
 
 /* NotFound Page Styling */
 
@@ -40,3 +29,4 @@
   border-radius: 5px;
   text-decoration: none;
 }
+

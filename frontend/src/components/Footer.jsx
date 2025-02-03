@@ -3,7 +3,6 @@ import {
   FaSearch,
   FaHeart,
   FaUser,
-  FaHome,
   FaInstagram,
   FaFacebook,
   FaWhatsapp,
@@ -15,12 +14,12 @@ function Footer() {
   const [activeIcon, setActiveIcon] = useState(null);
   return (
     <>
-      <footer className="bg-green-100 border border-r-2 rounded-t-full p-1 shadow-md w-full hidden md:block z-50">
+      <footer className="bg-current p-1 shadow-md w-full hidden md:block z-20">
         <div className="w-full mx-auto max-w-screen-2xl p-2 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-600 flex items-center">
-            © 2024{" "}
+            © 2025{" "}
             <a href="#" className="hover:underline ml-1">
-              Logo
+              LeckerLex
             </a>
             . All Rights Reserved.
             <span className="flex ml-4 space-x-2">
