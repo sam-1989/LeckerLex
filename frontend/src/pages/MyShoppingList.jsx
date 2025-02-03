@@ -18,9 +18,12 @@ function MyShoppingList() {
     const getShoppingList = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3000/users/shoppinglist", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://localhost:3000/users/shoppinglist",
+          {
+            credentials: "include",
+          }
+        );
         if (!response.ok) {
           setError("Failed to fetch shopping list.");
         }
@@ -41,17 +44,20 @@ function MyShoppingList() {
   // Save the updated shopping list to the backend
   const saveShoppingList = async (updatedList) => {
     try {
-      const response = await fetch("http://localhost:3000/users/update-shoppinglist", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          shoppingList: updatedList,
-          action: "replace",
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:3000/users/update-shoppinglist",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            shoppingList: updatedList,
+            action: "replace",
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to update shopping list.");
       }
@@ -121,7 +127,9 @@ function MyShoppingList() {
       return;
     }
     if (shoppingList.includes(formattedIngredient)) {
-      setNotification("This ingredient has already been added to the shopping list");
+      setNotification(
+        "This ingredient has already been added to the shopping list"
+      );
       setTimeout(() => {
         setNotification("");
       }, 3000);
