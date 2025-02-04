@@ -6,14 +6,20 @@ import {
   faTint,
   faUtensils,
   faWheatAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import {
   faClock,
   faLeaf,
   faSeedling,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 
+import Form from "../components/CulinaryJournalForm";
+
+
 function Favorites() {
-  const { favorites, setFavorites, setShoppingList } = useContext(RecipeContext);
+  const { favorites, setFavorites, setShoppingList } =
+    useContext(RecipeContext);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [cookTime, setCookTime] = useState("");
   const [calories, setCalories] = useState("");
@@ -21,7 +27,8 @@ function Favorites() {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
   const [missingIngredients, setMissingIngredients] = useState({});
-  const [pendingShoppingListUpdate, setPendingShoppingListUpdate] = useState(null);
+  const [pendingShoppingListUpdate, setPendingShoppingListUpdate] =
+    useState(null);
 
   const toggleDetails = (id) => {
     setSelectedRecipeId((prevId) => (prevId === id ? null : id));
@@ -35,6 +42,8 @@ function Favorites() {
     setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
 
+
+  // Diese Funktion verwaltet das Hinzufügen / Entfernen von Zutaten zur missingIngredients-Liste, basierend auf dem recipeId. Sie aktualisiert auch die Menge der fehlenden Zutaten abhängig von servings.
   const toggleMissingIngredient = (recipeId, ingredient) => {
     setMissingIngredients((prev) => {
       const updated = { ...prev };
@@ -50,14 +59,16 @@ function Favorites() {
         updated[recipeId].push({
           name: ingredient.name,
           amount: Number.isInteger(ingredient.amount * servings)
-            ? ingredient.amount * servings
-            : (ingredient.amount * servings).toFixed(1),
+            ? ingredient.amount * servings // Ganze Zahl ohne Dezimalstellen
+            : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
           unit: ingredient.unit,
         });
       }
       setFavorites((prevFavorites) =>
         prevFavorites.map((fav) =>
-          fav.id === recipeId ? { ...fav, missingIngredients: updated[recipeId] } : fav
+          fav.id === recipeId
+            ? { ...fav, missingIngredients: updated[recipeId] }
+            : fav
         )
       );
       return updated;
@@ -68,28 +79,36 @@ function Favorites() {
     setMissingIngredients((prev) => {
       const updatedMissing = { ...prev };
       Object.keys(updatedMissing).forEach((recipeId) => {
-        updatedMissing[recipeId] = updatedMissing[recipeId].map((ingredient) => {
-          const originalIngredient = favorites
-            .find((r) => r.id === parseInt(recipeId))
-            ?.ingredients.find((ing) => ing.name === ingredient.name);
-          return originalIngredient
-            ? {
-                ...ingredient,
-                amount: Number.isInteger(ingredient.amount * servings)
-                  ? ingredient.amount * servings
-                  : (ingredient.amount * servings).toFixed(1),
-              }
-            : ingredient;
-        });
+
+        updatedMissing[recipeId] = updatedMissing[recipeId].map(
+          (ingredient) => {
+            const originalIngredient = favorites
+              .find((r) => r.id === parseInt(recipeId))
+              ?.ingredients.find((ing) => ing.name === ingredient.name);
+            return originalIngredient
+              ? {
+                  ...ingredient,
+                  /* amount: (originalIngredient.amount * servings).toFixed(1) */
+                  amount: Number.isInteger(ingredient.amount * servings)
+                    ? ingredient.amount * servings // Ganze Zahl ohne Dezimalstellen
+                    : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
+                }
+              : ingredient;
+          }
+        );
+
       });
       return updatedMissing;
     });
-  }, [servings, favorites]);
+  }, [servings]);
 
   useEffect(() => {
     if (selectedRecipeId) {
       const storedMissing =
-        favorites.find((fav) => fav.id === selectedRecipeId)?.missingIngredients || [];
+
+        favorites.find((fav) => fav.id === selectedRecipeId)
+          ?.missingIngredients || [];
+
       setMissingIngredients((prev) => ({
         ...prev,
         [selectedRecipeId]: storedMissing,
@@ -100,32 +119,43 @@ function Favorites() {
   const addMissingToShoppingList = async () => {
     if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return;
     const missingNames = missingIngredients[selectedRecipeId]
-      .filter((ingredient) => ingredient.name.trim())
+
+      .filter((ingredient) => ingredient.name.trim()) // Sicherstellen, dass nur gültige Zutaten enthalten sind
       .map((ingredient) => ingredient.name.trim().toLowerCase());
 
-    if (missingNames.length === 0) return;
+    if (missingNames.length === 0) return; // Falls keine Zutaten fehlen, nichts tun (abbrechen)
+
 
     try {
-      const response = await fetch("http://localhost:3000/users/update-shoppinglist", {
-        method: "PATCH",
-        body: JSON.stringify({
-          shoppingList: missingNames,
-          action: "add",
-        }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:3000/users/update-shoppinglist",
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            shoppingList: missingNames,
+            action: "add",
+          }),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         console.log("Shopping list updated successfully");
 
         setMissingIngredients((prev) => {
           const updated = { ...prev };
-          delete updated[selectedRecipeId];
+
+          delete updated[selectedRecipeId]; // Löscht die Zutaten für das aktuelle Rezept
           return updated;
         });
+
+        // Speichert die Änderungen auch in Favoriten
         setFavorites((prevFavorites) =>
           prevFavorites.map((fav) =>
-            fav.id === selectedRecipeId ? { ...fav, missingIngredients: [] } : fav
+            fav.id === selectedRecipeId
+              ? { ...fav, missingIngredients: [] }
+              : fav
+
           )
         );
       } else {
@@ -143,16 +173,23 @@ function Favorites() {
     }
     if (pendingShoppingListUpdate) {
       setShoppingList((prevList) => {
-        const updatedList = new Set([...prevList, ...pendingShoppingListUpdate]);
+
+        const updatedList = new Set([
+          ...prevList,
+          ...pendingShoppingListUpdate,
+        ]);
+
         return [...updatedList];
       });
       setPendingShoppingListUpdate(null);
     }
-  }, [pendingShoppingListUpdate, setShoppingList, hasInitialized]);
+
+  }, [pendingShoppingListUpdate, setShoppingList]);
 
   const servingsText = `for ${servings} ${
     servings === 1 || servings === 0.5 ? "serving" : "servings"
   }`;
+
 
   // --- Filtering Logic ---
   const filterRecipe = (recipe) => {
@@ -186,6 +223,7 @@ function Favorites() {
     }
     return true;
   };
+
 
   // Only show filtered recipes in the grid view.
   const filteredFavorites = favorites.filter(filterRecipe);
@@ -292,6 +330,7 @@ function Favorites() {
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
                       <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
+
                     </div>
                   </div>
                 </div>
@@ -300,21 +339,27 @@ function Favorites() {
                 <div className="bg-gray-900 rounded-3xl p-6 flex items-center justify-between mb-6">
                   <h3 className="text-md font-semibold">Servings</h3>
                   <div className="flex items-center gap-4">
+
                     <button
                       onClick={handleDecreaseServings}
+
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
                     >
                       &minus;
                     </button>
                     <span className="text-lg">{servingsText}</span>
+
                     <button
                       onClick={handleIncreaseServings}
+
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
                     >
                       &#xff0b;
+
                     </button>
                   </div>
                 </div>
+
 
                 {/** Ingredients List */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
@@ -333,6 +378,7 @@ function Favorites() {
                             isSelected
                               ? "bg-green-600 text-gray-100"
                               : "bg-gray-700 hover:bg-gray-800"
+
                           }`}
                         >
                           {Number.isInteger(ingredient.amount * servings)
@@ -344,6 +390,7 @@ function Favorites() {
                     })}
                   </ul>
                 </div>
+
 
                 {/** Missing Ingredients & Shopping List */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
@@ -368,16 +415,19 @@ function Favorites() {
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
                   <h3 className="text-xl font-semibold mb-3">Preparation</h3>
                   <ol className="list-decimal ml-6 space-y-2">
+
                     {recipe.preparation.map((step, index) => (
                       <li key={index}>{step}</li>
                     ))}
                   </ol>
                 </div>
 
+
                 {/** Nutrition */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md">
                   <h3 className="text-xl font-semibold mb-3">Nutrition (per 100g)</h3>
                   <ul className="ml-6 space-y-1">
+
                     {Object.entries(recipe.nutrition).map(([key, value]) => (
                       <li key={key}>
                         <span className="capitalize">{key}</span>: {value}
@@ -390,25 +440,34 @@ function Favorites() {
                     ))}
                   </ul>
                 </div>
+<CulinaryJournalForm
+                  recipeName={recipe.title}
+                  recipeId={recipe.id}
+                />
               </div>
             ))}
           <div className="flex justify-center mt-8">
             <button
               onClick={() => setSelectedRecipeId(null)}
               className="px-6 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow"
+
             >
               Back to Favorites
             </button>
           </div>
         </div>
       ) : (
+
         /** Favorites Grid (using filteredFavorites) */
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
           {filteredFavorites.map((recipe) => (
+
             <div
               key={recipe.id}
               onClick={() => toggleDetails(recipe.id)}
+
               className="bg-gray-800 rounded-2xl overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer"
+
             >
               <img
                 src={recipe.image}
@@ -417,6 +476,7 @@ function Favorites() {
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
+
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faClock} className="text-green-400 text-lg" />
@@ -440,6 +500,7 @@ function Favorites() {
                 <div className="mt-2 flex items-center gap-2">
                   <FontAwesomeIcon icon={faFire} className="text-red-500 text-lg" />
                   <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
+
                 </div>
               </div>
             </div>
@@ -447,12 +508,16 @@ function Favorites() {
         </div>
       )}
 
+
       {/** Back to Home Button */}
+
       {!selectedRecipeId && (
         <div className="flex justify-center mt-12">
           <button
+
             onClick={() => (window.location.href = "/home")}
             className="px-8 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow text-xl"
+
           >
             Back to Home
           </button>

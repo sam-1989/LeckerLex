@@ -8,6 +8,7 @@ import {
   FaWhatsapp,
   FaCartArrowDown,
 } from "react-icons/fa";
+import { BsJournalAlbum } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
 
 function Footer() {
@@ -113,6 +114,17 @@ function Footer() {
               onClick={() => setActiveIcon("heart")}
             >
               <FaHeart size={20} />
+            </NavLink>
+          </li>
+          <li className="hover:text-green-500">
+            <NavLink
+              to="journal"
+              className={`hover:underline ${
+                activeIcon === "journal" ? "text-green-500" : ""
+              }`}
+              onClick={() => setActiveIcon("journal")}
+            >
+              <BsJournalAlbum size={20} />
             </NavLink>
           </li>
           <li className="hover:text-green-500">
