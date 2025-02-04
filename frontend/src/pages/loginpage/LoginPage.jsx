@@ -120,7 +120,7 @@ export default function LoginComponent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full pl-10 pr-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-3xl focus:outline-none focus:ring focus:ring-indigo-500"
+                className="w-full pl-10 pr-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-green-500 transition"
               />
             </div>
             </div>
@@ -136,7 +136,7 @@ export default function LoginComponent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full pl-10 pr-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-3xl focus:outline-none focus:ring focus:ring-indigo-500"
+                className="w-full pl-10 pr-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-green-500 transition"
               />
                <div
                   className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
@@ -155,7 +155,7 @@ export default function LoginComponent() {
             )}
             <button
               type="submit"
-              className="w-full px-4 py-2 mb-3 text-md bg-green-600 text-white rounded-3xl shadow-lg hover:bg-green-500 transition duration-300"
+              className="w-full px-4 py-2 mb-4 mt-1 text-md bg-green-500 text-white rounded-3xl shadow-lg hover:bg-green-700 transition duration-300"
             >
               Sign In
             </button>
@@ -164,15 +164,15 @@ export default function LoginComponent() {
           <div className="text-center mt-4 text-sm text-gray-300"> 
               No profile?{" "}
               <button
-              className="text-blue-400 hover:underline"
+              className="text-blue-400 font-medium hover:underline"
               onClick={handleRedirectToRegister}
               >
                 Register here
               </button>
               </div>
-              <div className="text-center mt-4 text-md text-gray-300">
+              <div className="text-center mt-8 text-md text-gray-300">
                 <button
-                className="text-blue-400 font-medium hover:underline hover:scale-105"
+                className="text-blue-400 font-semibold hover:scale-105"
                 onClick={handleGuestLogin}
                 >
                   Continue as Guest
