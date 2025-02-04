@@ -144,7 +144,7 @@ function MyShoppingList() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-fit">
+    <div className="flex flex-col lg:flex-row min-h-fit lg:pr-5">
       {/* Image Section (visible on large screens) */}
       <div className="hidden lg:flex w-auto mt-4 flex-col items-center justify-center p-4">
         <img
@@ -156,7 +156,7 @@ function MyShoppingList() {
 
       {/* Shopping List Section */}
       <div
-        className="p-8 m-10 w-full lg:w-2/3 border border-gray-800 rounded-3xl shadow-lg"
+        className="p-8 m-auto w-full lg:w-2/3 border border-gray-800 rounded-3xl shadow-lg"
         style={{ background: "#11151E" }}
       >
         {/* Title */}

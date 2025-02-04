@@ -64,8 +64,8 @@ export default function ProfileWelcomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 flex items-center justify-center py-10 px-4">
-      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+    <div className="min-h-full flex items-center justify-center align py-10 px-4">
+      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl justify-center items-center overflow-hidden">
         {/* Sidebar/Menu */}
         {!isMobileView && (
           <aside className="w-full md:w-1/3 bg-[#11151E] border-r border-gray-700 p-8">

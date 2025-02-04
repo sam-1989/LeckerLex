@@ -14,8 +14,7 @@ import {
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 
-import Form from "../components/CulinaryJournalForm";
-
+import CulinaryJournalForm from "../components/CulinaryJournalForm";
 
 function Favorites() {
   const { favorites, setFavorites, setShoppingList } =
@@ -41,7 +40,6 @@ function Favorites() {
   const handleDecreaseServings = () => {
     setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
-
 
   // Diese Funktion verwaltet das Hinzufügen / Entfernen von Zutaten zur missingIngredients-Liste, basierend auf dem recipeId. Sie aktualisiert auch die Menge der fehlenden Zutaten abhängig von servings.
   const toggleMissingIngredient = (recipeId, ingredient) => {
@@ -79,7 +77,6 @@ function Favorites() {
     setMissingIngredients((prev) => {
       const updatedMissing = { ...prev };
       Object.keys(updatedMissing).forEach((recipeId) => {
-
         updatedMissing[recipeId] = updatedMissing[recipeId].map(
           (ingredient) => {
             const originalIngredient = favorites
@@ -96,7 +93,6 @@ function Favorites() {
               : ingredient;
           }
         );
-
       });
       return updatedMissing;
     });
@@ -105,7 +101,6 @@ function Favorites() {
   useEffect(() => {
     if (selectedRecipeId) {
       const storedMissing =
-
         favorites.find((fav) => fav.id === selectedRecipeId)
           ?.missingIngredients || [];
 
@@ -124,7 +119,6 @@ function Favorites() {
       .map((ingredient) => ingredient.name.trim().toLowerCase());
 
     if (missingNames.length === 0) return; // Falls keine Zutaten fehlen, nichts tun (abbrechen)
-
 
     try {
       const response = await fetch(
@@ -155,7 +149,6 @@ function Favorites() {
             fav.id === selectedRecipeId
               ? { ...fav, missingIngredients: [] }
               : fav
-
           )
         );
       } else {
@@ -173,7 +166,6 @@ function Favorites() {
     }
     if (pendingShoppingListUpdate) {
       setShoppingList((prevList) => {
-
         const updatedList = new Set([
           ...prevList,
           ...pendingShoppingListUpdate,
@@ -183,13 +175,11 @@ function Favorites() {
       });
       setPendingShoppingListUpdate(null);
     }
-
-  }, [pendingShoppingListUpdate, setShoppingList]);
+  }, [pendingShoppingListUpdate, setShoppingList, hasInitialized]);
 
   const servingsText = `for ${servings} ${
     servings === 1 || servings === 0.5 ? "serving" : "servings"
   }`;
-
 
   // --- Filtering Logic ---
   const filterRecipe = (recipe) => {
@@ -197,7 +187,8 @@ function Favorites() {
     if (cookTime) {
       if (cookTime.includes("-")) {
         const [min, max] = cookTime.split("-").map(Number);
-        if (recipe.preparationTime < min || recipe.preparationTime > max) return false;
+        if (recipe.preparationTime < min || recipe.preparationTime > max)
+          return false;
       } else if (cookTime.endsWith("+")) {
         const min = Number(cookTime.replace("+", ""));
         if (recipe.preparationTime < min) return false;
@@ -207,7 +198,11 @@ function Favorites() {
     if (calories) {
       if (calories.includes("-")) {
         const [min, max] = calories.split("-").map(Number);
-        if (!recipe.nutrition || recipe.nutrition.calories < min || recipe.nutrition.calories > max)
+        if (
+          !recipe.nutrition ||
+          recipe.nutrition.calories < min ||
+          recipe.nutrition.calories > max
+        )
           return false;
       } else if (calories.endsWith("+")) {
         const min = Number(calories.replace("+", ""));
@@ -224,12 +219,11 @@ function Favorites() {
     return true;
   };
 
-
   // Only show filtered recipes in the grid view.
   const filteredFavorites = favorites.filter(filterRecipe);
 
   return (
-    <div className="min-h-screen bg-black text-gray-100 py-10">
+    <div className="min-h-full bg-black text-gray-100 py-10">
       {/* Filter Section */}
       {!selectedRecipeId && (
         <main className="bg-gray-800 shadow-lg rounded-2xl w-full max-w-3xl mx-auto p-6 mb-8">
@@ -304,33 +298,58 @@ function Favorites() {
                   </div>
                   <div className="flex justify-around items-center p-4 border-t border-gray-600">
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faClock} className="text-lg text-green-400" />
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className="text-lg text-green-400"
+                      />
                       <span>{recipe.preparationTime} min</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {recipe.diet?.vegetarian && (
-                        <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="Vegetarian" />
+                        <FontAwesomeIcon
+                          icon={faLeaf}
+                          className="text-green-500"
+                          title="Vegetarian"
+                        />
                       )}
                       {recipe.diet?.vegan && (
-                        <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="Vegan" />
+                        <FontAwesomeIcon
+                          icon={faSeedling}
+                          className="text-green-500"
+                          title="Vegan"
+                        />
                       )}
                       {!recipe.diet?.glutenFree && (
-                        <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="Contains Gluten" />
+                        <FontAwesomeIcon
+                          icon={faWheatAlt}
+                          className="text-yellow-500"
+                          title="Contains Gluten"
+                        />
                       )}
                       {!recipe.diet?.dairyFree && (
-                        <FontAwesomeIcon icon={faTint} className="text-blue-500" title="Contains Dairy" />
+                        <FontAwesomeIcon
+                          icon={faTint}
+                          className="text-blue-500"
+                          title="Contains Dairy"
+                        />
                       )}
-                      {(!recipe.diet?.vegetarian &&
+                      {!recipe.diet?.vegetarian &&
                         !recipe.diet?.vegan &&
                         recipe.diet?.glutenFree &&
-                        recipe.diet?.dairyFree) && (
-                        <FontAwesomeIcon icon={faUtensils} className="text-gray-400" title="No special diet" />
-                      )}
+                        recipe.diet?.dairyFree && (
+                          <FontAwesomeIcon
+                            icon={faUtensils}
+                            className="text-gray-400"
+                            title="No special diet"
+                          />
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
+                      <FontAwesomeIcon
+                        icon={faFire}
+                        className="text-lg text-red-500"
+                      />
                       <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
-
                     </div>
                   </div>
                 </div>
@@ -339,10 +358,8 @@ function Favorites() {
                 <div className="bg-gray-900 rounded-3xl p-6 flex items-center justify-between mb-6">
                   <h3 className="text-md font-semibold">Servings</h3>
                   <div className="flex items-center gap-4">
-
                     <button
                       onClick={handleDecreaseServings}
-
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
                     >
                       &minus;
@@ -351,34 +368,36 @@ function Favorites() {
 
                     <button
                       onClick={handleIncreaseServings}
-
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
                     >
                       &#xff0b;
-
                     </button>
                   </div>
                 </div>
 
-
                 {/** Ingredients List */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
-                  <h3 className="text-lg text-cen font-semibold mb-6">Ingredients</h3>
-                  <p className="text-md text-green-400 mb-4">Select the ingredients you are missing</p>
+                  <h3 className="text-lg text-cen font-semibold mb-6">
+                    Ingredients
+                  </h3>
+                  <p className="text-md text-green-400 mb-4">
+                    Select the ingredients you are missing
+                  </p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {recipe.ingredients.map((ingredient, index) => {
-                      const isSelected = (missingIngredients[recipe.id] || []).some(
-                        (item) => item.name === ingredient.name
-                      );
+                      const isSelected = (
+                        missingIngredients[recipe.id] || []
+                      ).some((item) => item.name === ingredient.name);
                       return (
                         <li
                           key={index}
-                          onClick={() => toggleMissingIngredient(recipe.id, ingredient)}
+                          onClick={() =>
+                            toggleMissingIngredient(recipe.id, ingredient)
+                          }
                           className={`cursor-pointer rounded-full p-2 text-center transition-colors ${
                             isSelected
                               ? "bg-green-600 text-gray-100"
                               : "bg-gray-700 hover:bg-gray-800"
-
                           }`}
                         >
                           {Number.isInteger(ingredient.amount * servings)
@@ -391,22 +410,29 @@ function Favorites() {
                   </ul>
                 </div>
 
-
                 {/** Missing Ingredients & Shopping List */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
-                  <h3 className="text-xl font-semibold mb-3">Missing Ingredients</h3>
+                  <h3 className="text-xl font-semibold mb-3">
+                    Missing Ingredients
+                  </h3>
                   <ul className="mb-4">
-                    {(recipe.missingIngredients || []).map((ingredient, index) => (
-                      <li key={index} className="mb-1">
-                        {ingredient.amount} {ingredient.unit} {ingredient.name}
-                      </li>
-                    ))}
+                    {(recipe.missingIngredients || []).map(
+                      (ingredient, index) => (
+                        <li key={index} className="mb-1">
+                          {ingredient.amount} {ingredient.unit}{" "}
+                          {ingredient.name}
+                        </li>
+                      )
+                    )}
                   </ul>
                   <button
                     onClick={addMissingToShoppingList}
                     className="flex items-center gap-2 bg-green-500 hover:bg-green-600 transition-colors px-4 py-2 rounded-full shadow"
                   >
-                    <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+                    <FontAwesomeIcon
+                      icon={faShoppingCart}
+                      className="text-xl"
+                    />
                     <span>Add to Shopping List</span>
                   </button>
                 </div>
@@ -415,19 +441,18 @@ function Favorites() {
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
                   <h3 className="text-xl font-semibold mb-3">Preparation</h3>
                   <ol className="list-decimal ml-6 space-y-2">
-
                     {recipe.preparation.map((step, index) => (
                       <li key={index}>{step}</li>
                     ))}
                   </ol>
                 </div>
 
-
                 {/** Nutrition */}
                 <div className="bg-gray-900 rounded-3xl p-6 shadow-md">
-                  <h3 className="text-xl font-semibold mb-3">Nutrition (per 100g)</h3>
+                  <h3 className="text-xl font-semibold mb-3">
+                    Nutrition (per 100g)
+                  </h3>
                   <ul className="ml-6 space-y-1">
-
                     {Object.entries(recipe.nutrition).map(([key, value]) => (
                       <li key={key}>
                         <span className="capitalize">{key}</span>: {value}
@@ -440,7 +465,7 @@ function Favorites() {
                     ))}
                   </ul>
                 </div>
-<CulinaryJournalForm
+                <CulinaryJournalForm
                   recipeName={recipe.title}
                   recipeId={recipe.id}
                 />
@@ -450,24 +475,19 @@ function Favorites() {
             <button
               onClick={() => setSelectedRecipeId(null)}
               className="px-6 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow"
-
             >
               Back to Favorites
             </button>
           </div>
         </div>
       ) : (
-
         /** Favorites Grid (using filteredFavorites) */
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
           {filteredFavorites.map((recipe) => (
-
             <div
               key={recipe.id}
               onClick={() => toggleDetails(recipe.id)}
-
               className="bg-gray-800 rounded-2xl overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer"
-
             >
               <img
                 src={recipe.image}
@@ -479,28 +499,49 @@ function Favorites() {
 
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faClock} className="text-green-400 text-lg" />
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className="text-green-400 text-lg"
+                    />
                     <span>{recipe.preparationTime} min</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {recipe.diet?.vegetarian && (
-                      <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="Vegetarian" />
+                      <FontAwesomeIcon
+                        icon={faLeaf}
+                        className="text-green-500"
+                        title="Vegetarian"
+                      />
                     )}
                     {recipe.diet?.vegan && (
-                      <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="Vegan" />
+                      <FontAwesomeIcon
+                        icon={faSeedling}
+                        className="text-green-500"
+                        title="Vegan"
+                      />
                     )}
                     {!recipe.diet?.glutenFree && (
-                      <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="Contains Gluten" />
+                      <FontAwesomeIcon
+                        icon={faWheatAlt}
+                        className="text-yellow-500"
+                        title="Contains Gluten"
+                      />
                     )}
                     {!recipe.diet?.dairyFree && (
-                      <FontAwesomeIcon icon={faTint} className="text-blue-500" title="Contains Dairy" />
+                      <FontAwesomeIcon
+                        icon={faTint}
+                        className="text-blue-500"
+                        title="Contains Dairy"
+                      />
                     )}
                   </div>
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faFire} className="text-red-500 text-lg" />
+                  <FontAwesomeIcon
+                    icon={faFire}
+                    className="text-red-500 text-lg"
+                  />
                   <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
-
                 </div>
               </div>
             </div>
@@ -508,16 +549,13 @@ function Favorites() {
         </div>
       )}
 
-
       {/** Back to Home Button */}
 
       {!selectedRecipeId && (
         <div className="flex justify-center mt-12">
           <button
-
             onClick={() => (window.location.href = "/home")}
             className="px-8 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow text-xl"
-
           >
             Back to Home
           </button>
