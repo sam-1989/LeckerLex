@@ -291,7 +291,7 @@ function Favorites() {
                   <img
                     src={recipe.image}
                     alt={recipe.title}
-                    className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
+                    className="w-full h-64 object-contain"
                   />
                   <div className="p-4 text-center">
                     <h2 className="text-2xl font-bold">{recipe.title}</h2>
