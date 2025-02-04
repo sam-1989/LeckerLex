@@ -17,16 +17,18 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-[#11151E] rounded-3xl shadow-lg p-8">
-        <h2 className="text-3xl text-center font-semibold text-white mt-5 mb-6">
+    <div className="bg-gray-950 flex items-center justify-center rounded-3xl py-10">
+      {/* Form Card */}
+      <div className="w-full max-w-lg bg-[#11151E] rounded-3xl shadow-2xl p-10">
+        <h2 className="text-3xl font-bold text-center text-gray-200 mb-8">
           Change Password
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Current Password Field */}
           <div className="flex flex-col">
             <label
               htmlFor="currentPassword"
-              className="text-md font-semibold text-gray-300"
+              className="text-lg font-medium text-gray-300"
             >
               Current Password
             </label>
@@ -35,13 +37,14 @@ export default function ChangePassword() {
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="mt-1 px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-2 px-4 py-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
             />
           </div>
+          {/* New Password Field */}
           <div className="flex flex-col">
             <label
               htmlFor="newPassword"
-              className="text-md font-semibold text-gray-300"
+              className="text-lg font-medium text-gray-300"
             >
               New Password
             </label>
@@ -50,13 +53,14 @@ export default function ChangePassword() {
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-2 px-4 py-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
             />
           </div>
+          {/* Confirm Password Field */}
           <div className="flex flex-col">
             <label
               htmlFor="confirmPassword"
-              className="text-md font-semibold text-gray-300"
+              className="text-lg font-medium text-gray-300"
             >
               Confirm Password
             </label>
@@ -65,13 +69,13 @@ export default function ChangePassword() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="mt-2 px-4 py-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
             />
           </div>
         </div>
         <button
           onClick={handleChangePassword}
-          className="mt-6 w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+          className="mt-8 w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition"
         >
           Update Password
         </button>

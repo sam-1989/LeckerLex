@@ -1,55 +1,62 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { RecipeContext } from '../context/RecipeContext';
+import React, { useContext, useState, useEffect } from "react";
+import { RecipeContext } from "../context/RecipeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart, faTint, faUtensils, faWheatAlt } from "@fortawesome/free-solid-svg-icons";
-import { faClock, faLeaf, faSeedling, faFire } from '@fortawesome/free-solid-svg-icons';
-
+import {
+  faShoppingCart,
+  faTint,
+  faUtensils,
+  faWheatAlt,
+  faClock,
+  faLeaf,
+  faSeedling,
+  faFire,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Favorites() {
   const { favorites, setFavorites, setShoppingList } = useContext(RecipeContext);
   const [hasInitialized, setHasInitialized] = useState(false);
-  const [cookTime, setCookTime] = useState('');
-  const [calories, setCalories] = useState('');
-  const [nutrition, setNutrition] = useState('');
+  const [cookTime, setCookTime] = useState("");
+  const [calories, setCalories] = useState("");
+  const [nutrition, setNutrition] = useState("");
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [servings, setServings] = useState(1);
   const [missingIngredients, setMissingIngredients] = useState({});
   const [pendingShoppingListUpdate, setPendingShoppingListUpdate] = useState(null);
-  
+
   const toggleDetails = (id) => {
-    setSelectedRecipeId(prevId => (prevId === id ? null : id));
+    setSelectedRecipeId((prevId) => (prevId === id ? null : id));
   };
 
   const handleIncreaseServings = () => {
-    setServings(prev => Math.round((prev + 0.5) * 10) / 10);
+    setServings((prev) => Math.round((prev + 0.5) * 10) / 10);
   };
 
   const handleDecreaseServings = () => {
-    setServings(prev => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
+    setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
 
-
-  // Diese Funktion verwaltet das Hinzufügen / Entfernen von Zutaten zur missingIngredients-Liste, basierend auf dem recipeId. Sie aktualisiert auch die Menge der fehlenden Zutaten abhängig von servings.
   const toggleMissingIngredient = (recipeId, ingredient) => {
-    setMissingIngredients(prev => {
+    setMissingIngredients((prev) => {
       const updated = { ...prev };
       if (!updated[recipeId]) {
         updated[recipeId] = [];
       }
-      const existingIndex = updated[recipeId].findIndex(item => item.name === ingredient.name);
+      const existingIndex = updated[recipeId].findIndex(
+        (item) => item.name === ingredient.name
+      );
       if (existingIndex > -1) {
         updated[recipeId].splice(existingIndex, 1);
       } else {
         updated[recipeId].push({
           name: ingredient.name,
           amount: Number.isInteger(ingredient.amount * servings)
-          ? ingredient.amount * servings   // Ganze Zahl ohne Dezimalstellen
-          : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
+            ? ingredient.amount * servings
+            : (ingredient.amount * servings).toFixed(1),
           unit: ingredient.unit,
         });
       }
-      setFavorites(prevFavorites => 
-        prevFavorites.map(fav =>
+      setFavorites((prevFavorites) =>
+        prevFavorites.map((fav) =>
           fav.id === recipeId ? { ...fav, missingIngredients: updated[recipeId] } : fav
         )
       );
@@ -58,22 +65,22 @@ function Favorites() {
   };
 
   useEffect(() => {
-    setMissingIngredients(prev => {
+    setMissingIngredients((prev) => {
       const updatedMissing = { ...prev };
-      Object.keys(updatedMissing).forEach(recipeId => {
-        updatedMissing[recipeId] = updatedMissing[recipeId].map(ingredient => {
+      Object.keys(updatedMissing).forEach((recipeId) => {
+        updatedMissing[recipeId] = updatedMissing[recipeId].map((ingredient) => {
           const originalIngredient = favorites
-            .find(r => r.id === parseInt(recipeId))?.ingredients
-            .find(ing => ing.name === ingredient.name);
+            .find((r) => r.id === parseInt(recipeId))
+            ?.ingredients.find((ing) => ing.name === ingredient.name);
           return originalIngredient
-          ? {
-            ...ingredient,
-            /* amount: (originalIngredient.amount * servings).toFixed(1) */
-            amount: Number.isInteger(ingredient.amount * servings)
-          ? ingredient.amount * servings   // Ganze Zahl ohne Dezimalstellen
-          : (ingredient.amount * servings).toFixed(1), // Eine Nachkommastelle bei Dezimalzahlen
-          }
-          : ingredient;
+            ? {
+                ...ingredient,
+                amount: Number.isInteger(ingredient.amount * servings)
+                  ? ingredient.amount * servings
+                  : (ingredient.amount * servings).toFixed(1),
+              }
+            : ingredient;
+        });
       });
       return updatedMissing;
     });
@@ -81,19 +88,23 @@ function Favorites() {
 
   useEffect(() => {
     if (selectedRecipeId) {
-      const storedMissing = favorites.find(fav => fav.id === selectedRecipeId)?.missingIngredients || [];
-      setMissingIngredients(prev => ({ ...prev, [selectedRecipeId]: storedMissing }));
+      const storedMissing =
+        favorites.find((fav) => fav.id === selectedRecipeId)?.missingIngredients || [];
+      setMissingIngredients((prev) => ({
+        ...prev,
+        [selectedRecipeId]: storedMissing,
+      }));
     }
   }, [selectedRecipeId, favorites]);
 
   const addMissingToShoppingList = async () => {
     if (!selectedRecipeId || !missingIngredients[selectedRecipeId]) return;
     const missingNames = missingIngredients[selectedRecipeId]
-    .filter(ingredient => ingredient.name.trim())  // Sicherstellen, dass nur gültige Zutaten enthalten sind
-    .map(ingredient => ingredient.name.trim().toLowerCase());
+      .filter((ingredient) => ingredient.name.trim())
+      .map((ingredient) => ingredient.name.trim().toLowerCase());
 
-    if (missingNames.length === 0) return; // Falls keine Zutaten fehlen, nichts tun (abbrechen)
-    
+    if (missingNames.length === 0) return;
+
     try {
       const response = await fetch("http://localhost:3000/users/update-shoppinglist", {
         method: "PATCH",
@@ -107,21 +118,16 @@ function Favorites() {
       if (response.ok) {
         console.log("Shopping list updated successfully");
 
-        // Löscht die Markierung & die gesamte Liste der fehlenden Zutaten
         setMissingIngredients((prev) => {
-          const updated = { ...prev};
-          delete updated[selectedRecipeId]; // Löscht die Zutaten für das aktuelle Rezept
+          const updated = { ...prev };
+          delete updated[selectedRecipeId];
           return updated;
         });
-
-        // Speichert die Änderungen auch in Favoriten
-        setFavorites((prevFavorites) => 
-        prevFavorites.map((fav) =>
-        fav.id === selectedRecipeId
-        ? {...fav, missingIngredients: []}
-        : fav
-        )
-      );
+        setFavorites((prevFavorites) =>
+          prevFavorites.map((fav) =>
+            fav.id === selectedRecipeId ? { ...fav, missingIngredients: [] } : fav
+          )
+        );
       } else {
         console.log("Failed to update shopping list.");
       }
@@ -136,301 +142,318 @@ function Favorites() {
       return;
     }
     if (pendingShoppingListUpdate) {
-      setShoppingList(prevList => {
+      setShoppingList((prevList) => {
         const updatedList = new Set([...prevList, ...pendingShoppingListUpdate]);
         return [...updatedList];
       });
       setPendingShoppingListUpdate(null);
     }
-  }, [pendingShoppingListUpdate, setShoppingList]);
+  }, [pendingShoppingListUpdate, setShoppingList, hasInitialized]);
 
-  const servingsText = `for ${servings} ${servings === 1 || servings === 0.5 ? 'serving' : 'servings'}`;
+  const servingsText = `for ${servings} ${
+    servings === 1 || servings === 0.5 ? "serving" : "servings"
+  }`;
 
-  console.log("Favoriten in Favorites.jsx:", favorites);
+  // --- Filtering Logic ---
+  const filterRecipe = (recipe) => {
+    // Filter by Cooking Time (using recipe.preparationTime)
+    if (cookTime) {
+      if (cookTime.includes("-")) {
+        const [min, max] = cookTime.split("-").map(Number);
+        if (recipe.preparationTime < min || recipe.preparationTime > max) return false;
+      } else if (cookTime.endsWith("+")) {
+        const min = Number(cookTime.replace("+", ""));
+        if (recipe.preparationTime < min) return false;
+      }
+    }
+    // Filter by Calories (using recipe.nutrition.calories)
+    if (calories) {
+      if (calories.includes("-")) {
+        const [min, max] = calories.split("-").map(Number);
+        if (!recipe.nutrition || recipe.nutrition.calories < min || recipe.nutrition.calories > max)
+          return false;
+      } else if (calories.endsWith("+")) {
+        const min = Number(calories.replace("+", ""));
+        if (!recipe.nutrition || recipe.nutrition.calories < min) return false;
+      }
+    }
+    // Filter by Nutrition preferences (diet)
+    if (nutrition) {
+      if (nutrition === "vegetarian" && !recipe.diet?.vegetarian) return false;
+      if (nutrition === "vegan" && !recipe.diet?.vegan) return false;
+      if (nutrition === "gluten-free" && !recipe.diet?.glutenFree) return false;
+      if (nutrition === "dairy-free" && !recipe.diet?.dairyFree) return false;
+    }
+    return true;
+  };
+
+  // Only show filtered recipes in the grid view.
+  const filteredFavorites = favorites.filter(filterRecipe);
 
   return (
-    <div className="min-h-screen bg-black py-10 z-0">
+    <div className="min-h-screen bg-black text-gray-100 py-10">
       {/* Filter Section */}
       {!selectedRecipeId && (
-        <main className="bg-[#11151E] shadow-xl rounded-3xl w-full max-w-2xl mx-auto p-6 mb-10">
-          <section>
-            <div className="flex flex-wrap justify-around gap-4 mb-6">
-              <label className="flex flex-col items-center">
-                <span className="mb-2 text-gray-200">Cooking Time</span>
-                <select
-                  value={cookTime}
-                  onChange={(e) => setCookTime(e.target.value)}
-                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
-                >
-                  <option value="">Select...</option>
-                  <option value="0-15">0 - 15 minutes</option>
-                  <option value="15-30">15 - 30 minutes</option>
-                  <option value="30-45">30 - 45 minutes</option>
-                  <option value="45-60">45 - 60 minutes</option>
-                  <option value="60+">60 or more</option>
-                </select>
-              </label>
-              <label className="flex flex-col items-center">
-                <span className="mb-2 text-gray-200">Calories</span>
-                <select
-                  value={calories}
-                  onChange={(e) => setCalories(e.target.value)}
-                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
-                >
-                  <option value="">Select...</option>
-                  <option value="0-100">0 - 100 calories</option>
-                  <option value="100-200">100 - 200 calories</option>
-                  <option value="200-300">200 - 300 calories</option>
-                  <option value="300-400">300 - 400 calories</option>
-                  <option value="400+">400 or more calories</option>
-                </select>
-              </label>
-              <label className="flex flex-col items-center">
-                <span className="mb-2 text-gray-200">Nutrition</span>
-                <select
-                  value={nutrition}
-                  onChange={(e) => setNutrition(e.target.value)}
-                  className="p-2 border border-gray-600 rounded-3xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors bg-gray-700 text-gray-200"
-                >
-                  <option value="">Select...</option>
-                  <option value="vegetarian">Vegetarian</option>
-                  <option value="vegan">Vegan</option>
-                  <option value="gluten-free">Gluten-free</option>
-                  <option value="dairy-free">Dairy-free</option>
-                </select>
-              </label>
-            </div>
-          </section>
+        <main className="bg-gray-800 shadow-lg rounded-2xl w-full max-w-3xl mx-auto p-6 mb-8">
+          <div className="flex flex-wrap justify-around gap-6">
+            {/** Cooking Time */}
+            <label className="flex flex-col items-center">
+              <span className="mb-2">Cooking Time</span>
+              <select
+                value={cookTime}
+                onChange={(e) => setCookTime(e.target.value)}
+                className="p-2 border border-gray-600 rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors"
+              >
+                <option value="">Select...</option>
+                <option value="0-15">0 - 15 minutes</option>
+                <option value="15-30">15 - 30 minutes</option>
+                <option value="30-45">30 - 45 minutes</option>
+                <option value="45-60">45 - 60 minutes</option>
+                <option value="60+">60 or more</option>
+              </select>
+            </label>
+            {/** Calories */}
+            <label className="flex flex-col items-center">
+              <span className="mb-2">Calories</span>
+              <select
+                value={calories}
+                onChange={(e) => setCalories(e.target.value)}
+                className="p-2 border border-gray-600 rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors"
+              >
+                <option value="">Select...</option>
+                <option value="0-100">0 - 100 calories</option>
+                <option value="100-200">100 - 200 calories</option>
+                <option value="200-300">200 - 300 calories</option>
+                <option value="300-400">300 - 400 calories</option>
+                <option value="400+">400 or more calories</option>
+              </select>
+            </label>
+            {/** Nutrition */}
+            <label className="flex flex-col items-center">
+              <span className="mb-2">Nutrition</span>
+              <select
+                value={nutrition}
+                onChange={(e) => setNutrition(e.target.value)}
+                className="p-2 border border-gray-600 rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition-colors"
+              >
+                <option value="">Select...</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="gluten-free">Gluten-free</option>
+                <option value="dairy-free">Dairy-free</option>
+              </select>
+            </label>
+          </div>
         </main>
       )}
-       
-        {/* Bedingte Darstellung */}
-        {selectedRecipeId ? (
-          <div className='grid gap-6 p-6 bg-gray-100 rounded-lg shadow-lg max-w-3xl mx-auto'>
 
-            {/* Rezept aus Favoriten filtern */}
-            {favorites
+      {/* Recipe Details Section */}
+      {selectedRecipeId ? (
+        <div className="max-w-4xl mx-auto bg-gray-800 p-6 rounded-2xl shadow-lg">
+          {favorites
             .filter((recipe) => recipe.id === selectedRecipeId)
             .map((recipe) => (
-              <div key={recipe.id} className='w-full'>
-
-                {/* Bild, Titel, Kochzeit, Ernährung und Kalorien */}
-                <div className='bg-white p-4 rounded-lg shadow mb-4'>
-                  <div className='w-full  aspect-w-1/2 aspect-h-1/2 overflow-hidden rounded-lg shadow'>
+              <div key={recipe.id}>
+                {/** Recipe Header */}
+                <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-md mb-6">
                   <img
                     src={recipe.image}
                     alt={recipe.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
                   />
+                  <div className="p-4 text-center">
+                    <h2 className="text-2xl font-bold">{recipe.title}</h2>
                   </div>
-                  <div>
-                  <h2 className='text-l font-semibold  mt-4 text-center'>{recipe.title}</h2>
-                  </div>
-
-                {/* Kochzeit, Kalorien und Ernährungs-Icons */}
-                <div className="flex justify-between items-center mb-4 p-3">
-
-                  {/* Kochzeit */}
-                  <div className='"text-gray-700 font-light text-sm'>
-                    <FontAwesomeIcon icon={faClock} className='text-lg' />
-                      <span className="text-md text-gray-500">{recipe.preparationTime} min</span> 
-                  </div>
-
-                  {/* Ernährung */}
-                  <div className='"text-gray-700 font-light text-sm'>
-                    {recipe.diet?.vegetarian && <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="vegetarian" />}
-                    {recipe.diet?.vegan && <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="vegan" />}
-                    {!recipe.diet?.glutenFree && <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="contains gluten" />}
-                    {!recipe.diet?.dairyFree && <FontAwesomeIcon icon={faTint} className="text-blue-500" title="contains dairy" />}
-                    {!recipe.diet?.vegetarian && !recipe.diet?.vegan && recipe.diet?.glutenFree && recipe.diet?.dairyFree && <FontAwesomeIcon icon={faUtensils} className="text-gray-500" title="no diet" />}
-                  </div>
-
-                  {/* Kalorien */}
-                  <div className='"text-gray-700 font-light text-sm'>
-                    <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
-                      <span className="text-md text-gray-500">{recipe.nutrition?.calories || "N/A"} kcal</span> 
+                  <div className="flex justify-around items-center p-4 border-t border-gray-600">
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faClock} className="text-lg text-green-400" />
+                      <span>{recipe.preparationTime} min</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {recipe.diet?.vegetarian && (
+                        <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="Vegetarian" />
+                      )}
+                      {recipe.diet?.vegan && (
+                        <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="Vegan" />
+                      )}
+                      {!recipe.diet?.glutenFree && (
+                        <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="Contains Gluten" />
+                      )}
+                      {!recipe.diet?.dairyFree && (
+                        <FontAwesomeIcon icon={faTint} className="text-blue-500" title="Contains Dairy" />
+                      )}
+                      {(!recipe.diet?.vegetarian &&
+                        !recipe.diet?.vegan &&
+                        recipe.diet?.glutenFree &&
+                        recipe.diet?.dairyFree) && (
+                        <FontAwesomeIcon icon={faUtensils} className="text-gray-400" title="No special diet" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
+                      <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-                {/* Servings */}
-                <div className='bg-white p-4 rounded-lg shadow flex justify-between items-center mb-4'>
-                  <h3 className='text-md font-semibold mt-6 mb-4'>Servings</h3>
-                  <div className='flex gap-2'>
+                {/** Servings Adjuster */}
+                <div className="bg-gray-900 rounded-3xl p-6 flex items-center justify-between mb-6">
+                  <h3 className="text-md font-semibold">Servings</h3>
+                  <div className="flex items-center gap-4">
                     <button
-                      className=" w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-gray-100 text-green-500 text-lg font-extrabold sm:text-xl   hover:bg-green-600 hover:text-white focus:outline-none"
                       onClick={handleDecreaseServings}
-                      >
-                        {"\u2212"} {/* Unicode Minus-zeichen */}
+                      className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
+                    >
+                      &minus;
                     </button>
-                    <p className="mx-2 sm:mx-4 text-sm sm:text-base lg:text-lg xl:text-base text-gray-600">
-                        Ingredients {servingsText}
-                    </p>
+                    <span className="text-lg">{servingsText}</span>
                     <button
-                      className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-gray-100 text-green-500 text-lg font-extrabold sm:text-xl   hover:bg-green-600 hover:text-white focus:outline-none"
                       onClick={handleIncreaseServings}
-                      >
-                        {"\uFF0B"}  {/* Unicode Plus-Zeichen */}
+                      className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 hover:bg-green-500 transition-colors"
+                    >
+                      &#xff0b;
                     </button>
                   </div>
                 </div>
 
-                {/* Ingredients */}
-                <div className='bg-white p-4 rounded-lg shadow mb-4'>
-                  <h3 className='text-md font-semibold mt-6 mb-2'>Ingredients</h3>
-                  <h4 className='text-sm font-semibold p-1 text-green-500 mb-3'>Choose ingredients you are missing</h4>
-                  <ul>
-
-                      {recipe.ingredients.map((ingredient, index) => {
+                {/** Ingredients List */}
+                <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
+                  <h3 className="text-lg text-cen font-semibold mb-6">Ingredients</h3>
+                  <p className="text-md text-green-400 mb-4">Select the ingredients you are missing</p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {recipe.ingredients.map((ingredient, index) => {
                       const isSelected = (missingIngredients[recipe.id] || []).some(
-                      (item) => item.name === ingredient.name
+                        (item) => item.name === ingredient.name
                       );
                       return (
                         <li
                           key={index}
                           onClick={() => toggleMissingIngredient(recipe.id, ingredient)}
-                          className={`flex items-center gap-2 p-1 mb-2 cursor-pointer rounded-3xl transition-colors duration-200 ${isSelected ? "bg-green-500 text-white" : "bg-gray-100 hover:bg-gray-200"}`}
-                          >
-                            {Number.isInteger(ingredient.amount * servings)
-                            ? (ingredient.amount * servings)
-                            : (ingredient.amount *servings).toFixed(1)} {ingredient.unit} {ingredient.name}
+                          className={`cursor-pointer rounded-full p-2 text-center transition-colors ${
+                            isSelected
+                              ? "bg-green-600 text-gray-100"
+                              : "bg-gray-700 hover:bg-gray-800"
+                          }`}
+                        >
+                          {Number.isInteger(ingredient.amount * servings)
+                            ? ingredient.amount * servings
+                            : (ingredient.amount * servings).toFixed(1)}{" "}
+                          {ingredient.unit} {ingredient.name}
                         </li>
                       );
                     })}
                   </ul>
                 </div>
 
-                {/* Missing Ingredients */}
-                <div className='bg-white p-4 rounded-lg shadow mb-4'>
-                  <h3 className='text-md font-semibold mt-4 mb-4'>Missing Ingredients</h3>
-                  <ul
-                    className='list-none pl-6'>
-                    {favorites.find(fav => fav.id === recipe.id)?.missingIngredients?.map((ingredient, index) => (
-                      <li key={index}>
-                      {ingredient.amount} {ingredient.unit} {ingredient.name}
+                {/** Missing Ingredients & Shopping List */}
+                <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
+                  <h3 className="text-xl font-semibold mb-3">Missing Ingredients</h3>
+                  <ul className="mb-4">
+                    {(recipe.missingIngredients || []).map((ingredient, index) => (
+                      <li key={index} className="mb-1">
+                        {ingredient.amount} {ingredient.unit} {ingredient.name}
                       </li>
                     ))}
                   </ul>
-                  <div className='relative group'>
-                    <button
-                      onClick={addMissingToShoppingList}
-                      className='bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none mt-4'>
-                      <FontAwesomeIcon icon={faShoppingCart} className='text-xl' />
-                    </button>
-                    {/* Tooltip */}
-                    <span className='absolut left-full ml-2 top-1/2 transform -translate-x-1/2  opacity-0 group-hover:opacity-100 bg-green-500 text-white text-xs rounded-md py-1 px-2 transition-opacity duration-300 whitespace-nowrap'>Add to Shopping List</span>
-                  </div>
+                  <button
+                    onClick={addMissingToShoppingList}
+                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 transition-colors px-4 py-2 rounded-full shadow"
+                  >
+                    <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+                    <span>Add to Shopping List</span>
+                  </button>
                 </div>
 
-                {/* Preparation */}
-                <div className='bg-white p-4 rounded-lg shadow mb-4 w-full max-w-xl'>
-                  <h3 className='text-md font-semibold mt-6'>Preparation</h3>
-                  <ol className='list-decimal pl-6'>
+                {/** Preparation */}
+                <div className="bg-gray-900 rounded-3xl p-6 shadow-md mb-6">
+                  <h3 className="text-xl font-semibold mb-3">Preparation</h3>
+                  <ol className="list-decimal ml-6 space-y-2">
                     {recipe.preparation.map((step, index) => (
                       <li key={index}>{step}</li>
                     ))}
                   </ol>
                 </div>
 
-                {/* Nutrition */}
-                <div className='bg-white p-4 rounded-lg shadow'>
-                  <h3 className='text-md font-semibold mt-6'>Nutrition (pro 100g)</h3>
-                  <ul className='list-none pl-6'>
+                {/** Nutrition */}
+                <div className="bg-gray-900 rounded-3xl p-6 shadow-md">
+                  <h3 className="text-xl font-semibold mb-3">Nutrition (per 100g)</h3>
+                  <ul className="ml-6 space-y-1">
                     {Object.entries(recipe.nutrition).map(([key, value]) => (
                       <li key={key}>
-                        {key.charAt(0).toUpperCase() + key.slice(1)} : {value}
+                        <span className="capitalize">{key}</span>: {value}
                         {key === "calories"
-                        ? " kcal"
-                        : key === "sodium"
-                        ? " mg"
-                        : " g"}
+                          ? " kcal"
+                          : key === "sodium"
+                          ? " mg"
+                          : " g"}
                       </li>
                     ))}
                   </ul>
                 </div>
-
               </div>
             ))}
-
-            {/* Back to Favorites außerhalb der Cards */}
-            <div className='flex justify-center mt-4'>
-              <button
+          <div className="flex justify-center mt-8">
+            <button
               onClick={() => setSelectedRecipeId(null)}
-              className='px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600'
-              >
-                Back to Favorites
-              </button>
-            </div>
-
+              className="px-6 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow"
+            >
+              Back to Favorites
+            </button>
           </div>
-            
-          
-          ) : (
-          /* Falls kein Rezept ausgewählt ist, zeige normale Favoritenliste */
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
-          {favorites.map((recipe) => (
+        </div>
+      ) : (
+        /** Favorites Grid (using filteredFavorites) */
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+          {filteredFavorites.map((recipe) => (
             <div
               key={recipe.id}
-              className={`flex flex-col border rounded-lg shadow-md
-                        transform hover:scale-95
-                       hover:outline hover:outline-1 hover:outline-gray-300 
-                       hover:shadow-md   hover:bg-green-50 
-                            transition-colors bg-white
-                       }`}
               onClick={() => toggleDetails(recipe.id)}
-              >
+              className="bg-gray-800 rounded-2xl overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer"
+            >
               <img
                 src={recipe.image}
                 alt={recipe.title}
-                className="w-full h-48 object-cover rounded-t-lg hover:opacity-90 
-                           transition-opacity"
+                className="w-full h-48 object-cover"
               />
-              <div
-                className="p-4 flex-1 flex flex-col justify-between bg-white hover:bg-green-50 
-                              transition-colors"
-              >
+              <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
-              </div>
-
-              {/* Kochzeit, Kalorien und Ernährungs-Icons */}
-              <div className="flex justify-between items-center mb-4 p-3">
-
-              {/* Kochzeit */}
-              <div className='"text-gray-700 font-light text-sm'>
-                <FontAwesomeIcon icon={faClock} className='text-lg' />
-                  <span className="text-md text-gray-500">{recipe.preparationTime} min</span> 
-              </div>
-
-              {/* Ernährung */}
-              <div className='"text-gray-700 font-light text-sm'>
-                {recipe.diet?.vegetarian && <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="vegetarian" />}
-                {recipe.diet?.vegan && <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="vegan" />}
-                {!recipe.diet?.glutenFree && <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="contains gluten" />}
-                {!recipe.diet?.dairyFree && <FontAwesomeIcon icon={faTint} className="text-blue-500" title="contains dairy" />}
-                {!recipe.diet?.vegetarian && !recipe.diet?.vegan && recipe.diet?.glutenFree && recipe.diet?.dairyFree && <FontAwesomeIcon icon={faUtensils} className="text-gray-500" title="no diet" />}
-              </div>
-
-              {/* Kalorien */}
-              <div className='"text-gray-700 font-light text-sm'>
-                <FontAwesomeIcon icon={faFire} className="text-lg text-red-500" />
-                  <span className="text-md text-gray-500">{recipe.nutrition?.calories || "N/A"} kcal</span> 
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faClock} className="text-green-400 text-lg" />
+                    <span>{recipe.preparationTime} min</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {recipe.diet?.vegetarian && (
+                      <FontAwesomeIcon icon={faLeaf} className="text-green-500" title="Vegetarian" />
+                    )}
+                    {recipe.diet?.vegan && (
+                      <FontAwesomeIcon icon={faSeedling} className="text-green-500" title="Vegan" />
+                    )}
+                    {!recipe.diet?.glutenFree && (
+                      <FontAwesomeIcon icon={faWheatAlt} className="text-yellow-500" title="Contains Gluten" />
+                    )}
+                    {!recipe.diet?.dairyFree && (
+                      <FontAwesomeIcon icon={faTint} className="text-blue-500" title="Contains Dairy" />
+                    )}
+                  </div>
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faFire} className="text-red-500 text-lg" />
+                  <span>{recipe.nutrition?.calories || "N/A"} kcal</span>
+                </div>
               </div>
             </div>
-          </div> 
-        ))}
-      </div>
-    )}
-      
-      {/* Bedingung: wenn kein Rezept ausgewählt wurde,dann den Button anzeigen */}
+          ))}
+        </div>
+      )}
+
+      {/** Back to Home Button */}
       {!selectedRecipeId && (
-        <div className="flex justify-center mt-6 w-full">
+        <div className="flex justify-center mt-12">
           <button
-            onClick={() => {
-            // Logic to navigate back to home
-            window.location.href = "/home";
-            }}
-            className="px-6 py-3 bg-green-500 text-white rounded-3xl hover:bg-green-700 focus:outline-none"
-            >
+            onClick={() => (window.location.href = "/home")}
+            className="px-8 py-3 bg-green-500 hover:bg-green-600 transition-colors rounded-full shadow text-xl"
+          >
             Back to Home
           </button>
         </div>

@@ -37,13 +37,8 @@ const AnimatedLetters = ({ text, className }) => {
   useEffect(() => {
     // Wait 2 seconds before starting the visible animation.
     const timer = setTimeout(() => {
-      controls.start('visible').then(() => {
-        // After 2.5 seconds, start the exit animation.
-        setTimeout(() => {
-          controls.start('exit');
-        }, 4000);
-      });
-    }, 4500);
+      controls.start('visible').then(() => {});
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, [controls]);
@@ -146,7 +141,7 @@ export default function LandingPage() {
       >
         <Link to="/home">
           <button
-            className="button px-6 py-3 text-md md:text-lg bg-green-700 text-gray-100 rounded-full hover:bg-green-800 hover:scale-105"
+            className="button px-6 py-3 text-md md:text-lg bg-green-700 text-orange-50 rounded-full hover:bg-green-800 hover:scale-105"
             aria-label="Get inspired button"
 
           >

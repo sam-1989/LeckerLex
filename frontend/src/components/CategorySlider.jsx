@@ -105,7 +105,7 @@ function CategorySlider({ categories, selectedCategory, setSelectedCategory }) {
                 ${
                   selectedCategory === category.id
                     ? "bg-green-800 text-gray-100"
-                    : "bg-green-50"
+                    : "bg-orange-50"
                 }
                 hover:text-gray-800 hover:scale-105 hover:ring-2 hover:ring-orange-700 hover:ring-offset-2
               `}
