@@ -46,7 +46,7 @@ function Sidebar({
       <div
         className={`
           fixed bottom-0 left-0 w-full h-64 md:h-full md:w-64 
-          bg-gray-900 text-white border-t md:border-t-0 md:border-r border-blue-700
+          bg-gray-900 text-white border-t md:border-t-0 md:border-r border-blue-700 z-20
           overflow-y-auto md:overflow-x-hidden transition-transform duration-500
           ${
             isSidebarOpen

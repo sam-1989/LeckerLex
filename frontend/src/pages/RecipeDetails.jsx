@@ -12,17 +12,18 @@ import {
   faTint,
   faUtensils,
   faFire,
-
 } from "@fortawesome/free-solid-svg-icons";
 
 function RecipeDetails() {
   const { id } = useParams(); // Rezept-ID aus der URL
   const { recipes } = useContext(RecipeContext); // Rezepte aus dem Context
   const { isLoggedIn } = useContext(AuthContext);
-  const { isFavorite, setIsFavorite, favorites, setFavorites } =
-    useContext(RecipeContext);
-
-  console.log("Initial favorites in RecipeDetails:", favorites);
+  const {
+    isFavorite,
+    setIsFavorite,
+    favorites: favs,
+    setFavorites,
+  } = useContext(RecipeContext);
 
   const navigate = useNavigate();
 
@@ -125,7 +126,6 @@ function RecipeDetails() {
     setServings((prev) => Math.max(0.5, Math.round((prev - 0.5) * 10) / 10));
   };
 
-
   // Dynamic text for servings
 
   const servingsText = `for ${servings} ${
@@ -134,10 +134,8 @@ function RecipeDetails() {
 
   if (!recipe) {
     return (
-
       <div className="bg-gray-900 min-h-screen flex items-center justify-center">
         <p className="text-center text-2xl font-semibold text-orange-200">
-
           Recipe not found 😔
         </p>
       </div>
@@ -145,7 +143,6 @@ function RecipeDetails() {
   }
 
   return (
-
     <div className="p-6 max-w-6xl mx-auto relative bg-[#11151E] min-h-screen font-medium rounded-2xl text-gray-200">
       {/* Recipe Image Section */}
       <div className="relative mx-auto w-full sm:w-8/12 lg:w-6/12 h-72 sm:h-80 lg:h-96 mt-16 rounded-2xl">
@@ -190,34 +187,27 @@ function RecipeDetails() {
                 icon={faLeaf}
                 className="text-green-400"
                 title="Vegetarian"
-
               />
             )}
             {recipe.diet?.vegan && (
               <FontAwesomeIcon
                 icon={faSeedling}
-
                 className="text-green-400"
                 title="Vegan"
-
               />
             )}
             {!recipe.diet?.glutenFree && (
               <FontAwesomeIcon
                 icon={faWheatAlt}
-
                 className="text-yellow-400"
                 title="Contains gluten"
-
               />
             )}
             {!recipe.diet?.dairyFree && (
               <FontAwesomeIcon
                 icon={faTint}
-
                 className="text-blue-400"
                 title="Contains dairy"
-
               />
             )}
             {!recipe.diet?.vegetarian &&
@@ -226,7 +216,6 @@ function RecipeDetails() {
               recipe.diet?.dairyFree && (
                 <FontAwesomeIcon
                   icon={faUtensils}
-
                   className="text-gray-400"
                   title="No specific diet"
                 />
@@ -235,12 +224,10 @@ function RecipeDetails() {
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon={faFire} className="text-lg text-red-400" />
             <span className="text-md">
-
               {recipe.nutritionPer100g?.calories || "N/A"} kcal
             </span>
           </div>
         </div>
-
       </div>
 
       {/* Section Buttons */}
@@ -268,12 +255,11 @@ function RecipeDetails() {
             </h3>
             <div className="flex items-center justify-center space-x-4 mb-10">
               <div className="inline-flex items-center border border-gray-300 rounded-full overflow-hidden shadow-sm">
-
                 <button
-                  className=" w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-green-500 text-white text-lg sm:text-xl   hover:bg-green-600 focus:outline-none"
                   onClick={handleDecreaseServings}
+                  className="px-4 py-2 text-gray-300 hover:bg-gray-100 hover:text-gray-800 transition-colors focus:outline-none"
+                  aria-label="Decrease servings"
                 >
-
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
@@ -294,10 +280,10 @@ function RecipeDetails() {
                 </span>
 
                 <button
-                  className="w-5 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full  bg-green-500 text-white text-lg sm:text-xl   hover:bg-green-600 focus:outline-none"
                   onClick={handleIncreaseServings}
+                  className="px-4 py-2 text-gray-300 hover:bg-gray-100 hover:text-gray-800 transition-colors focus:outline-none"
+                  aria-label="Increase servings"
                 >
-
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
@@ -336,18 +322,15 @@ function RecipeDetails() {
                   </li>
                 );
               })}
-
             </ul>
           </div>
         )}
         {visibleSection === "nutrition" && (
-
           <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl">
             <h3 className="text-2xl font-bold mb-4">
               Nutritional Values (per 100g)
             </h3>
             <ul className="list-disc pl-6 space-y-2 text-gray-300">
-
               <li>Calories: {recipe.nutritionPer100g.calories} kcal</li>
               <li>Fat: {recipe.nutritionPer100g.fat} g</li>
               <li>Saturated Fat: {recipe.nutritionPer100g.saturatedFat} g</li>
@@ -359,17 +342,24 @@ function RecipeDetails() {
           </div>
         )}
         {visibleSection === "preparation" && (
-
           <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl">
             <h3 className="text-2xl font-bold mb-6">Preparation Steps</h3>
             <div className="relative pl-10">
               {/* Vertical Line */}
               <div className="absolute left-5 top-0 bottom-0 w-px bg-gray-600"></div>
-
               {recipe.steps.map((step, index) => (
-                <li key={index}>{step.description}</li>
+                <div key={index} className="mb-6 flex items-start">
+                  {/* Number Badge */}
+                  <div className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white font-bold text-lg text-center">
+                    {index + 1}
+                  </div>
+                  {/* Step Description */}
+                  <div className="ml-4">
+                    <p className="text-gray-300 text-lg">{step.description}</p>
+                  </div>
+                </div>
               ))}
-            </ol>
+            </div>
           </div>
         )}
       </div>
@@ -378,7 +368,6 @@ function RecipeDetails() {
       {showMissingIngredients &&
         recipe.missedIngredients &&
         recipe.missedIngredients.length > 0 && (
-
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="relative bg-gray-800 rounded-lg shadow-2xl p-6 w-11/12 sm:w-1/2 lg:w-1/3 animate-popIn">
               <button
@@ -395,7 +384,6 @@ function RecipeDetails() {
                   <li
                     key={index}
                     className="flex justify-between text-gray-300"
-
                   >
                     {Number.isInteger(ingredient.amount * servings)
                       ? ingredient.amount * servings
@@ -427,8 +415,8 @@ function RecipeDetails() {
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
     </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-// import { RecipeContext } from "../context/RecipeContext";
+import { RecipeContext } from "../context/RecipeContext";
 import { FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +30,6 @@ function ResultPage() {
   const [nutrition, setNutrition] = useState("");
 
   const { recipes } = useContext(RecipeContext);
-
 
   const [visibleCount, setVisibleCount] = useState(8);
 
