@@ -43,6 +43,7 @@ export default {
       fontFamily: {
         sans: ["Open Sans", "Arial", "sans-serif"],
         playpen: ["Playpen Sans", "serif"],
+        charmonman: ["Charmonman", "serif"],
       },
       fontWeight: {
         light: 300,

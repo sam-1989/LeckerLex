@@ -55,8 +55,11 @@ function Navbar() {
     <nav className="hidden md:flex items-center justify-between p-8 mr-6 ml-6 bg-transparent z-50">
       <div className="flex items-center">
         {/* Logo or Brand Name */}
-        <NavLink to="/home" className="text-2xl font-bold text-orange-200">
-          LeckerLex
+        <NavLink to="/home" className="text-2xl  text-orange-200">
+          <span className="font-charmonman font-bold text-green-400 text-4xl">
+            Lecker
+          </span>
+          <span className="font-semibold">Lex</span>
         </NavLink>
       </div>
       {/* Increase horizontal gap between navlinks */}
