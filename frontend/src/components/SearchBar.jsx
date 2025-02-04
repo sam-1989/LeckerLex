@@ -9,7 +9,7 @@ function SearchBar({
   selectedIngredients,
 }) {
   const [placeholder, setPlaceholder] = useState(
-    "Enter here your ingredients..."
+    "Enter ingredients, separated by commas..."
   );
 
   // Handle input changes IMPORTANT
@@ -39,10 +39,10 @@ function SearchBar({
 
   return (
     <div className="text-center mb-4 px-4 mt-6">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl text-gray-800 font-medium sm:m-4">
-          Cook with <span className="text-blue-600">What You've Got 😊</span>
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl text-orange-200 font-medium sm:m-4">
+          Cook with <span className="text-green-600">What You've Got 🥗</span>
         </h2>
-        <div className="mt-4 flex justify-center items-center sticky top-0">
+        <div className="mt-8 flex justify-center items-center sticky top-0">
           <label htmlFor="ingredient-search" className="sr-only">
             Search for recipes by ingredients
           </label>
@@ -50,7 +50,7 @@ function SearchBar({
             <input
           id="ingredient-search"
           type="text"
-          className="w-full p-2 border border-gray-300 rounded-full shadow-md hover:shadow-lg focus:ring-1 focus:ring-green-800 transition duration-100 font-book placeholder-black"
+          className="w-full p-2 rounded-full focus:ring-4 focus:ring-blue-800 bg-orange-50 transition font-normal placeholder-black"
           placeholder={placeholder}
           value={searchText}
           onChange={handleInputChange}

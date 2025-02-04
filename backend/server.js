@@ -3,7 +3,7 @@ import connectDB from "./config/dbConnect.js";
 import recipeRouter from "./routes/recipeRouter.js";
 import userRouter from "./routes/userRouter.js";
 import guestRouter from "./routes/guestRouter.js";
-import reviewRouter from "./routes/reviewRouter.js";
+import journalRouter from "./routes/journalRouter.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use("/search", recipeRouter);
 app.use("/users", userRouter);
-app.use("/review", reviewRouter);
+app.use("/journal", journalRouter);
 app.use("/guests", guestRouter);
 
 // catch-all handler for undefined routes

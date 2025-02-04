@@ -1,11 +1,64 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {motion} from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
-import HintergrundVideo from '../../assets/videos/kochenderTopf.mp4';
-import '../../assets/fonts/fonts.css';
-import './styles.css';
+import HintergrundVideo from '../../assets/videos/FallingTomatos.mp4';
 
+
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { type: 'spring', stiffness: 300, damping: 20 }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -50, 
+    scale: 0.8,
+    transition: { duration: 1, ease: 'easeInOut' }
+  },
+};
+
+const AnimatedLetters = ({ text, className }) => {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    // Wait 2 seconds before starting the visible animation.
+    const timer = setTimeout(() => {
+      controls.start('visible').then(() => {});
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [controls]);
+
+  const letters = text.split('');
+  return (
+    <motion.span
+      variants={containerVariants}
+      initial="hidden"
+      animate={controls}
+      className={className}
+    >
+      {letters.map((letter, index) => (
+        <motion.span key={index} variants={letterVariants}>
+          {letter === ' ' ? '\u00A0' : letter}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+};
 
 
 export default function LandingPage() {
@@ -22,9 +75,9 @@ export default function LandingPage() {
     }
   }, [inView, videoLoaded]);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (videoLoaded && videoRef.current) {
-      videoRef.current.playbackRate = 0.5; 
+      videoRef.current.playbackRate = 0.5;
     }
   }, [videoLoaded]);
 
@@ -35,80 +88,67 @@ export default function LandingPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
+      {videoLoaded && (
+        <motion.video
+          ref={videoRef}
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          src={HintergrundVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Background video of falling tomatos into water"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        />
+      )}
 
-        {videoLoaded && (
-          <motion.video
-            ref={videoRef}
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            src={HintergrundVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            aria-label='Background video of a cooking pot'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          />
-        )}
+      {/* Responsive Heading */}
+      <motion.div
+        className="absolute top-20 md:top-40 lg:right-3/4 transform -translate-x-1/2 z-20 text-center"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 2 }}
+      >
+        <h1 className="text-orange-300 text-3xl md:text-5xl font-bold">
+          LeckerLex
+        </h1>
+      </motion.div>
 
-        <motion.div
-          className="absolute top-5 left-2/5 transform -translate-x-1/2 z-20 text-center"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          <h1 className="text-green-700 text-4xl md:text-5xl font-bold">
-            LeckerLex
-          </h1>
-        </motion.div>
+      {/* Responsive Animated Text Container */}
+      <motion.div
+        className="z-10 w-11/12 md:w-1/2 bg-black bg-opacity-0 p-4 rounded text-center"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 50 }}
+        transition={{ duration: 1, delay: 2 }}
+      >
+        <motion.p className="text-orange-200 text-2xl md:text-4xl font-medium text-center mb-8">
+          <AnimatedLetters text="Discover culinary delights" />
+        </motion.p>
+        <motion.p className="text-orange-200 text-2xl md:text-4xl font-medium text-center">
+          <AnimatedLetters text="with ingredients you already have." />
+        </motion.p>
+      </motion.div>
 
-        <motion.div
-          className="z-10 w-3/4 md:w-1/2 bg-black bg-opacity-0 p-4 rounded text-center"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 50 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          <motion.p
-            className="text-gray-100 text-4xl md:text-4xl font-medium text-left mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.5 }}
+      {/* Get Inspired Button */}
+      <motion.div
+        className="absolute bottom-16 w-full text-center"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 2 }}
+      >
+        <Link to="/home">
+          <button
+            className="button px-6 py-3 text-md md:text-lg bg-green-700 text-orange-50 rounded-full hover:bg-green-800 hover:scale-105"
+            aria-label="Get inspired button"
+
           >
-            Discover culinary delights 
-          </motion.p>
-          <motion.p
-            className="text-gray-100 text-4xl md:text-4xl font-medium text-right"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 2.5 }}
-          >
-            with ingredients you already have.
-          </motion.p>
-        </motion.div>
-
-        {/* Button mit Framer Motion */}
-        <motion.div
-  className="absolute bottom-16 w-full text-center"
-  initial={{ y: 50, opacity: 0 }}
-  animate={{ y: 0, opacity: 1 }}
-  transition={{ duration: 1, delay: 3 }}
->
-  <Link to="/home">
-    <button
-      className="button px-8 py-4 text-lg md:text-xl bg-green-600 text-gray-100 rounded-full shadow-2xl
-        relative overflow-hidden transition-transform duration-100 hover:bg-green-700 hover:scale-105"
-      aria-label="Start the inspiration with the ingredients you've got"
-    >
-      Get Inspired
-    </button>
-  </Link>
-</motion.div>
+            Get Inspired
+          </button>
+        </Link>
+      </motion.div>
     </motion.div>
   );
-  
 }
-
-
-

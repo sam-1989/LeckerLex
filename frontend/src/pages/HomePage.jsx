@@ -7,7 +7,6 @@ import SearchBar from "../components/SearchBar";
 import Sidebar from "../components/Sidebar";
 
 export default function HomePage() {
-
   const [guestCount, setGuestCount] = useState(0);
   useEffect(() => {
     // Funktion zum Registrieren des Gastbesuchs
@@ -54,14 +53,13 @@ export default function HomePage() {
         setGuestCount(data.count);
         console.log("Guest count fetched successfully:", data);
       } catch (error) {
-        console.log("Error fetching guest count:",error.message);
+        console.log("Error fetching guest count:", error.message);
       }
     };
 
     registerGuestVisit(); // gastbesuch registrieren
     fetchGuestCount(); // Gastanzahl abrufen
-
-  }, []);  // stellt sicher, dass dies nur einmal ausgeführt wird, wenn die Komponente bereitgestellt wird
+  }, []); // stellt sicher, dass dies nur einmal ausgeführt wird, wenn die Komponente bereitgestellt wird
 
   // access setRecipes from context to store fetched recipes
   const { recipes, setRecipes } = useContext(RecipeContext);
@@ -189,7 +187,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden bg-white">
+    <div className="min-h-full bg-black">
       <div className="flex justify-center items-center">
         <SearchBar
           searchText={searchText}

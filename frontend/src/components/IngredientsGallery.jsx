@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaCheckCircle } from "react-icons/fa";
 
 function IngredientsGallery({
   herbsAndSpices,
@@ -70,39 +71,44 @@ function IngredientsGallery({
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto sm:my-16 border border-gray-200 md:px-4 lg:px-24 py-0 
-     rounded-3xl lg:rounded-full bg-green-200 shadow-inner">
-      <div className="grid gap-3 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+    <div
+      className="max-w-screen-lg mx-auto sm:my-16 md:px-4 lg:px-24 py-0 rounded-3xl lg:rounded-full shadow-lg"
+      style={{ background: "#11151E" }}
+    >
+      <div className="grid gap-6 p-4 grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
         {itemsToDisplay.map((item, idx) => {
           const isSelected = selectedIngredients.includes(item.alt);
-          const delay = idx * 50;
+          const delay = idx * 80;
           return (
             <div
               key={idx}
-              className={`relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden
-                 rounded-xl hover:outline hover:outline-1 hover:outline-gray-300 shadow-md bg-gray-50 border border-r-1 outline-2
-                  transition-opacity duration-200 ease-in-out ${
-                isLoaded ? "opacity-100" : "opacity-0"
-              }`}
               onClick={() => handleImageClick(item.alt)}
               style={{ transitionDelay: `${delay}ms` }}
+              className={`
+                relative cursor-pointer aspect-w-1 aspect-h-1 group overflow-hidden
+                rounded-3xl bg-[#11151E]
+                ${isLoaded ? "opacity-100" : "opacity-0"}
+                ${isSelected ? "ring-2 ring-green-600" : ""}
+              `}
             >
               <img
                 src={item.src}
                 alt={item.alt}
-                loading="lazy"
-                className="w-full h-full object-contain mx-auto border border-gray-200 shadow-md transition-transform
-                 duration-100 transform group-hover:scale-105"
+                className="w-full h-full object-contain mx-auto shadow-md transition-transform duration-200 transform group-hover:scale-120"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20
-               text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-200">
-                {item.alt}
+              <div
+                className="absolute inset-0 flex items-center justify-center p-6 bg-black bg-opacity-40
+                           text-white text-md font-medium opacity-0 group-hover:opacity-100 duration-100"
+              >
+                <span className="font-medium text-center ">{item.alt}</span>
               </div>
+
+              {/* Uncomment if you want to show a check icon when selected:
               {isSelected && (
-                <div className="absolute top-0 right-0 text-sm px-3 bg-transparent">
-                  ✔
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <FaCheckCircle className="text-green-400 text-2xl" />
                 </div>
-              )}
+              )} */}
             </div>
           );
         })}

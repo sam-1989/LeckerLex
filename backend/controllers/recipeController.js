@@ -82,16 +82,23 @@ export const searchRecipesAndDetails = async (req, res, next) => {
           ).toFixed(2);
         }
 
+        const capitalizedTitle = recipe.title
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(" ");
+
         return {
           id: recipe.id,
-          title: recipe.title,
+          title: capitalizedTitle,
           image: recipe.image,
           usedIngredientCount: recipe.usedIngredientCount,
           missedIngredientCount: recipe.missedIngredientCount,
           missedIngredients: recipe.missedIngredients.map((ingredient) => ({
             name: ingredient.name,
-            amount: ingredient.amount,
-            unit: ingredient.unit,
+            amount: ingredient.amount || 0,
+            unit: ingredient.unit || "",
           })),
           usedIngredients: recipe.usedIngredients.map(
             (ingredient) => ingredient.original
