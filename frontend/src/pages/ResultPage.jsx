@@ -31,7 +31,6 @@ function ResultPage() {
 
   const { recipes } = useContext(RecipeContext);
 
-
   const [visibleCount, setVisibleCount] = useState(8);
 
   const navigate = useNavigate();
@@ -40,14 +39,17 @@ function ResultPage() {
   const filteredRecipes = recipes.filter((recipe) => {
     let valid = true;
 
-    // Filter by cooking time 
+    // Filter by cooking time
     if (cookTime) {
       if (cookTime.endsWith("+")) {
         const minTime = Number(cookTime.slice(0, -1));
         if (recipe.preparationTime < minTime) valid = false;
       } else {
         const [minTime, maxTime] = cookTime.split("-").map(Number);
-        if (recipe.preparationTime < minTime || recipe.preparationTime > maxTime)
+        if (
+          recipe.preparationTime < minTime ||
+          recipe.preparationTime > maxTime
+        )
           valid = false;
       }
     }
@@ -59,7 +61,10 @@ function ResultPage() {
         if (recipe.nutritionPer100g.calories < minCalories) valid = false;
       } else {
         const [minCal, maxCal] = calories.split("-").map(Number);
-        if (recipe.nutritionPer100g.calories < minCal || recipe.nutritionPer100g.calories > maxCal)
+        if (
+          recipe.nutritionPer100g.calories < minCal ||
+          recipe.nutritionPer100g.calories > maxCal
+        )
           valid = false;
       }
     }
@@ -159,9 +164,13 @@ function ResultPage() {
                 {recipe.title}
               </h2>
               <div className="flex items-center justify-between">
-                <p className="text-gray-300 text-sm">{recipe.preparationTime} mins</p>
+                <p className="text-gray-300 text-sm">
+                  {recipe.preparationTime} mins
+                </p>
                 {recipe.diet.vegan && <FaLeaf className="text-green-500" />}
-                <p className="text-gray-300 text-sm">{recipe.nutritionPer100g.calories} kcal</p>
+                <p className="text-gray-300 text-sm">
+                  {recipe.nutritionPer100g.calories} kcal
+                </p>
               </div>
             </div>
           </div>

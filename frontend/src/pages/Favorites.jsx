@@ -13,6 +13,7 @@ import {
   faSeedling,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
+import CulinaryJournalForm from "../components/CulinaryJournalForm";
 
 function Favorites() {
   const { favorites, setFavorites, setShoppingList } =
@@ -439,6 +440,10 @@ function Favorites() {
                     ))}
                   </ul>
                 </div>
+                <CulinaryJournalForm
+                  recipeName={recipe.title}
+                  recipeId={recipe.id}
+                />
               </div>
             ))}
 
