@@ -2,11 +2,6 @@
 
 Welcome to **LeckerLex** – the ultimate platform where food enthusiasts and culinary creatives come together to explore, share, and celebrate the art of cooking! Our full stack web application is designed to inspire your culinary journey with a sleek interface, robust features, and a vibrant community. Whether you're a seasoned chef or a passionate home cook, LeckerLex is your go-to hub for discovering and managing recipes that excite your taste buds.
 
-[![GitHub stars](https://img.shields.io/github/stars/your-username/LeckerLex.svg?style=social)](https://github.com/your-username/LeckerLex/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/LeckerLex.svg?style=social)](https://github.com/your-username/LeckerLex/network)
-[![GitHub issues](https://img.shields.io/github/issues/your-username/LeckerLex.svg)](https://github.com/your-username/LeckerLex/issues)
-[![License](https://img.shields.io/github/license/your-username/LeckerLex.svg)](LICENSE)
-
 ---
 
 ## Table of Contents
