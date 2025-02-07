@@ -49,4 +49,4 @@ LeckerLex is built using a powerful and modern tech stack that ensures a smooth,
 
 
 ---
-Happy cooking and happy coding with LeckerLex! 🚀🍴
+Happy cooking with LeckerLex! 🚀🍴
