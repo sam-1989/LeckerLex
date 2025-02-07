@@ -39,7 +39,7 @@ LeckerLex is built using a powerful and modern tech stack that ensures a smooth,
 
 - **Front-end:**  
   - [React](https://reactjs.org/)  
-  - Styled with modern CSS frameworks - [Tailwind CSS](https://tailwindcss.com/) 
+  - Styled with modern CSS framework -> [Tailwind CSS](https://tailwindcss.com/) 
 - **Back-end:**  
   - [Node.js](https://nodejs.org/) and [Express](https://expressjs.com/)
 - **Database:**  
