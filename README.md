@@ -4,7 +4,7 @@ Welcome to **LeckerLex** – the ultimate platform where food enthusiasts and cu
 
 ---
 
-## Table of Contents
+Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -17,13 +17,13 @@ Welcome to **LeckerLex** – the ultimate platform where food enthusiasts and cu
 
 ---
 
-## Overview
+ Overview
 
 LeckerLex is a cutting-edge, full stack web application that transforms the way you interact with food content. Imagine a platform where you can effortlessly browse mouth-watering recipes, manage your culinary creations, and connect with fellow food lovers—all in one place. With LeckerLex, every meal is an adventure waiting to be shared!
 
 ---
 
-## Features
+Features
 
 - **🔒 Secure Authentication:** Create and manage your account with industry-standard security.
 - **🍲 Recipe Management:** Easily add, edit, and delete recipes to build your personal cookbook.
@@ -33,7 +33,7 @@ LeckerLex is a cutting-edge, full stack web application that transforms the way 
 
 ---
 
-## Tech Stack
+Tech Stack
 
 LeckerLex is built using a powerful and modern tech stack that ensures a smooth, secure, and scalable experience:
 
@@ -50,7 +50,7 @@ LeckerLex is built using a powerful and modern tech stack that ensures a smooth,
 
 ---
 
-## Getting Started
+Getting Started
 
 Ready to dive in? Follow these simple steps to set up LeckerLex on your local machine:
 
@@ -60,7 +60,7 @@ Ready to dive in? Follow these simple steps to set up LeckerLex on your local ma
 - [Git](https://git-scm.com/)
 - A MongoDB instance (local or cloud)
 
-### Installation Steps
+## Installation Steps
 
 1. **Clone the Repository:**
 
