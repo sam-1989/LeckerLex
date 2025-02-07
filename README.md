@@ -49,21 +49,4 @@ LeckerLex is built using a powerful and modern tech stack that ensures a smooth,
 
 
 ---
-
-# Getting Started
-
-Ready to dive in? Follow these simple steps to set up LeckerLex on your local machine:
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v14 or higher
-- [Git](https://git-scm.com/)
-- A MongoDB instance (local or cloud)
-
-## Installation Steps
-
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/your-username/LeckerLex.git
-   cd LeckerLex
+Happy cooking and happy coding with LeckerLex! 🚀🍴
