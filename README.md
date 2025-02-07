@@ -21,29 +21,26 @@ LeckerLex is a full stack web application that reimagines the way food enthusias
 ## Features
 
 - **User Authentication:** Secure registration and login system.
-- **Recipe Management:** Create, update, and delete recipes.
-- **Dynamic Search:** Filter and search recipes based on ingredients, cuisine, or dietary preferences.
+- **Dynamic Search:** Filter and search recipes based on ingredients or dietary preferences.
 - **Responsive Design:** Enjoy a seamless experience on desktop and mobile devices.
-- **Interactive UI:** Easily navigate through recipes and user profiles.
+- **Interactive UI:** Easily navigate through ingredients and recipes
 
 ---
 
 ## Tech Stack
 
-> **Note:** Replace or adjust these details based on your actual implementation.
-
 - **Front-end:** 
-  - [React](https://reactjs.org/) (or your chosen framework)
-  - CSS / [Tailwind CSS](https://tailwindcss.com/) / [Bootstrap](https://getbootstrap.com/)
+  - [React](https://reactjs.org/) 
+  - [Tailwind CSS](https://tailwindcss.com/)
 - **Back-end:**
   - [Node.js](https://nodejs.org/)
   - [Express](https://expressjs.com/)
 - **Database:**
-  - [MongoDB](https://www.mongodb.com/) (or your preferred database)
+  - [MongoDB](https://www.mongodb.com/)
+  - Mongoose
 - **Authentication:**
-  - JSON Web Tokens ([JWT](https://jwt.io/)) or an alternative secure method
-- **Deployment:**
-  - Docker, Heroku, or any other cloud provider
+  - JSON Web Tokens ([JWT](https://jwt.io/)) 
+
 
 ---
 
