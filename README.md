@@ -1,6 +1,6 @@
 # LeckerLex 🍽️✨
 
-Welcome to **LeckerLex** – the ultimate platform where food enthusiasts and culinary creatives come together to explore, share, and celebrate the art of cooking! Our full stack web application is designed to inspire your culinary journey with a sleek interface, robust features, and a vibrant community. Whether you're a seasoned chef or a passionate home cook, LeckerLex is your go-to hub for discovering and managing recipes that excite your taste buds.
+## Welcome to **LeckerLex** – the ultimate platform where food enthusiasts and culinary creatives come together to explore, share, and celebrate the art of cooking! Our full stack web application is designed to inspire your culinary journey with a sleek interface, robust features, and a vibrant community. Whether you're a seasoned chef or a passionate home cook, LeckerLex is your go-to hub for discovering and managing recipes that excite your taste buds.
 
 ---
 
