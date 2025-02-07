@@ -36,8 +36,7 @@ LeckerLex is a full stack web application that reimagines the way food enthusias
   - [Node.js](https://nodejs.org/)
   - [Express](https://expressjs.com/)
 - **Database:**
-  - [MongoDB](https://www.mongodb.com/)
-  - Mongoose
+  - [MongoDB](https://www.mongodb.com/) (Mongoose)
 - **Authentication:**
   - JSON Web Tokens ([JWT](https://jwt.io/)) 
 
