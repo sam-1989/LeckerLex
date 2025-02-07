@@ -4,22 +4,9 @@
 
 ---
 
-# Table of Contents
+ # Description
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Demo](#demo)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
----
-
- # Overview
-
-LeckerLex is a cutting-edge, full stack web application that transforms the way you interact with food content. Imagine a platform where you can effortlessly browse mouth-watering recipes, manage your culinary creations, and connect with fellow food lovers—all in one place. With LeckerLex, every meal is an adventure waiting to be shared!
+### LeckerLex is a cutting-edge, full stack web application that transforms the way you interact with food content. Imagine a platform where you can effortlessly browse mouth-watering recipes, manage your culinary creations, and connect with fellow food lovers—all in one place. With LeckerLex, every meal is an adventure waiting to be shared!
 
 ---
 
