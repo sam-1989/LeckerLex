@@ -11,7 +11,7 @@
 ---
 
 # Features
-- **🍲 Ingredient-Inspired Meals: Quickly discover delicious recipes using the ingredients you already have at home.
+- **🍲 Ingredient-Inspired Meals:** Quickly discover delicious recipes using the ingredients you already have at home.
 - **🔒 Secure Authentication:** Create and manage your account with industry-standard security.
 - **🔍 Dynamic Search:** Discover recipes by ingredients, cuisine, or dietary preferences.
 - **📱 Responsive Design:** Enjoy a seamless experience on both desktop and mobile devices.
